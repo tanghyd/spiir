@@ -1,0 +1,70 @@
+# https://docs.ansible.com/ansible/latest/reference_appendices/YAMLSyntax.html
+seed: 21
+
+distributions:
+  - variable: mass_1
+    distribution: normal
+    loc: 7
+    scale: 2
+  - variable: mass_2
+    distribution: normal
+    loc: 6
+    scale: 1
+  - variable: phase
+    distribution: uniform
+    low: 0.0
+    high: 3.141592653589793
+  - variable: chi_1
+    distribution: uniform
+    seed: 20
+    low: 0.0
+    high: 0.88
+  - variable: chi_2
+    distribution: uniform
+    low: 0.0
+    high: 0.88
+  - variable: theta_1
+    distribution: sin_angle
+    package: pycbc
+  - variable: theta_2
+    distribution: sin_angle
+    package: pycbc
+  - variable: theta_jn
+    distribution: sin_angle
+    package: pycbc
+  - variable: phi_12
+    distribution: uniform
+    seed: 20
+    low: 0.0
+    high: 3.141592653589793
+  - variable: phi_jl
+    distribution: uniform
+    low: 0.0
+    high: 3.141592653589793
+
+
+transforms:
+  - transform: abs
+    package: numpy
+    variables: "mass_1"
+  - transform: abs
+    package: numpy
+    variables: "mass_2"
+  - transform: sigmasq
+    package: spiir
+    psd: /home/dawn/daniel/ozgrav/spiir-data/share/data/psd/H1L1V1-REF_PSD-1257382107-1257388107.xml
+    ifos: [ H1, L1, V1 ]
+  # - transform: sigmasq
+  #   psds: {
+  #     H1: /home/dawn/daniel/ozgrav/spiir-data/share/data/psd/H1L1V1-REF_PSD-1257382107-1257388107.xml,
+  #     L1: /home/dawn/daniel/ozgrav/spiir-data/share/data/psd/H1L1V1-REF_PSD-1257382107-1257388107.xml,
+  #     V1: /home/dawn/daniel/ozgrav/spiir-data/share/data/psd/H1L1V1-REF_PSD-1257382107-1257388107.xml,
+  #   }
+
+constraints:
+  - constraint: greater_equal
+    variables: [ "sigmasq", 10 ]
+  - constraint: less_equal
+    variables: [ "sigmasq", 20 ]
+  - constraint: greater_equal
+    variables: [ "mass_1", "mass_2" ]

@@ -20,7 +20,7 @@ modules be loaded first:
 Then proceed with the instructions for a installation with Virtualenv.
 
 ### Virtualenv
-  
+
 Installation with these commands requires an existing installation of Python3.8.
 
   ```
@@ -30,10 +30,18 @@ Installation with these commands requires an existing installation of Python3.8.
 
   # if a "conda base" env is activated, the wrong pip may be used -> check "which pip".
   pip install --upgrade pip setuptools wheel  # useful for ozstar updates
-  pip install -r requirements.txt
+  ```
 
-  # install local packages in editable mode
-  pip install -e .
+Next we need to change directories to where this repository is installed. For example:
+
+  ```
+  # download spiir repository and change working directory
+  git clone https://github.com/tanghyd/spiir.git
+  cd spiir
+
+  # then we can install our local "spiir" package
+  # this will also install required dependencies
+  pip install .
   ```
 
 #### Optional Dependencies
@@ -41,7 +49,7 @@ Installation with these commands requires an existing installation of Python3.8.
 Sometimes optional dependencies may be required by the user, such as certain distribution implementatinos by PyCBC. To install these, we can instead add an extra tag to our install as follows:
 
   ```
-  pip install -e .[pycbc]
+  pip install .[pycbc]
   ```
 
 #### Jupyter Notebook
@@ -50,6 +58,7 @@ If the user would like to use this virtual environment in a Jupyter notebook ker
 
   ```
   # add virtual environment to jupyter notebook kernels (can change --name)
+  pip install ipykernel
   python -m ipykernel install --user --name=spiir
   ```
 

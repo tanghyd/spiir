@@ -46,7 +46,7 @@ Next we need to change directories to where this repository is installed. For ex
 
 #### Optional Dependencies
 
-Sometimes optional dependencies may be required by the user, such as certain distribution implementatinos by PyCBC. To install these, we can instead add an extra tag to our install as follows:
+Sometimes optional dependencies may be required by the user, such as certain distribution implementations by PyCBC. To install these, we can instead add an extra tag to our install as follows:
 
   ```
   pip install .[pycbc]

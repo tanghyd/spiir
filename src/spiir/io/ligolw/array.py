@@ -23,34 +23,8 @@ def load_all_ligolw_frequency_arrays(
     ilwdchar_compat: bool = False,
     verbose: bool = False,
 ) -> pd.Series:
-    """Reads a valid LIGO_LW XML Document from a file path and returns a pd.Series
-    containing a REAL8FrequencySeries array associated with the specified kwargs.
-
-    Parameters
-    ----------
-    path: str | bytes | PathLike
-        A path-like to a file containing a valid LIGO_LW XML Document.
-
-    Returns
-    -------
-    pd.Series
-        A pd.Series array containing the value and index of each frequency component.
-
-    Examples
-    --------
-        >> psds = load_all_ligolw_frequency_arrays("coinc.xml")
-
-    """
-    xmldoc = load_ligolw_xmldoc(path, ilwdchar_compat=ilwdchar_compat, verbose=verbose)
-
-    return get_all_ligolw_frequency_arrays_from_xmldoc(xmldoc)
-
-
-def get_all_ligolw_frequency_arrays_from_xmldoc(
-    xmldoc: ligo.lw.ligolw.Element,
-) -> Dict[int, pd.Series]:
-    """Reads a valid LIGO_LW XML Document from a file path and returns a dictionary
-    containing the real-valued frequency arrays associated with each interferometer.
+    """Reads a valid LIGO_LW XML Document from a file path and returns a dictionary of 
+    pd.Series containing a REAL8FrequencySeries array for each frequency series present.
 
     The LIGO_LW Document should contain exactly one LIGO_LW REAL8FrequencySeries
     element per interferometer each as an Array element. Each REAL8FrequencySeries is
@@ -70,6 +44,42 @@ def get_all_ligolw_frequency_arrays_from_xmldoc(
         Whether to add ilwdchar conversion compatibility.
     verbose: bool
         Whether to enable verbose output for ligo.lw.utils.load_filename.
+
+    Returns
+    -------
+    pd.Series
+        A pd.Series array containing the value and index of each frequency component.
+
+    Examples
+    --------
+        >> psds = load_all_ligolw_frequency_arrays("coinc.xml")
+
+    """
+    xmldoc = load_ligolw_xmldoc(path, ilwdchar_compat=ilwdchar_compat, verbose=verbose)
+
+    return get_all_ligolw_frequency_arrays_from_xmldoc(xmldoc)
+
+
+def get_all_ligolw_frequency_arrays_from_xmldoc(
+    xmldoc: ligo.lw.ligolw.Element,
+) -> Dict[int, pd.Series]:
+    """Reads a valid LIGO_LW XML Document from memory and returns a dictionary of 
+    pd.Series containing a REAL8FrequencySeries array for each frequency series present.
+
+    The LIGO_LW Document should contain exactly one LIGO_LW REAL8FrequencySeries
+    element per interferometer each as an Array element. Each REAL8FrequencySeries is
+    paired with an instrument string corresponding to the interferometer name.
+
+    The returned dictionary has keys describing each interferometer name, with each
+    value being a frequency array with an index specifying its frequency bins. Each
+    array is indexed separately to handle the case where each frequency array
+    may not have matching resolutions (i.e. PSDs may not have matching frequency
+    components recorded), but if they are the same they can simply be concatenated.
+
+    Parameters
+    ----------
+    path: str | bytes | PathLike
+        A path-like to a file containing a valid LIGO_LW XML Document.
 
     Returns
     -------

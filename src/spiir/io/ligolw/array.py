@@ -78,8 +78,8 @@ def get_all_ligolw_frequency_arrays_from_xmldoc(
 
     Parameters
     ----------
-    path: str | bytes | PathLike
-        A path-like to a file containing a valid LIGO_LW XML Document.
+    xmldoc: ligo.lw.ligolw.Element
+        A LIGO_LW XML Document, or Element, containing the necessary LIGO_LW elements.
 
     Returns
     -------

@@ -1,0 +1,22 @@
+wheel
+pycbc
+lalsuite
+astropy
+gwpy
+python-ligo-lw
+numpy
+scipy
+pandas
+matplotlib
+
+# jupyter notebooks
+ipykernel
+# jupyter
+# ipywidgets
+
+# dev packages
+# pre-commit
+# black
+# isort
+# mypy
+# flake8

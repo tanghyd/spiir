@@ -5,13 +5,13 @@ from typing import Optional, Union, Any, Dict, Tuple
 import numpy as np
 import pandas as pd
 
-from .sigmasq import SigmaSqTransform
+# custom transforms dictionary
+# from .sigmasq import SigmaSqTransform
+# transforms = {SigmaSqTransform.transform: SigmaSqTransform}
+transforms: Dict[str, Any] = {}
 
 logger = logging.getLogger(__name__)
 
-# custom transforms dictionary
-# transforms = {SigmaSqTransform.transform: SigmaSqTransform}
-transforms: Dict[str, Any] = {}
 
 class Transform:
     """Abstract Base Class for Transform classes"""

@@ -1,6 +1,5 @@
 from .constraint import Constraint, NumPyConstraint, SPIIRConstraint
-
-from .transform import Transform, SPIIRTransform, SigmaSqTransform
+from .transform import Transform, SPIIRTransform
 from .distribution import (
     Distribution,
     NumPyDistribution,

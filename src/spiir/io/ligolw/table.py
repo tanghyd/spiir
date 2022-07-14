@@ -13,7 +13,7 @@ import pandas as pd
 # import after postcoh.py for PostcohInspiralTable compatibility
 from . import postcoh
 from .ligolw import load_ligolw_xmldoc
-from ...utils.mp import validate_cpu_count
+from ..mp import validate_cpu_count
 
 import ligo.lw.lsctables
 from gwpy.table import EventTable

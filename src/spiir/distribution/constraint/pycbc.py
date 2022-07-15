@@ -8,8 +8,8 @@ import numpy as np
 import pandas as pd
 
 from pycbc.io import record
-from pycbc.transform import apply_transforms
-from pycbc.distribution.constraints import constraints
+from pycbc.transforms import apply_transforms
+from pycbc.distributions.constraints import constraints
 
 from .constraint import Constraint
 
@@ -27,13 +27,36 @@ class PyCBCConstraint(Constraint):
         package: str = "pycbc",
         **kwargs,
     ):
+        """Some description.
+        
+        Parameters
+        ----------
+        constraint: str
+            A constraint.
+        variables: str | tuple[str, ...] | None
+            Some variables
+        name: str | None
+            A name
+        package: str
+            A package - should be "pycbc".
+        
+        Methods
+        -------
+        _load_constraint:
+            Some description.
+        __call__:
+            Some description.
+        apply:
+            Some description.
+        """
+
         assert package == getattr(PyCBCConstraint, "package")
         super().__init__(constraint, variables, name, package, **kwargs)
 
         self._constraint = self._load_constraint()
 
     def _load_constraint(self):
-        from spiir.distributions.constraints.pycbc import constraints
+        from spiir.distribution.constraint.pycbc import constraints
 
         return constraints.constraints[self.constraint](**self.kwargs)
 
@@ -59,6 +82,13 @@ class MassConstraint:
         Custom pycbc.distributions.constraints.Constraint object that evaluates
         to True if mass parameters (mass1 and mass2) obey the conventional notation
         where mass1 >= mass2.
+
+        Methods
+        -------
+        __call__:
+            Sample description.
+        _constraint:
+            Sample description.
         """
         self.constraint_arg = constraint_arg
         self.transforms = transforms

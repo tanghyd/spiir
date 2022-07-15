@@ -1,6 +1,20 @@
+<<<<<<< HEAD
 from ast import Index
 import concurrent.futures
 import logging
+=======
+"""Utilities for multiprocessing.
+
+This module demonstrates documentation as specified by the `NumPy
+Documentation HOWTO`_. Docstrings may extend over multiple lines. Sections
+are created with a section header followed by an underline of equal length.
+
+.. _NumPy Documentation HOWTO:
+   https://github.com/numpy/numpy/blob/master/doc/HOWTO_DOCUMENT.rst.txt
+
+"""
+
+>>>>>>> Add module level docstrings
 import multiprocessing as mp
 from collections.abc import Callable, Sequence
 from functools import partial

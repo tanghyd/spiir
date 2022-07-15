@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # SPIIR Library Development Guide
 
 ## Documentation
@@ -25,6 +26,40 @@ encoding, as described in [lexical analysis](https://docs.python.org/3/reference
 When type hints are written into the documentation, we strongly recommend writing them 
 in the style of Python's most modern type hint style, which leverages Python types 
 directly (i.e. list, tuple, dict instead of typing.List, typing.Tuple, typing.Dict) 
+=======
+# SPIIR Python Library Development Guide
+
+## Documentation
+
+### NumPy Style Guide
+
+All documentation should follow the 
+[NumPy documentation style guide](https://numpydoc.readthedocs.io/en/latest/format.html).
+The NumPy style guide is a derivation of the Google Developer documentation style guide.
+All docstrings should follow the style and order of sections as defined in the links above.
+
+#### Docstring Conventions
+
+Further information about writing Python docstrings can be found in the 
+[specifications from PEP 257](https://peps.python.org/pep-0257/#multi-line-docstrings) 
+detailing docstring conventions for scripts, modules, functions, and classes. For an 
+example of NumPy Style Python docstrings we refer to an 
+[example from Sphinx](https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_numpy.html#example-numpy).
+Note that this NumPy example starts with a UTF-8 encoding declaration that we have 
+chosen to omit in our package documentation because UTF-8 is already the default 
+encoding, as described in [lexical analysis](https://docs.python.org/3/reference/lexical_analysis.html#encoding-declarations) section of the Python documentation.
+
+#### Type Hints
+
+When type hints are written into the documentation, we strongly recommend writing them 
+<<<<<<< HEAD
+in the style of Python most modern type hint style, which leverages Python types 
+directly  (i.e. list, tuple, dict instead  of typing.List, typing.Tuple, typing.Dict) 
+>>>>>>> Add sphinx quick start
+=======
+in the style of Python's most modern type hint style, which leverages Python types 
+directly (i.e. list, tuple, dict instead of typing.List, typing.Tuple, typing.Dict) 
+>>>>>>> Minor edits to CONTRIBUTING.md
 as well as the new typing operators for union (`|` instead of `typing.Union`) and 
 optionals (`| None` instead of `typing.Optional`). However, currently this package is 
 being written in Python3.8, and so the latest Python3.9 and Python3.10 typing features 
@@ -32,6 +67,9 @@ won't be available in the actual code itself. Nevertherless, the new approach is
 readable and will be suitable for future updates when the library is eventually ported 
 to Python3.10.
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
 ### Building Documentation With Sphinx
 
 The documentation for this package can be built using Sphinx by calling `make docs` in 
@@ -97,3 +135,36 @@ The current issues holding things up include:
 - PyCBC matched filtering results in peak SNRs that aren't equal to what we scale the injection to have, it always seems to be distributed around the desired value
 - I realised the current code I've been working on is all more astrophysical and multiple detectors, when I desire mostly single detector as mentioned before
 - I think I've fixed injections being projected properly for multiple detectors, but I will list it here in case
+=======
+### Sphinx
+=======
+### Building With Sphinx
+>>>>>>> Rerun make github again
+=======
+### Building Documentation With Sphinx
+>>>>>>> Add module level docstrings
+
+The documentation for this package can be built using Sphinx by running the following 
+commands in the `docsrc/` directory as follows:
+
+<<<<<<< HEAD
+    sphinx-quickstart
+<<<<<<< HEAD
+    sphinx-apidoc -f -o ./source ../src  # generates .rst files from code
+    make html                            # use make clean html to remove old build files
+>>>>>>> Add sphinx quick start
+=======
+    sphinx-apidoc -M -f -o ./source ../src/spiir  # generates .rst files from code
+    make github                          # use make clean to remove old build files
+>>>>>>> Rerun make github again
+=======
+    sphinx-apidoc -M -f -o ./source ../src/spiir  # generates .rst files from code
+    make github                          # use make clean to remove old build files
+
+This will output our rendered HTML documentation to the `docs/` directory, which will 
+make it compatible for rendering via GitHub Pages.
+
+This documentation was originally produced by calling `sphinx-quickstart` in the 
+`docsrc/` directory, and making the necessary changes to `docsrc/source/conf.py`, as 
+well as adding a `make github` command to `docsrc/Makefile`.
+>>>>>>> Edit CONTRIBUTING.md

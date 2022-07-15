@@ -120,18 +120,16 @@ the output to a numpy array.</p>
 <p>Source: <a class="reference external" href="https://stackoverflow.com/a/24527424">https://stackoverflow.com/a/24527424</a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>iterable: Iterable</strong></dt><dd><p>An iterable object such as an array, tuple, np.array, etc.</p>
-</dd>
-<dt><strong>size: int</strong></dt><dd><p>The number of elements per array chunk.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>iterable</strong> (<em>Iterable</em>) – An iterable object such as an array, tuple, np.array, etc.</p></li>
+<li><p><strong>size</strong> (<em>int</em>) – The number of elements per array chunk.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt>itertools.chain</dt><dd><p>An iterable object.</p>
+<dd class="field-even"><p>An iterable object.</p>
 </dd>
-</dl>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>itertools.chain</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -154,16 +152,13 @@ the output to a numpy array.</p>
 multiprocessing CPU cores based on the user’s machine specifications.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>nproc: int</strong></dt><dd><p>The number of processes to be used for CPU multiprocessing.</p>
-</dd>
-</dl>
+<dd class="field-odd"><p><strong>nproc</strong> (<em>int</em>) – The number of processes to be used for CPU multiprocessing.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt>int</dt><dd><p>A valid CPU count (nproc) integer for use in multiprocessing programs.</p>
+<dd class="field-even"><p>A valid CPU count (nproc) integer for use in multiprocessing programs.</p>
 </dd>
-</dl>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
 </dd>
 </dl>
 </dd></dl>

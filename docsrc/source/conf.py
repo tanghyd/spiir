@@ -38,13 +38,13 @@ extensions = [
     "sphinx_rtd_theme",
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
-    # 'sphinx.ext.napoleon',
+    'sphinx.ext.napoleon',
     'sphinx_copybutton',
     'sphinx_toggleprompt',
-    'numpydoc',
+    # 'numpydoc',
 ]
 
-# napoleon_google_docstring = False
+napoleon_google_docstring = False
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -68,7 +68,7 @@ html_theme = 'sphinx_rtd_theme'
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
-numpydoc_show_class_members = False
+# numpydoc_show_class_members = False
 
 # generate autosummary even if no references
 autosummary_generate = True

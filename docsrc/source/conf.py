@@ -39,6 +39,8 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
     # 'sphinx.ext.napoleon',
+    'sphinx_copybutton',
+    'sphinx_toggleprompt',
     'numpydoc',
 ]
 
@@ -71,3 +73,6 @@ numpydoc_show_class_members = False
 # generate autosummary even if no references
 autosummary_generate = True
 autosummary_imported_members = True
+
+# Configure toggleprompt
+toggleprompt_offset_right = 25  # stops toggle and copy buttons overlapping

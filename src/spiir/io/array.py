@@ -26,13 +26,12 @@ def chunk_iterable(iterable: Iterable, size: int = 1000) -> Iterable:
 
     Examples
     --------
-
     The example below enables chunked array processing on a large numpy array.
 
-    # very_large_array = np.random.randn(10000000000000)
-    for chunk in chunks(very_large_array, size=10000):
-        array = np.fromiter(chunk, dtype=very_large_array.dtype)
-        # do processing on array chunk
+    >>> very_large_array = np.random.randn(10000000000000)
+    >>> for chunk in chunks(very_large_array, size=10000):
+    ...    array = np.fromiter(chunk, dtype=very_large_array.dtype)
+    ...    # do processing on array chunk
     """
     iterator = iter(iterable)
     for first in iterator:

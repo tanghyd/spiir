@@ -40,6 +40,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">SPIIR Python Library</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">src</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="spiir.html">spiir package</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="spiir.html#subpackages">Subpackages</a><ul class="current">
@@ -114,26 +115,28 @@ the output to a numpy array.</p>
 <p>Source: <a class="reference external" href="https://stackoverflow.com/a/24527424">https://stackoverflow.com/a/24527424</a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>iterable</strong> (<em>Iterable</em>) – An iterable object such as an array, tuple, np.array, etc.</p></li>
-<li><p><strong>size</strong> (<em>int</em>) – The number of elements per array chunk.</p></li>
-</ul>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>iterable: Iterable</strong></dt><dd><p>An iterable object such as an array, tuple, np.array, etc.</p>
+</dd>
+<dt><strong>size: int</strong></dt><dd><p>The number of elements per array chunk.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>An iterable object.</p>
+<dd class="field-even"><dl class="simple">
+<dt>itertools.chain</dt><dd><p>An iterable object.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>itertools.chain</p>
+</dl>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
 <p>The example below enables chunked array processing on a large numpy array.</p>
-<p># very_large_array = np.random.randn(10000000000000)
-for chunk in chunks(very_large_array, size=10000):</p>
-<blockquote>
-<div><p>array = np.fromiter(chunk, dtype=very_large_array.dtype)
-# do processing on array chunk</p>
-</div></blockquote>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">very_large_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">10000000000000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">chunks</span><span class="p">(</span><span class="n">very_large_array</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">10000</span><span class="p">):</span>
+<span class="gp">... </span>   <span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fromiter</span><span class="p">(</span><span class="n">chunk</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">very_large_array</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+<span class="gp">... </span>   <span class="c1"># do processing on array chunk</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </section>
@@ -146,13 +149,16 @@ for chunk in chunks(very_large_array, size=10000):</p>
 multiprocessing CPU cores based on the user’s machine specifications.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>nproc</strong> (<em>int</em>) – The number of processes to be used for CPU multiprocessing.</p>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>nproc: int</strong></dt><dd><p>The number of processes to be used for CPU multiprocessing.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A valid CPU count (nproc) integer for use in multiprocessing programs.</p>
+<dd class="field-even"><dl class="simple">
+<dt>int</dt><dd><p>A valid CPU count (nproc) integer for use in multiprocessing programs.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>int</p>
+</dl>
 </dd>
 </dl>
 </dd></dl>

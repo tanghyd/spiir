@@ -34,7 +34,7 @@ def load_ligolw_xmldoc(
     nullable: bool = False,
     verbose: bool = False,
     contenthandler: Optional[ligo.lw.ligolw.LIGOLWContentHandler] = None,
-) -> ligo.lw.ligolw.Element:
+) -> ligo.lw.ligolw.Document:
     """Reads a valid LIGO_LW XML Document from a file path and returns a dictionary containing
     the complex SNR timeseries arrays associated with each interferometer ('ifo').
 
@@ -56,7 +56,8 @@ def load_ligolw_xmldoc(
 
     Returns
     -------
-    ligo.lw.ligolw.Element
+    ligo.lw.ligolw.Document
+        The loaded LIGO_LW Document object.
     """
     # define XML document parser
     if contenthandler is None:
@@ -91,7 +92,7 @@ def strip_ilwdchar(xmldoc: ligo.lw.ligolw.Element) -> ligo.lw.ligolw.Element:
         A valid LIGO_LW XML Document or Element with the required LIGO_LW elements.
 
     Returns
-    ----------
+    -------
     ligo.lw.ligolw.Element
         The same LIGO_LW Document object passed as input with ilwd:char types
         converted to integers.

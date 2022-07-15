@@ -10,6 +10,7 @@ Welcome to spiir's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   introduction
    modules
 
 Indices and tables

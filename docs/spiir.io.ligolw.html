@@ -193,7 +193,9 @@ components recorded), but if they are the same they can simply be concatenated.<
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>&gt;&gt; psds = load_all_ligolw_frequency_arrays(“coinc.xml”)</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">psds</span> <span class="o">=</span> <span class="n">load_all_ligolw_frequency_arrays</span><span class="p">(</span><span class="s2">&quot;coinc.xml&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
@@ -860,7 +862,8 @@ otherwise it is set to an appropriate default value given the column type.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt>pd.DataFrame</dt><dd></dd>
+<dt>EventTable | pd.DataFrame</dt><dd><p>The LIGO_LW Table data either as a gwpy.EventTable or pandas.DataFrame.</p>
+</dd>
 </dl>
 </dd>
 </dl>

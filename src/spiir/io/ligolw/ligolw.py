@@ -104,7 +104,6 @@ def strip_ilwdchar(xmldoc: ligo.lw.ligolw.Element) -> ligo.lw.ligolw.Element:
     there is no general implementation of the reverse transformation.
     Applications that require the inverse transformation must implement their
     own algorithm for doing so, specifically for their needs.
-
     """
     for elem in xmldoc.getElements(
         lambda e: (

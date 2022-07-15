@@ -58,7 +58,8 @@ def load_ligolw_tables(
 
     Returns
     -------
-    pd.DataFrame
+    EventTable | pd.DataFrame
+        The LIGO_LW Table data either as a gwpy.EventTable or pandas.DataFrame.
     """
     # TODO: Add column filtering in load_ligolw_xmldoc with LIGOLWContentHandler
 

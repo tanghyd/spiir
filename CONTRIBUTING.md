@@ -31,7 +31,7 @@ directly (i.e. list, tuple, dict instead of typing.List, typing.Tuple, typing.Di
 
 ## Documentation
 
-### NumPy Style
+### NumPy Style Guide
 
 All documentation should follow the NumPy documentation style guide which can be found 
 [here](https://numpydoc.readthedocs.io/en/latest/format.html). The NumPy style guide is 
@@ -128,8 +128,9 @@ The current issues holding things up include:
 >>>>>>> Rerun make github again
 
 The documentation for this package can be built using Sphinx by running the following 
-commands in the `docs/` directory as follows:
+commands in the `docsrc/` directory as follows:
 
+<<<<<<< HEAD
     sphinx-quickstart
 <<<<<<< HEAD
     sphinx-apidoc -f -o ./source ../src  # generates .rst files from code
@@ -139,3 +140,14 @@ commands in the `docs/` directory as follows:
     sphinx-apidoc -M -f -o ./source ../src/spiir  # generates .rst files from code
     make github                          # use make clean to remove old build files
 >>>>>>> Rerun make github again
+=======
+    sphinx-apidoc -M -f -o ./source ../src/spiir  # generates .rst files from code
+    make github                          # use make clean to remove old build files
+
+This will output our rendered HTML documentation to the `docs/` directory, which will 
+make it compatible for rendering via GitHub Pages.
+
+This documentation was originally produced by calling `sphinx-quickstart` in the 
+`docsrc/` directory, and making the necessary changes to `docsrc/source/conf.py`, as 
+well as adding a `make github` command to `docsrc/Makefile`.
+>>>>>>> Edit CONTRIBUTING.md

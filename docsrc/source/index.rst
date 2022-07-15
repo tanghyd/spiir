@@ -7,10 +7,10 @@ Welcome to spiir's documentation!
 =================================
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
    :caption: Contents:
 
-modules
+   modules
 
 Indices and tables
 ==================

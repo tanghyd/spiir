@@ -15,7 +15,9 @@ import os
 import sys
 from typing import List
 
-sys.path.insert(0, os.path.abspath('../../src/spiir'))
+sys.path.insert(0, os.path.abspath('../../src/'))
+
+# sys.path.insert(0, os.path.abspath('../../src/spiir/'))
 
 
 # -- Project information -----------------------------------------------------
@@ -34,8 +36,10 @@ release = '0.0.1'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    "sphinx_rtd_theme",
     'sphinx.ext.autodoc',
     'sphinx.ext.napoleon',
+    'sphinx.ext.autosummary',
 ]
 
 napoleon_google_docstring = False

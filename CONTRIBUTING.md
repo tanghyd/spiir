@@ -37,9 +37,14 @@ a derivation of the Google Developer documentation style guide. All function doc
 must follow the style and order of sections as defined in the link above.
 
 When type hints are written into the documentation, we strongly recommend writing them 
+<<<<<<< HEAD
 in the style of Python most modern type hint style, which leverages Python types 
 directly  (i.e. list, tuple, dict instead  of typing.List, typing.Tuple, typing.Dict) 
 >>>>>>> Add sphinx quick start
+=======
+in the style of Python's most modern type hint style, which leverages Python types 
+directly (i.e. list, tuple, dict instead of typing.List, typing.Tuple, typing.Dict) 
+>>>>>>> Minor edits to CONTRIBUTING.md
 as well as the new typing operators for union (`|` instead of `typing.Union`) and 
 optionals (`| None` instead of `typing.Optional`). However, currently this package is 
 being written in Python3.8, and so the latest Python3.9 and Python3.10 typing features 

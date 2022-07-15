@@ -1,6 +1,11 @@
 spiir.io package
 ================
 
+.. automodule:: spiir.io
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Subpackages
 -----------
 
@@ -24,14 +29,6 @@ spiir.io.mp module
 ------------------
 
 .. automodule:: spiir.io.mp
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: spiir.io
    :members:
    :undoc-members:
    :show-inheritance:

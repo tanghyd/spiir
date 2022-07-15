@@ -22,7 +22,7 @@ $(document).ready(function() {
     var border_style = pre.css('border-top-style');
     var border_color = pre.css('border-top-color');
     var button_styles = {
-        'cursor':'pointer', 'position': 'absolute', 'top': '0', 'right': '100px',
+        'cursor':'pointer', 'position': 'absolute', 'top': '0', 'right': '45px',
         'border-color': border_color, 'border-style': border_style,
         'border-width': border_width, 'color': border_color, 'text-size': '75%',
         'font-family': 'monospace', 'padding-left': '0.2em', 'padding-right': '0.2em',
@@ -71,7 +71,7 @@ $(document).ready(function() {
             button.data('hidden', 'false');
         }
     });
-    if ('false' === 'true') {
+    if ('true' === 'true') {
         $('.copybutton').click();  // click once to hide
     }
 });

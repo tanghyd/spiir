@@ -10,22 +10,15 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
 
 import os
 import sys
-import pathlib
-
-path = pathlib.Path(__file__).resolve() / '..' / '..' / '..' / 'src'
-
-sys.path.insert(0, os.path.abspath(path))
+sys.path.insert(0, os.path.abspath('../../src/'))
 
 
 # -- Project information -----------------------------------------------------
 
-project = 'spiir'
+project = 'SPIIR'
 copyright = '2022, Daniel Tang'
 author = 'Daniel Tang'
 
@@ -40,8 +33,10 @@ release = '0.0.1'
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
-    'numpydoc'
+    'sphinx.ext.napoleon',
 ]
+
+napoleon_google_docstring = False
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

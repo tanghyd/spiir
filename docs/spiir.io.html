@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>spiir.io package &mdash; spiir 0.0.1 documentation</title>
+  <title>spiir.io package &mdash; SPIIR 0.0.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -26,7 +26,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> spiir
+            <a href="index.html" class="icon icon-home"> SPIIR
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -54,7 +54,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">spiir</a>
+          <a href="index.html">SPIIR</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -106,18 +106,16 @@ the output to a numpy array.</p>
 <p>Source: <a class="reference external" href="https://stackoverflow.com/a/24527424">https://stackoverflow.com/a/24527424</a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>iterable: Iterable</strong></dt><dd><p>An iterable object such as an array, tuple, np.array, etc.</p>
-</dd>
-<dt><strong>size: int</strong></dt><dd><p>The number of elements per array chunk.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>iterable</strong> (<em>Iterable</em>) – An iterable object such as an array, tuple, np.array, etc.</p></li>
+<li><p><strong>size</strong> (<em>int</em>) – The number of elements per array chunk.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt>itertools.chain</dt><dd><p>An iterable object.</p>
+<dd class="field-even"><p>An iterable object.</p>
 </dd>
-</dl>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>itertools.chain</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -140,16 +138,13 @@ for chunk in chunks(very_large_array, size=10000):</p>
 multiprocessing CPU cores based on the user’s machine specifications.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>nproc: int</strong></dt><dd><p>The number of processes to be used for CPU multiprocessing.</p>
-</dd>
-</dl>
+<dd class="field-odd"><p><strong>nproc</strong> (<em>int</em>) – The number of processes to be used for CPU multiprocessing.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt>int</dt><dd><p>A valid CPU count (nproc) integer for use in multiprocessing programs.</p>
+<dd class="field-even"><p>A valid CPU count (nproc) integer for use in multiprocessing programs.</p>
 </dd>
-</dl>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
 </dd>
 </dl>
 </dd></dl>

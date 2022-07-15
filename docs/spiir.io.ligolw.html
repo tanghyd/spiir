@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>spiir.io.ligolw package &mdash; spiir 0.0.1 documentation</title>
+  <title>spiir.io.ligolw package &mdash; SPIIR 0.0.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -26,7 +26,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> spiir
+            <a href="index.html" class="icon icon-home"> SPIIR
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -55,7 +55,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">spiir</a>
+          <a href="index.html">SPIIR</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -83,7 +83,7 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="spiir.io.ligolw.array.get_all_ligolw_frequency_arrays_from_xmldoc">
 <span class="sig-prename descclassname"><span class="pre">spiir.io.ligolw.array.</span></span><span class="sig-name descname"><span class="pre">get_all_ligolw_frequency_arrays_from_xmldoc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xmldoc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Element</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Series</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#spiir.io.ligolw.array.get_all_ligolw_frequency_arrays_from_xmldoc" title="Permalink to this definition"></a></dt>
-<dd><p>Reads a valid LIGO_LW XML Document from memory and returns a dictionary of 
+<dd><p>Reads a valid LIGO_LW XML Document from memory and returns a dictionary of
 pd.Series containing a REAL8FrequencySeries array for each frequency series present.</p>
 <p>The LIGO_LW Document should contain exactly one LIGO_LW REAL8FrequencySeries
 element per interferometer each as an Array element. Each REAL8FrequencySeries is
@@ -95,17 +95,14 @@ may not have matching resolutions (i.e. PSDs may not have matching frequency
 components recorded), but if they are the same they can simply be concatenated.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>xmldoc: ligo.lw.ligolw.Element</strong></dt><dd><p>A LIGO_LW XML Document, or Element, containing the necessary LIGO_LW elements.</p>
-</dd>
-</dl>
+<dd class="field-odd"><p><strong>xmldoc</strong> (<em>ligo.lw.ligolw.Element</em>) – A LIGO_LW XML Document, or Element, containing the necessary LIGO_LW elements.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt>dict[int, pd.Series]</dt><dd><p>A dictionary of pd.Series where the key refers to the interferometer name,
+<dd class="field-even"><p>A dictionary of pd.Series where the key refers to the interferometer name,
 and the values contain the respective real-valued frequency array.</p>
 </dd>
-</dl>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict[int, pd.Series]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -129,20 +126,18 @@ subtract the first element of the pd.Series index from every element for each
 SNR series respectively.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>xmldoc: ligo.lw.ligolw.Element</strong></dt><dd><p>A LIGO_LW XML Document, or Element, containing the necessary LIGO_LW elements.</p>
-</dd>
-<dt><strong>add_epoch_time: bool</strong></dt><dd><p>Whether to add the epoch time to each SNR series array for correct timestamps.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xmldoc</strong> (<em>ligo.lw.ligolw.Element</em>) – A LIGO_LW XML Document, or Element, containing the necessary LIGO_LW elements.</p></li>
+<li><p><strong>add_epoch_time</strong> (<em>bool</em>) – Whether to add the epoch time to each SNR series array for correct timestamps.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt>dict[int, pd.Series]</dt><dd><p>A dictionary of pd.Series where the key refers to the sngl_inspiral event_id,
+<dd class="field-even"><p>A dictionary of pd.Series where the key refers to the sngl_inspiral event_id,
 and the values contain the respective SNR timeseries array
 (each with their own timestamped indices).</p>
 </dd>
-</dl>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict[int, pd.Series]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -150,7 +145,7 @@ and the values contain the respective SNR timeseries array
 <dl class="py function">
 <dt class="sig sig-object py" id="spiir.io.ligolw.array.load_all_ligolw_frequency_arrays">
 <span class="sig-prename descclassname"><span class="pre">spiir.io.ligolw.array.</span></span><span class="sig-name descname"><span class="pre">load_all_ligolw_frequency_arrays</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bytes</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">PathLike</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ilwdchar_compat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Series</span></span></span><a class="headerlink" href="#spiir.io.ligolw.array.load_all_ligolw_frequency_arrays" title="Permalink to this definition"></a></dt>
-<dd><p>Reads a valid LIGO_LW XML Document from a file path and returns a dictionary of 
+<dd><p>Reads a valid LIGO_LW XML Document from a file path and returns a dictionary of
 pd.Series containing a REAL8FrequencySeries array for each frequency series present.</p>
 <p>The LIGO_LW Document should contain exactly one LIGO_LW REAL8FrequencySeries
 element per interferometer each as an Array element. Each REAL8FrequencySeries is
@@ -162,20 +157,17 @@ may not have matching resolutions (i.e. PSDs may not have matching frequency
 components recorded), but if they are the same they can simply be concatenated.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>path: str | bytes | PathLike</strong></dt><dd><p>A path-like to a file containing a valid LIGO_LW XML Document.</p>
-</dd>
-<dt><strong>ilwdchar_compat: bool</strong></dt><dd><p>Whether to add ilwdchar conversion compatibility.</p>
-</dd>
-<dt><strong>verbose: bool</strong></dt><dd><p>Whether to enable verbose output for ligo.lw.utils.load_filename.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em><em> | </em><em>bytes</em><em> | </em><em>PathLike</em>) – A path-like to a file containing a valid LIGO_LW XML Document.</p></li>
+<li><p><strong>ilwdchar_compat</strong> (<em>bool</em>) – Whether to add ilwdchar conversion compatibility.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Whether to enable verbose output for ligo.lw.utils.load_filename.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt>pd.Series</dt><dd><p>A pd.Series array containing the value and index of each frequency component.</p>
+<dd class="field-even"><p>A pd.Series array containing the value and index of each frequency component.</p>
 </dd>
-</dl>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pd.Series</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -200,24 +192,20 @@ subtract the first element of the pd.Series index from every element for each
 SNR series respectively.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>path: str | bytes | PathLike</strong></dt><dd><p>A path-like to a file containing a valid LIGO_LW XML Document.</p>
-</dd>
-<dt><strong>add_epoch_time: bool</strong></dt><dd><p>Whether to add the epoch time to each SNR series array for correct timestamps.</p>
-</dd>
-<dt><strong>ilwdchar_compat: bool</strong></dt><dd><p>Whether to add ilwdchar conversion compatibility.</p>
-</dd>
-<dt><strong>verbose: bool</strong></dt><dd><p>Whether to enable verbose output for ligo.lw.utils.load_filename.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em><em> | </em><em>bytes</em><em> | </em><em>PathLike</em>) – A path-like to a file containing a valid LIGO_LW XML Document.</p></li>
+<li><p><strong>add_epoch_time</strong> (<em>bool</em>) – Whether to add the epoch time to each SNR series array for correct timestamps.</p></li>
+<li><p><strong>ilwdchar_compat</strong> (<em>bool</em>) – Whether to add ilwdchar conversion compatibility.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Whether to enable verbose output for ligo.lw.utils.load_filename.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt>dict[int, pd.Series]</dt><dd><p>A dictionary of pd.Series where the key refers to the sngl_inspiral event_id,
+<dd class="field-even"><p>A dictionary of pd.Series where the key refers to the sngl_inspiral event_id,
 and the values contain the respective SNR timeseries array
 (each with their own timestamped indices).</p>
 </dd>
-</dl>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict[int, pd.Series]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -229,101 +217,6 @@ and the values contain the respective SNR timeseries array
 <dt class="sig sig-object py" id="spiir.io.ligolw.ligolw.LIGOLWContentHandler">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">spiir.io.ligolw.ligolw.</span></span><span class="sig-name descname"><span class="pre">LIGOLWContentHandler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">document</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_handlers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#spiir.io.ligolw.ligolw.LIGOLWContentHandler" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">LIGOLWContentHandler</span></code></p>
-<p class="rubric">Methods</p>
-<table class="autosummary longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">characters</span></code>(content)</p></td>
-<td><p>Receive notification of character data.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">endDocument</span></code>()</p></td>
-<td><p>Receive notification of the end of a document.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">endElement</span></code>(name)</p></td>
-<td><p>Signals the end of an element in non-namespace mode.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">endElementNS</span></code>(uri_localname, qname)</p></td>
-<td><p>Signals the end of an element in namespace mode.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">endPrefixMapping</span></code>(prefix)</p></td>
-<td><p>End the scope of a prefix-URI mapping.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ignorableWhitespace</span></code>(whitespace)</p></td>
-<td><p>Receive notification of ignorable whitespace in element content.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">processingInstruction</span></code>(target, data)</p></td>
-<td><p>Receive notification of a processing instruction.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">setDocumentLocator</span></code>(locator)</p></td>
-<td><p>Called by the parser to give the application a locator for locating the origin of document events.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">skippedEntity</span></code>(name)</p></td>
-<td><p>Receive notification of a skipped entity.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">startDocument</span></code>()</p></td>
-<td><p>Receive notification of the beginning of a document.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">startElement</span></code>(name, attrs)</p></td>
-<td><p>Signals the start of an element in non-namespace mode.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">startElementNS</span></code>(uri_localname, qname, attrs)</p></td>
-<td><p>Signals the start of an element in namespace mode.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">startPrefixMapping</span></code>(prefix, uri)</p></td>
-<td><p>Begin the scope of a prefix-URI Namespace mapping.</p></td>
-</tr>
-</tbody>
-</table>
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 67%" />
-<col style="width: 33%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><strong>startAdcData</strong></p></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p><strong>startAdcInterval</strong></p></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p><strong>startArray</strong></p></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p><strong>startColumn</strong></p></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p><strong>startComment</strong></p></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p><strong>startDetector</strong></p></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p><strong>startDim</strong></p></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p><strong>startIGWDFrame</strong></p></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p><strong>startLIGO_LW</strong></p></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p><strong>startParam</strong></p></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p><strong>startStream</strong></p></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p><strong>startTable</strong></p></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p><strong>startTime</strong></p></td>
-<td></td>
-</tr>
-</tbody>
-</table>
 <dl class="py method">
 <dt class="sig sig-object py" id="spiir.io.ligolw.ligolw.LIGOLWContentHandler.startArray">
 <span class="sig-name descname"><span class="pre">startArray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#spiir.io.ligolw.ligolw.LIGOLWContentHandler.startArray" title="Permalink to this definition"></a></dt>
@@ -358,26 +251,18 @@ and the values contain the respective SNR timeseries array
 the complex SNR timeseries arrays associated with each interferometer (‘ifo’).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>path: str | bytes | PathLike</strong></dt><dd><p>A path-like to a file containing a valid LIGO_LW XML Document.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em><em> | </em><em>bytes</em><em> | </em><em>PathLike</em>) – A path-like to a file containing a valid LIGO_LW XML Document.</p></li>
+<li><p><strong>add_epoch_time</strong> (<em>bool</em>) – Whether to add the epoch time to each SNR series array for correct timestamps.</p></li>
+<li><p><strong>ilwdchar_compat</strong> (<em>bool</em>) – Whether to add ilwdchar conversion compatibility.</p></li>
+<li><p><strong>legacy_postcoh_compat</strong> (<em>bool</em>) – Whether to handle compatibility for legacy postcoh table formats.</p></li>
+<li><p><strong>nullable</strong> (<em>bool</em>) – If True, sets the values for missing postcoh columns to NoneType,
+otherwise it is set to an appropriate default value given the column type.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Whether to enable verbose output for ligo.lw.utils.load_filename.</p></li>
+</ul>
 </dd>
-<dt><strong>add_epoch_time: bool</strong></dt><dd><p>Whether to add the epoch time to each SNR series array for correct timestamps.</p>
-</dd>
-<dt><strong>ilwdchar_compat: bool</strong></dt><dd><p>Whether to add ilwdchar conversion compatibility.</p>
-</dd>
-<dt><strong>legacy_postcoh_compat: bool</strong></dt><dd><p>Whether to handle compatibility for legacy postcoh table formats.</p>
-</dd>
-<dt><strong>nullable: bool</strong></dt><dd><p>If True, sets the values for missing postcoh columns to NoneType,
-otherwise it is set to an appropriate default value given the column type.</p>
-</dd>
-<dt><strong>verbose: bool</strong></dt><dd><p>Whether to enable verbose output for ligo.lw.utils.load_filename.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt>ligo.lw.ligolw.Element</dt><dd></dd>
-</dl>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>ligo.lw.ligolw.Element</p>
 </dd>
 </dl>
 </dd></dl>
@@ -393,17 +278,14 @@ Weight XML Python library.</p>
 as well as ligo.lw.table.Table instances.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>xmldoc: ligo.lw.ligo.lw.ligolw.Element</strong></dt><dd><p>A valid LIGO_LW XML Document or Element with the required LIGO_LW elements.</p>
-</dd>
-</dl>
+<dd class="field-odd"><p><strong>xmldoc</strong> (<em>ligo.lw.ligo.lw.ligolw.Element</em>) – A valid LIGO_LW XML Document or Element with the required LIGO_LW elements.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt>ligo.lw.ligolw.Element</dt><dd><p>The same LIGO_LW Document object passed as input with ilwd:char types
+<dd class="field-even"><p>The same LIGO_LW Document object passed as input with ilwd:char types
 converted to integers.</p>
 </dd>
-</dl>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ligo.lw.ligolw.Element</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -421,90 +303,6 @@ own algorithm for doing so, specifically for their needs.</p>
 <dt class="sig sig-object py" id="spiir.io.ligolw.postcoh.PostcohInspiral">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">spiir.io.ligolw.postcoh.</span></span><span class="sig-name descname"><span class="pre">PostcohInspiral</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#spiir.io.ligolw.postcoh.PostcohInspiral" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">RowType</span></code></p>
-<dl class="field-list simple">
-<dt class="field-odd">Attributes</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>bankid</strong></dt><dd></dd>
-<dt><strong>chisq_H1</strong></dt><dd></dd>
-<dt><strong>chisq_K1</strong></dt><dd></dd>
-<dt><strong>chisq_L1</strong></dt><dd></dd>
-<dt><strong>chisq_V1</strong></dt><dd></dd>
-<dt><strong>cmbchisq</strong></dt><dd></dd>
-<dt><strong>coaphase_H1</strong></dt><dd></dd>
-<dt><strong>coaphase_K1</strong></dt><dd></dd>
-<dt><strong>coaphase_L1</strong></dt><dd></dd>
-<dt><strong>coaphase_V1</strong></dt><dd></dd>
-<dt><strong>cohsnr</strong></dt><dd></dd>
-<dt><strong>dec</strong></dt><dd></dd>
-<dt><strong>deff_H1</strong></dt><dd></dd>
-<dt><strong>deff_K1</strong></dt><dd></dd>
-<dt><strong>deff_L1</strong></dt><dd></dd>
-<dt><strong>deff_V1</strong></dt><dd></dd>
-<dt><strong>end</strong></dt><dd></dd>
-<dt><strong>end_time</strong></dt><dd></dd>
-<dt><strong>end_time_ns</strong></dt><dd></dd>
-<dt><strong>end_time_ns_sngl_H1</strong></dt><dd></dd>
-<dt><strong>end_time_ns_sngl_K1</strong></dt><dd></dd>
-<dt><strong>end_time_ns_sngl_L1</strong></dt><dd></dd>
-<dt><strong>end_time_ns_sngl_V1</strong></dt><dd></dd>
-<dt><strong>end_time_sngl_H1</strong></dt><dd></dd>
-<dt><strong>end_time_sngl_K1</strong></dt><dd></dd>
-<dt><strong>end_time_sngl_L1</strong></dt><dd></dd>
-<dt><strong>end_time_sngl_V1</strong></dt><dd></dd>
-<dt><strong>eta</strong></dt><dd></dd>
-<dt><strong>event_id</strong></dt><dd></dd>
-<dt><strong>f_final</strong></dt><dd></dd>
-<dt><strong>fap</strong></dt><dd></dd>
-<dt><strong>far</strong></dt><dd></dd>
-<dt><strong>far_1d</strong></dt><dd></dd>
-<dt><strong>far_1d_sngl_H1</strong></dt><dd></dd>
-<dt><strong>far_1d_sngl_K1</strong></dt><dd></dd>
-<dt><strong>far_1d_sngl_L1</strong></dt><dd></dd>
-<dt><strong>far_1d_sngl_V1</strong></dt><dd></dd>
-<dt><strong>far_1w</strong></dt><dd></dd>
-<dt><strong>far_1w_sngl_H1</strong></dt><dd></dd>
-<dt><strong>far_1w_sngl_K1</strong></dt><dd></dd>
-<dt><strong>far_1w_sngl_L1</strong></dt><dd></dd>
-<dt><strong>far_1w_sngl_V1</strong></dt><dd></dd>
-<dt><strong>far_2h</strong></dt><dd></dd>
-<dt><strong>far_2h_sngl_H1</strong></dt><dd></dd>
-<dt><strong>far_2h_sngl_K1</strong></dt><dd></dd>
-<dt><strong>far_2h_sngl_L1</strong></dt><dd></dd>
-<dt><strong>far_2h_sngl_V1</strong></dt><dd></dd>
-<dt><strong>far_sngl_H1</strong></dt><dd></dd>
-<dt><strong>far_sngl_K1</strong></dt><dd></dd>
-<dt><strong>far_sngl_L1</strong></dt><dd></dd>
-<dt><strong>far_sngl_V1</strong></dt><dd></dd>
-<dt><strong>ifos</strong></dt><dd></dd>
-<dt><strong>is_background</strong></dt><dd></dd>
-<dt><strong>livetime</strong></dt><dd></dd>
-<dt><strong>mass1</strong></dt><dd></dd>
-<dt><strong>mass2</strong></dt><dd></dd>
-<dt><strong>mchirp</strong></dt><dd></dd>
-<dt><strong>mtotal</strong></dt><dd></dd>
-<dt><strong>nullsnr</strong></dt><dd></dd>
-<dt><strong>pivotal_ifo</strong></dt><dd></dd>
-<dt><strong>pix_idx</strong></dt><dd></dd>
-<dt><strong>process_id</strong></dt><dd></dd>
-<dt><strong>ra</strong></dt><dd></dd>
-<dt><strong>rank</strong></dt><dd></dd>
-<dt><strong>skymap_fname</strong></dt><dd></dd>
-<dt><strong>snglsnr_H1</strong></dt><dd></dd>
-<dt><strong>snglsnr_K1</strong></dt><dd></dd>
-<dt><strong>snglsnr_L1</strong></dt><dd></dd>
-<dt><strong>snglsnr_V1</strong></dt><dd></dd>
-<dt><strong>spearman_pval</strong></dt><dd></dd>
-<dt><strong>spin1x</strong></dt><dd></dd>
-<dt><strong>spin1y</strong></dt><dd></dd>
-<dt><strong>spin1z</strong></dt><dd></dd>
-<dt><strong>spin2x</strong></dt><dd></dd>
-<dt><strong>spin2y</strong></dt><dd></dd>
-<dt><strong>spin2z</strong></dt><dd></dd>
-<dt><strong>template_duration</strong></dt><dd></dd>
-<dt><strong>tmplt_idx</strong></dt><dd></dd>
-</dl>
-</dd>
-</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="spiir.io.ligolw.postcoh.PostcohInspiral.bankid">
 <span class="sig-name descname"><span class="pre">bankid</span></span><a class="headerlink" href="#spiir.io.ligolw.postcoh.PostcohInspiral.bankid" title="Permalink to this definition"></a></dt>
@@ -901,176 +699,6 @@ own algorithm for doing so, specifically for their needs.</p>
 <dt class="sig sig-object py" id="spiir.io.ligolw.postcoh.PostcohInspiralTable">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">spiir.io.ligolw.postcoh.</span></span><span class="sig-name descname"><span class="pre">PostcohInspiralTable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attrs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#spiir.io.ligolw.postcoh.PostcohInspiralTable" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></p>
-<dl class="field-list simple">
-<dt class="field-odd">Attributes</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">Name</span></code></dt><dd><p>The “Name” attribute.</p>
-</dd>
-<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">Type</span></code></dt><dd><p>The “Type” attribute.</p>
-</dd>
-<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">columnnames</span></code></dt><dd><p>The stripped (without table prefixes attached) Name attributes of the Column elements in this table, in order.</p>
-</dd>
-<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">columnnamesreal</span></code></dt><dd><p>The non-stripped (with table prefixes attached) Name attributes of the Column elements in this table, in order.</p>
-</dd>
-<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">columnpytypes</span></code></dt><dd><p>The Python types corresponding to the Type attributes of the Column elements in this table, in order.</p>
-</dd>
-<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">columntypes</span></code></dt><dd><p>The Type attributes of the Column elements in this table, in order.</p>
-</dd>
-<dt><strong>how_to_index</strong></dt><dd></dd>
-<dt><strong>loadcolumns</strong></dt><dd></dd>
-</dl>
-</dd>
-</dl>
-<p class="rubric">Methods</p>
-<table class="autosummary longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">CheckElement</span></code>(elem)</p></td>
-<td><p>Return True if element is a Table element whose Name attribute matches the .tableName attribute of this class ; return False otherwise.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">CheckProperties</span></code>(tagname, attrs)</p></td>
-<td><p>Return True if tagname and attrs are the XML tag name and element attributes, respectively, of a Table element whose Name attribute matches the .tableName attribute of this class;  return False otherwise.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#spiir.io.ligolw.postcoh.PostcohInspiralTable.RowType" title="spiir.io.ligolw.postcoh.PostcohInspiralTable.RowType"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RowType</span></code></a></p></td>
-<td><p>alias of <a class="reference internal" href="#spiir.io.ligolw.postcoh.PostcohInspiral" title="spiir.io.ligolw.postcoh.PostcohInspiral"><code class="xref py py-class docutils literal notranslate"><span class="pre">PostcohInspiral</span></code></a></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TableName</span></code>(name)</p></td>
-<td><p><p class="rubric">Methods</p>
-</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">append</span></code>(object, /)</p></td>
-<td><p>Append object to the end of the list.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">appendChild</span></code>(child)</p></td>
-<td><p>Add a child to this element.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">appendColumn</span></code>(name)</p></td>
-<td><p>Append a Column element named &quot;name&quot; to the table.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">appendData</span></code>(content)</p></td>
-<td><p>Add characters to the element's pcdata.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">appendRow</span></code>(*args, **kwargs)</p></td>
-<td><p>Create and append a new row to this table, then return it</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">applyKeyMapping</span></code>(mapping)</p></td>
-<td><p>Used as the second half of the key reassignment algorithm.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear</span></code>(/)</p></td>
-<td><p>Remove all items from list.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy</span></code>()</p></td>
-<td><p>Construct and return a new Table document subtree whose structure is the same as this table, that is it has the same columns etc.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">count</span></code>(value, /)</p></td>
-<td><p>Return number of occurrences of value.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">endElement</span></code>()</p></td>
-<td><p>Method invoked by document parser when it encounters the end-of-element event.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">end_tag</span></code>(indent)</p></td>
-<td><p>Generate the string for the element's end tag.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">extend</span></code>(iterable, /)</p></td>
-<td><p>Extend list by appending elements from the iterable.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">getColumnByName</span></code>(name)</p></td>
-<td><p>Retrieve and return the Column child element named name.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">getElements</span></code>(filter)</p></td>
-<td><p>Return a list of elements below and including this element for which filter(element) returns True.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">getTablesByName</span></code>(elem, name)</p></td>
-<td><p>Return a list of Table elements named name under elem.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_next_id</span></code>()</p></td>
-<td><p>Returns the current value of the next_id class attribute, and increments the next_id class attribute by 1.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_table</span></code>(xmldoc[, name])</p></td>
-<td><p>Scan xmldoc for a Table element named name.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">index</span></code>(value[, start, stop])</p></td>
-<td><p>Return first index of value.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">insert</span></code>(index, object, /)</p></td>
-<td><p>Insert object before index.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">insertBefore</span></code>(newchild, refchild)</p></td>
-<td><p>Insert a new child node before an existing child.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">pop</span></code>([index])</p></td>
-<td><p>Remove and return item at index (default last).</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove</span></code>(value, /)</p></td>
-<td><p>Remove first occurrence of value.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">removeChild</span></code>(child)</p></td>
-<td><p>Remove a child from this element.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">replaceChild</span></code>(newchild, oldchild)</p></td>
-<td><p>Replace an existing node with a new node.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset_next_id</span></code>()</p></td>
-<td><p>If the current value of the next_id class attribute is not None then set it to 0, otherwise it is left unmodified.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">reverse</span></code>(/)</p></td>
-<td><p>Reverse <em>IN PLACE</em>.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_next_id</span></code>(next_id)</p></td>
-<td><p>Sets the value of the next_id class attribute.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">sort</span></code>(*[, key, reverse])</p></td>
-<td><p>Sort the list in ascending order and return None.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">start_tag</span></code>(indent)</p></td>
-<td><p>Generate the string for the element's start tag.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">sync_next_id</span></code>()</p></td>
-<td><p>Determines the highest-numbered ID in this table, and sets the table's .next_id attribute to the next highest ID in sequence.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">unlink</span></code>()</p></td>
-<td><p>Break internal references within the document tree rooted on this element to promote garbage collection.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">updateKeyMapping</span></code>(mapping)</p></td>
-<td><p>Used as the first half of the row key reassignment algorithm.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">write</span></code>([fileobj, indent])</p></td>
-<td><p>Recursively write an element and it's children to a file.</p></td>
-</tr>
-</tbody>
-</table>
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 73%" />
-<col style="width: 27%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><strong>getAttribute</strong></p></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p><strong>getChildrenByAttributes</strong></p></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p><strong>getElementsByTagName</strong></p></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p><strong>hasAttribute</strong></p></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p><strong>removeAttribute</strong></p></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p><strong>setAttribute</strong></p></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p><strong>validattributes</strong></p></td>
-<td></td>
-</tr>
-</tbody>
-</table>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="spiir.io.ligolw.postcoh.PostcohInspiralTable.RowType">
 <span class="sig-name descname"><span class="pre">RowType</span></span><a class="headerlink" href="#spiir.io.ligolw.postcoh.PostcohInspiralTable.RowType" title="Permalink to this definition"></a></dt>
@@ -1108,19 +736,17 @@ updated to their latest values - otherwise unconverted column names will be
 interpreted as if they were simply missing.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>xmldoc: ligo.lw.ligo.lw.ligolw.Element</strong></dt><dd><p>A valid LIGO_LW XML Document or Element with the required LIGO_LW elements.</p>
-</dd>
-<dt><strong>nullable: bool</strong></dt><dd><p>If True, sets the values for missing postcoh columns to NoneType,
-otherwise it is set to an appropriate default value given the column type.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xmldoc</strong> (<em>ligo.lw.ligo.lw.ligolw.Element</em>) – A valid LIGO_LW XML Document or Element with the required LIGO_LW elements.</p></li>
+<li><p><strong>nullable</strong> (<em>bool</em>) – If True, sets the values for missing postcoh columns to NoneType,
+otherwise it is set to an appropriate default value given the column type.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt>ligo.lw.ligolw.Element</dt><dd><p>The same LIGO_LW Document object with updated table column names.</p>
+<dd class="field-even"><p>The same LIGO_LW Document object with updated table column names.</p>
 </dd>
-</dl>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ligo.lw.ligolw.Element</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1131,16 +757,13 @@ otherwise it is set to an appropriate default value given the column type.</p>
 <dd><p>Updates legacy PostcohInspiralTable table column names to their latest versions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>xmldoc: ligo.lw.ligo.lw.ligolw.Element</strong></dt><dd><p>A valid LIGO_LW XML Document or Element with the required LIGO_LW elements.</p>
-</dd>
-</dl>
+<dd class="field-odd"><p><strong>xmldoc</strong> (<em>ligo.lw.ligo.lw.ligolw.Element</em>) – A valid LIGO_LW XML Document or Element with the required LIGO_LW elements.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt>ligo.lw.ligolw.Element</dt><dd><p>The same LIGO_LW Document object with updated table column names.</p>
+<dd class="field-even"><p>The same LIGO_LW Document object with updated table column names.</p>
 </dd>
-</dl>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ligo.lw.ligolw.Element</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1154,7 +777,9 @@ ligo.lw.ligolw.LIGOLWContentHandler, to cause it to use the Table
 classes defined in this module when parsing XML documents.</p>
 </div></blockquote>
 <p>NOTE: This function has not been tested and should not be assumed to work correctly.</p>
-<p class="rubric">Examples</p>
+<blockquote>
+<div><p>Examples</p>
+</div></blockquote>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">glue.ligolw</span> <span class="kn">import</span> <span class="n">ligolw</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">MyContentHandler</span><span class="p">(</span><span class="n">ligolw</span><span class="o">.</span><span class="n">LIGOLWContentHandler</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">pass</span>
@@ -1175,30 +800,20 @@ classes defined in this module when parsing XML documents.</p>
 using GWPy and returns a pandas DataFrame object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>paths: str | bytes | PathLike | Iterable[str | bytes | PathLike]</strong></dt><dd><p>A path or list of paths to LIGO_LW XML Document(s) each with a postcoh table.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>paths</strong> (<em>str</em><em> | </em><em>bytes</em><em> | </em><em>PathLike</em><em> | </em><em>Iterable</em><em>[</em><em>str</em><em> | </em><em>bytes</em><em> | </em><em>PathLike</em><em>]</em>) – A path or list of paths to LIGO_LW XML Document(s) each with a postcoh table.</p></li>
+<li><p><strong>columns</strong> (<em>list</em><em>[</em><em>str</em><em>] </em><em>| </em><em>None = None</em>) – A optional list of column names to filter and read in from each postcoh table.</p></li>
+<li><p><strong>ilwdchar_compat</strong> (<em>bool</em>) – Whether to add ilwdchar conversion compatibility.</p></li>
+<li><p><strong>legacy_postcoh_compat</strong> (<em>bool</em>) – Whether to handle compatibility for legacy postcoh table formats.</p></li>
+<li><p><strong>nullable</strong> (<em>bool</em>) – If True, sets the values for missing postcoh columns to NoneType,
+otherwise it is set to an appropriate default value given the column type.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Whether to enable verbose output.</p></li>
+<li><p><strong>nproc</strong> (<em>int</em>) – Number of CPU processes to use for multiprocessing. Default: 1, recommended: 4.</p></li>
+<li><p><strong>df</strong> (<em>bool</em>) – If True returns a pd.DataFrame, else returns the original gwpy.table.EventTable.</p></li>
+</ul>
 </dd>
-<dt><strong>columns: list[str] | None = None</strong></dt><dd><p>A optional list of column names to filter and read in from each postcoh table.</p>
-</dd>
-<dt><strong>ilwdchar_compat: bool</strong></dt><dd><p>Whether to add ilwdchar conversion compatibility.</p>
-</dd>
-<dt><strong>legacy_postcoh_compat: bool</strong></dt><dd><p>Whether to handle compatibility for legacy postcoh table formats.</p>
-</dd>
-<dt><strong>nullable: bool</strong></dt><dd><p>If True, sets the values for missing postcoh columns to NoneType,
-otherwise it is set to an appropriate default value given the column type.</p>
-</dd>
-<dt><strong>verbose: bool</strong></dt><dd><p>Whether to enable verbose output.</p>
-</dd>
-<dt><strong>nproc: int</strong></dt><dd><p>Number of CPU processes to use for multiprocessing. Default: 1, recommended: 4.</p>
-</dd>
-<dt><strong>df: bool</strong></dt><dd><p>If True returns a pd.DataFrame, else returns the original gwpy.table.EventTable.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt>pd.DataFrame</dt><dd></dd>
-</dl>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pd.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>

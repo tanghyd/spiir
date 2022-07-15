@@ -1,5 +1,5 @@
 .. spiir documentation master file, created by
-   sphinx-quickstart on Fri Jul 15 15:25:22 2022.
+   sphinx-quickstart on Fri Jul 15 17:52:16 2022.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
@@ -10,7 +10,6 @@ Welcome to spiir's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-modules
 
 
 Indices and tables

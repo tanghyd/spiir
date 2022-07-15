@@ -1,4 +1,5 @@
 # temp ignore
+./backup/
 src/spiir/waveform/iir
 src/spiir/waveform/bank.py
 

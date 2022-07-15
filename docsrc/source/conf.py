@@ -16,8 +16,7 @@ import sys
 from typing import List
 
 # sys.path.insert(0, os.path.abspath('../../src/'))
-sys.path.insert(0, os.path.abspath('../../src/spiir/'))
-
+sys.path.insert(0, os.path.abspath('../../src'))
 
 # -- Project information -----------------------------------------------------
 
@@ -38,10 +37,11 @@ extensions = [
     "sphinx_rtd_theme",
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
+    # 'sphinx.ext.napoleon',
     'numpydoc',
 ]
 
-napoleon_google_docstring = False
+# napoleon_google_docstring = False
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

@@ -9,7 +9,6 @@ Subpackages
 
    spiir.distribution
    spiir.io
-   spiir.tf
 
 Module contents
 ---------------

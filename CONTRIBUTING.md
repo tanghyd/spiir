@@ -31,6 +31,8 @@ directly (i.e. list, tuple, dict instead of typing.List, typing.Tuple, typing.Di
 
 ## Documentation
 
+### NumPy Style
+
 All documentation should follow the NumPy documentation style guide which can be found 
 [here](https://numpydoc.readthedocs.io/en/latest/format.html). The NumPy style guide is 
 a derivation of the Google Developer documentation style guide. All function docstrings 
@@ -52,6 +54,7 @@ won't be available in the actual code itself. Nevertherless, the new approach is
 readable and will be suitable for future updates when the library is eventually ported 
 to Python3.10.
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 ### Building Documentation With Sphinx
 
@@ -120,11 +123,19 @@ The current issues holding things up include:
 - I think I've fixed injections being projected properly for multiple detectors, but I will list it here in case
 =======
 ### Sphinx
+=======
+### Building With Sphinx
+>>>>>>> Rerun make github again
 
 The documentation for this package can be built using Sphinx by running the following 
 commands in the `docs/` directory as follows:
 
     sphinx-quickstart
+<<<<<<< HEAD
     sphinx-apidoc -f -o ./source ../src  # generates .rst files from code
     make html                            # use make clean html to remove old build files
 >>>>>>> Add sphinx quick start
+=======
+    sphinx-apidoc -M -f -o ./source ../src/spiir  # generates .rst files from code
+    make github                          # use make clean to remove old build files
+>>>>>>> Rerun make github again

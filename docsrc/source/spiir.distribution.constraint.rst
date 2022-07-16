@@ -9,18 +9,8 @@ spiir.distribution.constraint package
 Submodules
 ----------
 
-spiir.distribution.constraint.constraint module
------------------------------------------------
+.. toctree::
+   :maxdepth: 4
 
-.. automodule:: spiir.distribution.constraint.constraint
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-spiir.distribution.constraint.pycbc module
-------------------------------------------
-
-.. automodule:: spiir.distribution.constraint.pycbc
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   spiir.distribution.constraint.constraint
+   spiir.distribution.constraint.pycbc

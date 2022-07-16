@@ -76,4 +76,4 @@ autosummary_imported_members = True
 
 # Configure toggleprompt
 toggleprompt_default_hidden = "true"
-toggleprompt_offset_right = 30  # stops toggle and copy buttons overlapping
+toggleprompt_offset_right = 35  # stops toggle and copy buttons overlapping

@@ -10,7 +10,9 @@ Welcome to SPIIR's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   introduction
+   overview
+   simulation
+   ligolw
    modules
 
 Indices and tables

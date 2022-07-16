@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LIGO Light Weight &mdash; SPIIR 0.0.1 documentation</title>
+  <title>LIGO Light-Weight &mdash; SPIIR 0.0.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
@@ -24,7 +24,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="spiir" href="modules.html" />
-    <link rel="prev" title="Simulation" href="simulation.html" /> 
+    <link rel="prev" title="Waveform Generation" href="waveforms.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -48,9 +48,11 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="simulation.html">Simulation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">LIGO Light Weight</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="waveforms.html">Waveform Generation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">LIGO Light-Weight</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#the-ligo-lw-xml-format">The LIGO LW XML Format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#legacy-ilwd-char-types">Legacy ilwd:char Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#spiir-legacy-compatibility">SPIIR Legacy Compatibility</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">spiir</a></li>
@@ -70,7 +72,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>LIGO Light Weight</li>
+      <li>LIGO Light-Weight</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/ligolw.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -81,16 +83,47 @@
            <div itemprop="articleBody">
              
   <section id="ligo-light-weight">
-<h1>LIGO Light Weight<a class="headerlink" href="#ligo-light-weight" title="Permalink to this heading"></a></h1>
+<h1>LIGO Light-Weight<a class="headerlink" href="#ligo-light-weight" title="Permalink to this heading"></a></h1>
 <p>Version 0.0.1</p>
 <section id="the-ligo-lw-xml-format">
 <h2>The LIGO LW XML Format<a class="headerlink" href="#the-ligo-lw-xml-format" title="Permalink to this heading"></a></h2>
-<p>LIGO LW (Light Weight) is the name of a XML-based data format used across the LIGO
+<p>LIGO Light-Weight (LIGO LW) is the name of a XML-based data format used across the LIGO
 Scientific Collaboration.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This documentation is a work in progress! Hold tight…</p>
 </div>
+</section>
+<section id="legacy-ilwd-char-types">
+<h2>Legacy ilwd:char Types<a class="headerlink" href="#legacy-ilwd-char-types" title="Permalink to this heading"></a></h2>
+<p>LIGO Light Weight XML “ilwd:char” types are a legacy data type used to represent unique
+IDs as strings of the form “table:column:integer” - for example
+<cite>“process:process_id:10”`</cite> or  <cite>“postcoh:event_id:1”</cite>. Large LIGO LW XML ocuments may
+have many millions of these  strings and as a result are an extremely memory
+inefficient method of tracking ids. However, a number of projects within the LIGO
+Scientific Collaboration (LSC) still use ilwd:char types, especially if they are
+dependent on data generated or collected from previous science observation runs.</p>
+<p>There has been a push to deprecate all usage of ilwd:char types, with a number of
+scripts and packages offering functionality to convert ilwd:char types to a more simple
+integer based id format. For example, the <cite>python-ligo-lw`</cite> package offers scripts to
+convert any LIGO LW XML document with ilwd:char types to corresponding integer types,
+and the Python gravitational wave data processing library <cite>gwpy</cite> also offers legacy
+ilwd:char compatibility handling as well.</p>
+<p>In the case of SPIIR, a number of LIGO LW XML documents generated from the Python2.7
+version of the pipeline may still contain ilwd:char types. To complicate matters, SPIIR
+uses its own custom LIGO LW Table format called <cite>PostcohInspiralTable</cite> to record
+post-coherence coincident trigger data as candidate events for the pipeline, and so it
+may be the case that LIGO LW XML Documents with this <cite>“postcoh”</cite> table may still have
+ilwd:char types as well. However, as it is a custom type, it is not automatically
+supported out of the box by modern packages such as <cite>python-ligo-lw</cite> or <cite>gwpy</cite>, and
+they must be handled as a special case.</p>
+</section>
+<section id="spiir-legacy-compatibility">
+<h2>SPIIR Legacy Compatibility<a class="headerlink" href="#spiir-legacy-compatibility" title="Permalink to this heading"></a></h2>
+<p>Thankfully, this package provides the tools to assist with parsing SPIIR’s custom
+<cite>PostcohInspiralTable</cite> formats with support for ilwd:char types as well as any changing
+column data schemas that may occur during the ongoing development work of porting its
+legacy Python2.7 codebase to Python3.</p>
 </section>
 </section>
 
@@ -98,7 +131,7 @@ Scientific Collaboration.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="simulation.html" class="btn btn-neutral float-left" title="Simulation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="waveforms.html" class="btn btn-neutral float-left" title="Waveform Generation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="modules.html" class="btn btn-neutral float-right" title="spiir" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

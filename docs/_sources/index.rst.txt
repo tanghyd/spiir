@@ -11,7 +11,7 @@ Welcome to SPIIR's documentation!
    :caption: Contents:
 
    overview
-   waveforms
+   data_generation
    ligolw
    modules
 

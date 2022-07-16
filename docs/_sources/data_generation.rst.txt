@@ -1,6 +1,6 @@
-===================
-Waveform Generation
-===================
+===============
+Data Generation
+===============
 
 Version |version|
 
@@ -17,7 +17,7 @@ This section will discuss parameter sampling for compact binary coalescence simu
 models.
 
 
-Inspiral Simulation
+Waveform Simulation
 ===================
 
 This section will discuss generating waveform polarisations using numerical relativity

@@ -31,7 +31,10 @@ scripts and packages offering functionality to convert ilwd:char types to a more
 integer based id format. For example, the `python-ligo-lw`` package offers scripts to 
 convert any LIGO LW XML document with ilwd:char types to corresponding integer types, 
 and the Python gravitational wave data processing library `gwpy` also offers legacy 
-ilwd:char compatibility handling as well.
+ilwd:char compatibility handling as well. However, collaboration-wide support for this 
+legacy data type will not be maintained forever, with some packages deprecating support 
+for any ilwd:char types as of Python3.10 and onwards - making it imperative for users 
+to use the updated formats in their research and development workflow.
 
 In the case of SPIIR, a number of LIGO LW XML documents generated from the Python2.7 
 version of the pipeline may still contain ilwd:char types. To complicate matters, SPIIR 
@@ -42,10 +45,9 @@ ilwd:char types as well. However, as it is a custom type, it is not automaticall
 supported out of the box by modern packages such as `python-ligo-lw` or `gwpy`, and 
 they must be handled as a special case.
 
-SPIIR Legacy Compatibility
-==========================
+Legacy Compatibility
+====================
 
-Thankfully, this package provides the tools to assist with parsing SPIIR's custom 
-`PostcohInspiralTable` formats with support for ilwd:char types as well as any changing 
-column data schemas that may occur during the ongoing development work of porting its 
-legacy Python2.7 codebase to Python3.
+This package provides the tools to help parse custom `PostcohInspiralTable` table 
+formats with automatic compatibility support for legacy ilwd:char types and/or table 
+schemas (i.e. changing column names) during SPIIR's ongoing development updates.

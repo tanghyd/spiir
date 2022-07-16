@@ -24,7 +24,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="spiir" href="modules.html" />
-    <link rel="prev" title="Waveform Generation" href="waveforms.html" /> 
+    <link rel="prev" title="Data Generation" href="data_generation.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -48,11 +48,11 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="waveforms.html">Waveform Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_generation.html">Data Generation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">LIGO Light-Weight</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#the-ligo-lw-xml-format">The LIGO LW XML Format</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#legacy-ilwd-char-types">Legacy ilwd:char Types</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#spiir-legacy-compatibility">SPIIR Legacy Compatibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#legacy-compatibility">Legacy Compatibility</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">spiir</a></li>
@@ -108,7 +108,10 @@ scripts and packages offering functionality to convert ilwd:char types to a more
 integer based id format. For example, the <cite>python-ligo-lw`</cite> package offers scripts to
 convert any LIGO LW XML document with ilwd:char types to corresponding integer types,
 and the Python gravitational wave data processing library <cite>gwpy</cite> also offers legacy
-ilwd:char compatibility handling as well.</p>
+ilwd:char compatibility handling as well. However, collaboration-wide support for this
+legacy data type will not be maintained forever, with some packages deprecating support
+for any ilwd:char types as of Python3.10 and onwards - making it imperative for users
+to use the updated formats in their research and development workflow.</p>
 <p>In the case of SPIIR, a number of LIGO LW XML documents generated from the Python2.7
 version of the pipeline may still contain ilwd:char types. To complicate matters, SPIIR
 uses its own custom LIGO LW Table format called <cite>PostcohInspiralTable</cite> to record
@@ -118,12 +121,11 @@ ilwd:char types as well. However, as it is a custom type, it is not automaticall
 supported out of the box by modern packages such as <cite>python-ligo-lw</cite> or <cite>gwpy</cite>, and
 they must be handled as a special case.</p>
 </section>
-<section id="spiir-legacy-compatibility">
-<h2>SPIIR Legacy Compatibility<a class="headerlink" href="#spiir-legacy-compatibility" title="Permalink to this heading"></a></h2>
-<p>Thankfully, this package provides the tools to assist with parsing SPIIR’s custom
-<cite>PostcohInspiralTable</cite> formats with support for ilwd:char types as well as any changing
-column data schemas that may occur during the ongoing development work of porting its
-legacy Python2.7 codebase to Python3.</p>
+<section id="legacy-compatibility">
+<h2>Legacy Compatibility<a class="headerlink" href="#legacy-compatibility" title="Permalink to this heading"></a></h2>
+<p>This package provides the tools to help parse custom <cite>PostcohInspiralTable</cite> table
+formats with automatic compatibility support for legacy ilwd:char types and/or table
+schemas (i.e. changing column names) during SPIIR’s ongoing development updates.</p>
 </section>
 </section>
 
@@ -131,7 +133,7 @@ legacy Python2.7 codebase to Python3.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="waveforms.html" class="btn btn-neutral float-left" title="Waveform Generation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="data_generation.html" class="btn btn-neutral float-left" title="Data Generation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="modules.html" class="btn btn-neutral float-right" title="spiir" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

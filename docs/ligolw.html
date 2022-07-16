@@ -98,27 +98,29 @@ Scientific Collaboration.</p>
 <h2>Legacy ilwd:char Types<a class="headerlink" href="#legacy-ilwd-char-types" title="Permalink to this heading"></a></h2>
 <p>LIGO Light Weight XML “ilwd:char” types are a legacy data type used to represent unique
 IDs as strings of the form “table:column:integer” - for example
-<cite>“process:process_id:10”`</cite> or  <cite>“postcoh:event_id:1”</cite>. Large LIGO LW XML ocuments may
+<code class="docutils literal notranslate"><span class="pre">“process:process_id:10”</span></code> or  <code class="docutils literal notranslate"><span class="pre">&quot;postcoh:event_id:1&quot;</span></code>. Large LIGO LW XML ocuments may
 have many millions of these  strings and as a result are an extremely memory
 inefficient method of tracking ids. However, a number of projects within the LIGO
 Scientific Collaboration (LSC) still use ilwd:char types, especially if they are
 dependent on data generated or collected from previous science observation runs.</p>
 <p>There has been a push to deprecate all usage of ilwd:char types, with a number of
 scripts and packages offering functionality to convert ilwd:char types to a more simple
-integer based id format. For example, the <cite>python-ligo-lw`</cite> package offers scripts to
-convert any LIGO LW XML document with ilwd:char types to corresponding integer types,
-and the Python gravitational wave data processing library <cite>gwpy</cite> also offers legacy
-ilwd:char compatibility handling as well. However, collaboration-wide support for this
-legacy data type will not be maintained forever, with some packages deprecating support
-for any ilwd:char types as of Python3.10 and onwards - making it imperative for users
-to use the updated formats in their research and development workflow.</p>
+integer based id format. For example, the <a class="reference external" href="https://git.ligo.org/kipp.cannon/python-ligo-lw">python-ligo-lw</a> package offers utilities to
+convert LIGO LW XML documents with ilwd:char types to their corresponding modern
+integer version, and the Python gravitational wave astrophysics library <a class="reference external" href="https://gwpy.github.io/">gwpy</a> also
+offers automatic ilwd:char compatibility for a standard set of LSC LIGO LW Table
+schemas as well.</p>
+<p>However, collaboration-wide support for this this legacy data type will not be
+maintained forever, with some packages deprecating support for any ilwd:char types as
+of Python3.10 and onwards - making it imperative for users to use the updated formats
+in their research and development workflow as soon as possible.</p>
 <p>In the case of SPIIR, a number of LIGO LW XML documents generated from the Python2.7
 version of the pipeline may still contain ilwd:char types. To complicate matters, SPIIR
-uses its own custom LIGO LW Table format called <cite>PostcohInspiralTable</cite> to record
+uses its own custom LIGO LW Table format called <code class="docutils literal notranslate"><span class="pre">PostcohInspiralTable</span></code> to record
 post-coherence coincident trigger data as candidate events for the pipeline, and so it
-may be the case that LIGO LW XML Documents with this <cite>“postcoh”</cite> table may still have
+may be the case that LIGO LW XML Documents with this <code class="docutils literal notranslate"><span class="pre">&quot;postcoh&quot;</span></code> table may still have
 ilwd:char types as well. However, as it is a custom type, it is not automatically
-supported out of the box by modern packages such as <cite>python-ligo-lw</cite> or <cite>gwpy</cite>, and
+supported out of the box by modern packages such as <a class="reference external" href="https://git.ligo.org/kipp.cannon/python-ligo-lw">python-ligo-lw</a> or <a class="reference external" href="https://gwpy.github.io/">gwpy</a>, and
 they must be handled as a special case.</p>
 </section>
 <section id="legacy-compatibility">

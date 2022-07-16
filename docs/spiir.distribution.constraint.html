@@ -23,7 +23,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="&lt;no title&gt;" href="spiir.distribution.constraint.constraint.html" />
+    <link rel="next" title="spiir.distribution.transform package" href="spiir.distribution.transform.html" />
     <link rel="prev" title="spiir.distribution package" href="spiir.distribution.html" /> 
 </head>
 
@@ -94,8 +94,88 @@
 <span id="spiir-distribution-constraint-package"></span><h1>spiir.distribution.constraint package<a class="headerlink" href="#module-spiir.distribution.constraint" title="Permalink to this heading"></a></h1>
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
-<div class="toctree-wrapper compound">
-</div>
+</section>
+<section id="module-spiir.distribution.constraint.constraint">
+<span id="spiir-distribution-constraint-constraint-module"></span><h2>spiir.distribution.constraint.constraint module<a class="headerlink" href="#module-spiir.distribution.constraint.constraint" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="spiir.distribution.constraint.constraint.Constraint">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">spiir.distribution.constraint.constraint.</span></span><span class="sig-name descname"><span class="pre">Constraint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">package</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'numpy'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#spiir.distribution.constraint.constraint.Constraint" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Abstract Base Class for Constraint classes</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="spiir.distribution.constraint.constraint.Constraint.apply">
+<span class="sig-name descname"><span class="pre">apply</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#spiir.distribution.constraint.constraint.Constraint.apply" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="spiir.distribution.constraint.constraint.Constraint.package">
+<span class="sig-name descname"><span class="pre">package</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#spiir.distribution.constraint.constraint.Constraint.package" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="spiir.distribution.constraint.constraint.NumPyConstraint">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">spiir.distribution.constraint.constraint.</span></span><span class="sig-name descname"><span class="pre">NumPyConstraint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">package</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'numpy'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#spiir.distribution.constraint.constraint.NumPyConstraint" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#spiir.distribution.constraint.constraint.Constraint" title="spiir.distribution.constraint.constraint.Constraint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Constraint</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="spiir.distribution.constraint.constraint.NumPyConstraint.apply">
+<span class="sig-name descname"><span class="pre">apply</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#spiir.distribution.constraint.constraint.NumPyConstraint.apply" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="spiir.distribution.constraint.constraint.NumPyConstraint.package">
+<span class="sig-name descname"><span class="pre">package</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'numpy'</span></em><a class="headerlink" href="#spiir.distribution.constraint.constraint.NumPyConstraint.package" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="spiir.distribution.constraint.constraint.SPIIRConstraint">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">spiir.distribution.constraint.constraint.</span></span><span class="sig-name descname"><span class="pre">SPIIRConstraint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">package</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'numpy'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#spiir.distribution.constraint.constraint.SPIIRConstraint" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#spiir.distribution.constraint.constraint.Constraint" title="spiir.distribution.constraint.constraint.Constraint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Constraint</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="spiir.distribution.constraint.constraint.SPIIRConstraint.apply">
+<span class="sig-name descname"><span class="pre">apply</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#spiir.distribution.constraint.constraint.SPIIRConstraint.apply" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="spiir.distribution.constraint.constraint.SPIIRConstraint.package">
+<span class="sig-name descname"><span class="pre">package</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'spiir'</span></em><a class="headerlink" href="#spiir.distribution.constraint.constraint.SPIIRConstraint.package" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-spiir.distribution.constraint.pycbc">
+<span id="spiir-distribution-constraint-pycbc-module"></span><h2>spiir.distribution.constraint.pycbc module<a class="headerlink" href="#module-spiir.distribution.constraint.pycbc" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="spiir.distribution.constraint.pycbc.MassConstraint">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">spiir.distribution.constraint.pycbc.</span></span><span class="sig-name descname"><span class="pre">MassConstraint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">constraint_arg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transforms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#spiir.distribution.constraint.pycbc.MassConstraint" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="spiir.distribution.constraint.pycbc.MassConstraint.constraint">
+<span class="sig-name descname"><span class="pre">constraint</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'mass'</span></em><a class="headerlink" href="#spiir.distribution.constraint.pycbc.MassConstraint.constraint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="spiir.distribution.constraint.pycbc.PyCBCConstraint">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">spiir.distribution.constraint.pycbc.</span></span><span class="sig-name descname"><span class="pre">PyCBCConstraint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">package</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'numpy'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#spiir.distribution.constraint.pycbc.PyCBCConstraint" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#spiir.distribution.constraint.constraint.Constraint" title="spiir.distribution.constraint.constraint.Constraint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Constraint</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="spiir.distribution.constraint.pycbc.PyCBCConstraint.apply">
+<span class="sig-name descname"><span class="pre">apply</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#spiir.distribution.constraint.pycbc.PyCBCConstraint.apply" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="spiir.distribution.constraint.pycbc.PyCBCConstraint.package">
+<span class="sig-name descname"><span class="pre">package</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'pycbc'</span></em><a class="headerlink" href="#spiir.distribution.constraint.pycbc.PyCBCConstraint.package" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </section>
 </section>
 
@@ -104,7 +184,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="spiir.distribution.html" class="btn btn-neutral float-left" title="spiir.distribution package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="spiir.distribution.constraint.constraint.html" class="btn btn-neutral float-right" title="&lt;no title&gt;" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="spiir.distribution.transform.html" class="btn btn-neutral float-right" title="spiir.distribution.transform package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -9,7 +9,10 @@ spiir.distribution.transform package
 Submodules
 ----------
 
-.. toctree::
-   :maxdepth: 4
+spiir.distribution.transform.transform module
+---------------------------------------------
 
-   spiir.distribution.transform.transform
+.. automodule:: spiir.distribution.transform.transform
+   :members:
+   :undoc-members:
+   :show-inheritance:

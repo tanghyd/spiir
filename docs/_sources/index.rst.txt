@@ -9,7 +9,7 @@ The Summed Parallel Infinite Impulse Response (SPIIR) package is...
 
    overview
    getting_started
-   modules
+   Modules <modules>
 
 .. toctree::
    :hidden:

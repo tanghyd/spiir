@@ -20,13 +20,15 @@ help:
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 # build docs for github pages
-# 1. generate .rst files from spiir package structure
-# 2. clean old build artifacts (safe) and create html from .rst
-# 3. clear docs/ directory
-# 4. copy built html files to docs/
-# 5. add empty .nojekyll file so github pages does not use jekyll to render
+# 1. (optional) remove stale spiir.rst files from previous builds 
+# 2. generate .rst files from spiir package structure
+# 3. (optional) clean old build artifacts (safe) and create html from .rst
+# 4. clear docs/ directory
+# 5. copy built html files to docs/
+# 6. add empty .nojekyll file so github pages does not use jekyll to render
 docs:
-	@sphinx-apidoc -fMEeT -o ./source ../src/spiir
+	@rm -f ./source/spiir*.rst
+	@sphinx-apidoc -fME -o ./source ../src/spiir
 	@make clean && make html
 	@rm -r ../docs
 	@cp -a build/html/. ../docs

@@ -18,14 +18,8 @@ Subpackages
 Submodules
 ----------
 
+.. toctree::
+   :maxdepth: 4
 
-.. automodule:: spiir.distribution.config
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-
-.. automodule:: spiir.distribution.distribution
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   spiir.distribution.config
+   spiir.distribution.distribution

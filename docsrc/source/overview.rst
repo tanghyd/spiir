@@ -11,7 +11,7 @@ Welcome to the SPIIR gravitational wave search pipeline documentation!
 
 .. note::
    
-   This documentation is a work in progress! Hold tight...
+   This documentation is a work in progress! Please wait...
 
 
 Quick links

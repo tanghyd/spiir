@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>spiir.distribution package &mdash; SPIIR 0.0.1 documentation</title>
+  <title>&lt;no title&gt; &mdash; SPIIR 0.0.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
@@ -23,8 +23,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="spiir.distribution.constraint package" href="spiir.distribution.constraint.html" />
-    <link rel="prev" title="spiir package" href="spiir.html" /> 
+    <link rel="next" title="Data Generation" href="data_generation.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="spiir.io.array.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -46,20 +46,10 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">spiir</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="spiir.html">spiir package</a><ul class="current">
-<li class="toctree-l3 current"><a class="reference internal" href="spiir.html#subpackages">Subpackages</a><ul class="current">
-<li class="toctree-l4 current"><a class="current reference internal" href="#">spiir.distribution package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="spiir.io.html">spiir.io package</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">spiir</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">User Guides</span></p>
 <ul>
@@ -84,9 +74,10 @@
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="modules.html">spiir</a> &raquo;</li>
           <li><a href="spiir.html">spiir package</a> &raquo;</li>
-      <li>spiir.distribution package</li>
+          <li><a href="spiir.io.html">spiir.io package</a> &raquo;</li>
+      <li>&lt;no title&gt;</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/spiir.distribution.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/spiir.io.mp.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -94,40 +85,35 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-spiir.distribution">
-<span id="spiir-distribution-package"></span><h1>spiir.distribution package<a class="headerlink" href="#module-spiir.distribution" title="Permalink to this heading"></a></h1>
-<section id="subpackages">
-<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading"></a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="spiir.distribution.constraint.html">spiir.distribution.constraint package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="spiir.distribution.constraint.html#submodules">Submodules</a><ul class="simple">
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="spiir.distribution.transform.html">spiir.distribution.transform package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="spiir.distribution.transform.html#submodules">Submodules</a><ul class="simple">
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</div>
-</section>
-<section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
-<div class="toctree-wrapper compound">
-</div>
-</section>
-</section>
+  <span class="target" id="module-spiir.io.mp"></span><p>Utilities for multiprocessing.</p>
+<p>This module demonstrates documentation as specified by the <a class="reference external" href="https://github.com/numpy/numpy/blob/master/doc/HOWTO_DOCUMENT.rst.txt">NumPy
+Documentation HOWTO</a>. Docstrings may extend over multiple lines. Sections
+are created with a section header followed by an underline of equal length.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="spiir.io.mp.validate_cpu_count">
+<span class="sig-prename descclassname"><span class="pre">spiir.io.mp.</span></span><span class="sig-name descname"><span class="pre">validate_cpu_count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nproc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#spiir.io.mp.validate_cpu_count" title="Permalink to this definition"></a></dt>
+<dd><p>Validates whether the provided nproc argument is within a valid range of
+multiprocessing CPU cores based on the user’s machine specifications.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>nproc</strong> (<em>int</em>) – The number of processes to be used for CPU multiprocessing.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A valid CPU count (nproc) integer for use in multiprocessing programs.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="spiir.html" class="btn btn-neutral float-left" title="spiir package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="spiir.distribution.constraint.html" class="btn btn-neutral float-right" title="spiir.distribution.constraint package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="spiir.io.array.html" class="btn btn-neutral float-left" title="&lt;no title&gt;" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="data_generation.html" class="btn btn-neutral float-right" title="Data Generation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

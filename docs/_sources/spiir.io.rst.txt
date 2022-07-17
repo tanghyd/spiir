@@ -17,14 +17,8 @@ Subpackages
 Submodules
 ----------
 
+.. toctree::
+   :maxdepth: 4
 
-.. automodule:: spiir.io.array
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-
-.. automodule:: spiir.io.mp
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   spiir.io.array
+   spiir.io.mp

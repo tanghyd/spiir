@@ -26,7 +26,7 @@ help:
 # 4. copy built html files to docs/
 # 5. add empty .nojekyll file so github pages does not use jekyll to render
 docs:
-	@sphinx-apidoc -fME -o ./source ../src/spiir
+	@sphinx-apidoc -fMEeT -o ./source ../src/spiir
 	@make clean && make html
 	@rm -r ../docs
 	@cp -a build/html/. ../docs

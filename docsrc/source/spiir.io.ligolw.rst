@@ -9,26 +9,10 @@ spiir.io.ligolw package
 Submodules
 ----------
 
+.. toctree::
+   :maxdepth: 4
 
-.. automodule:: spiir.io.ligolw.array
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-
-.. automodule:: spiir.io.ligolw.ligolw
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-
-.. automodule:: spiir.io.ligolw.postcoh
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-
-.. automodule:: spiir.io.ligolw.table
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   spiir.io.ligolw.array
+   spiir.io.ligolw.ligolw
+   spiir.io.ligolw.postcoh
+   spiir.io.ligolw.table

@@ -1,4 +1,19 @@
+<<<<<<< HEAD
 from collections.abc import Iterable
+=======
+"""Utilities for array processing.
+
+This module demonstrates documentation as specified by the `NumPy
+Documentation HOWTO`_. Docstrings may extend over multiple lines. Sections
+are created with a section header followed by an underline of equal length.
+
+.. _NumPy Documentation HOWTO:
+   https://github.com/numpy/numpy/blob/master/doc/HOWTO_DOCUMENT.rst.txt
+
+"""
+
+from collections import Iterable
+>>>>>>> Add module level docstrings
 from itertools import chain, islice
 
 

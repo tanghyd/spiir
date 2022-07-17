@@ -33,10 +33,23 @@ directly (i.e. list, tuple, dict instead of typing.List, typing.Tuple, typing.Di
 
 ### NumPy Style Guide
 
-All documentation should follow the NumPy documentation style guide which can be found 
-[here](https://numpydoc.readthedocs.io/en/latest/format.html). The NumPy style guide is 
-a derivation of the Google Developer documentation style guide. All function docstrings 
-must follow the style and order of sections as defined in the link above.
+All documentation should follow the 
+[NumPy documentation style guide](https://numpydoc.readthedocs.io/en/latest/format.html).
+The NumPy style guide is a derivation of the Google Developer documentation style guide.
+All docstrings should follow the style and order of sections as defined in the links above.
+
+#### Docstring Conventions
+
+Further information about writing Python docstrings can be found in the 
+[specifications from PEP 257](https://peps.python.org/pep-0257/#multi-line-docstrings) 
+detailing docstring conventions for scripts, modules, functions, and classes. For an 
+example of NumPy Style Python docstrings we refer to an 
+[example from Sphinx](https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_numpy.html#example-numpy).
+Note that this NumPy example starts with a UTF-8 encoding declaration that we have 
+chosen to omit in our package documentation because UTF-8 is already the default 
+encoding, as described in [lexical analysis](https://docs.python.org/3/reference/lexical_analysis.html#encoding-declarations) section of the Python documentation.
+
+#### Type Hints
 
 When type hints are written into the documentation, we strongly recommend writing them 
 <<<<<<< HEAD
@@ -54,6 +67,7 @@ won't be available in the actual code itself. Nevertherless, the new approach is
 readable and will be suitable for future updates when the library is eventually ported 
 to Python3.10.
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 ### Building Documentation With Sphinx
@@ -126,6 +140,9 @@ The current issues holding things up include:
 =======
 ### Building With Sphinx
 >>>>>>> Rerun make github again
+=======
+### Building Documentation With Sphinx
+>>>>>>> Add module level docstrings
 
 The documentation for this package can be built using Sphinx by running the following 
 commands in the `docsrc/` directory as follows:

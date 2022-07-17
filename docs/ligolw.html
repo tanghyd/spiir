@@ -51,8 +51,14 @@
 <li class="toctree-l1"><a class="reference internal" href="data_generation.html">Data Generation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">LIGO Light-Weight</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#the-ligo-lw-xml-format">The LIGO LW XML Format</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#legacy-ilwd-char-types">Legacy ilwd:char Types</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#legacy-compatibility">Legacy Compatibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#legacy-formats">Legacy Formats</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ilwd-char-ids">ilwd:char IDs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#custom-spiir-elements">Custom SPIIR Elements</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#postcoh-inspiral-table">Postcoh Inspiral Table</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">spiir</a></li>
@@ -94,15 +100,17 @@ Scientific Collaboration.</p>
 <p>This documentation is a work in progress! Hold tight…</p>
 </div>
 </section>
-<section id="legacy-ilwd-char-types">
-<h2>Legacy ilwd:char Types<a class="headerlink" href="#legacy-ilwd-char-types" title="Permalink to this heading"></a></h2>
+<section id="legacy-formats">
+<h2>Legacy Formats<a class="headerlink" href="#legacy-formats" title="Permalink to this heading"></a></h2>
+<section id="ilwd-char-ids">
+<h3>ilwd:char IDs<a class="headerlink" href="#ilwd-char-ids" title="Permalink to this heading"></a></h3>
 <p>LIGO Light Weight XML “ilwd:char” types are a legacy data type used to represent unique
 IDs as strings of the form “table:column:integer” - for example
-<code class="docutils literal notranslate"><span class="pre">“process:process_id:10”</span></code> or  <code class="docutils literal notranslate"><span class="pre">&quot;postcoh:event_id:1&quot;</span></code>. Large LIGO LW XML ocuments may
-have many millions of these  strings and as a result are an extremely memory
-inefficient method of tracking ids. However, a number of projects within the LIGO
-Scientific Collaboration (LSC) still use ilwd:char types, especially if they are
-dependent on data generated or collected from previous science observation runs.</p>
+<code class="docutils literal notranslate"><span class="pre">“process:process_id:10”</span></code> or  <code class="docutils literal notranslate"><span class="pre">&quot;postcoh:event_id:1&quot;</span></code>. Large LIGO LW XML documents
+may have many millions of these strings and as a result are an extremely memory
+inefficient method of tracking unique ids. However, a number of older projects within
+the LIGO Scientific Collaboration (LSC) still use ilwd:char types, especially if they
+are dependent on data from historical science observation runs.</p>
 <p>There has been a push to deprecate all usage of ilwd:char types, with a number of
 scripts and packages offering functionality to convert ilwd:char types to a more simple
 integer based id format. For example, the <a class="reference external" href="https://git.ligo.org/kipp.cannon/python-ligo-lw">python-ligo-lw</a> package offers utilities to
@@ -112,8 +120,10 @@ offers automatic ilwd:char compatibility for a standard set of LSC LIGO LW Table
 schemas as well.</p>
 <p>However, collaboration-wide support for this this legacy data type will not be
 maintained forever, with some packages deprecating support for any ilwd:char types as
-of Python3.10 and onwards - making it imperative for users to use the updated formats
-in their research and development workflow as soon as possible.</p>
+of Python3.10 - making it imperative for LSC members to use the updated formats in
+their workflow as soon as possible. In the rare cases that historical data with
+ilwd:char types will still need to be used, conversion should be as simple as running
+a once-off script to replace ilwd:char types with integers forthe LIGO LW XML documents in-place.</p>
 <p>In the case of SPIIR, a number of LIGO LW XML documents generated from the Python2.7
 version of the pipeline may still contain ilwd:char types. To complicate matters, SPIIR
 uses its own custom LIGO LW Table format called <code class="docutils literal notranslate"><span class="pre">PostcohInspiralTable</span></code> to record
@@ -123,11 +133,15 @@ ilwd:char types as well. However, as it is a custom type, it is not automaticall
 supported out of the box by modern packages such as <a class="reference external" href="https://git.ligo.org/kipp.cannon/python-ligo-lw">python-ligo-lw</a> or <a class="reference external" href="https://gwpy.github.io/">gwpy</a>, and
 they must be handled as a special case.</p>
 </section>
-<section id="legacy-compatibility">
-<h2>Legacy Compatibility<a class="headerlink" href="#legacy-compatibility" title="Permalink to this heading"></a></h2>
-<p>This package provides the tools to help parse custom <cite>PostcohInspiralTable</cite> table
+</section>
+<section id="custom-spiir-elements">
+<h2>Custom SPIIR Elements<a class="headerlink" href="#custom-spiir-elements" title="Permalink to this heading"></a></h2>
+<section id="postcoh-inspiral-table">
+<h3>Postcoh Inspiral Table<a class="headerlink" href="#postcoh-inspiral-table" title="Permalink to this heading"></a></h3>
+<p>This package provides the tools to help parse custom <code class="docutils literal notranslate"><span class="pre">PostcohInspiralTable</span></code> table
 formats with automatic compatibility support for legacy ilwd:char types and/or table
 schemas (i.e. changing column names) during SPIIR’s ongoing development updates.</p>
+</section>
 </section>
 </section>
 

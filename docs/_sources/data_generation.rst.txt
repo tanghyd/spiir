@@ -4,6 +4,8 @@ Data Generation
 
 Version |version|
 
+In this section we will go into further depth about the functionality provided by the 
+SPIIR package in relation to generation of compact binary coalescence data.
 
 .. note::
    

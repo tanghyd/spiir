@@ -1,19 +1,29 @@
-.. SPIIR documentation master file, created by
-   sphinx-quickstart on Fri Jul 15 21:16:56 2022.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Welcome to SPIIR's documentation!
 =================================
+
+The Summed Parallel Infinite Impulse Response (SPIIR) package is...
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
    overview
-   data_generation
-   ligolw
+   getting_started
    modules
+
+.. toctree::
+   :hidden:
+   :caption: User Guides
+   :maxdepth: 2
+
+   data_generation
+   iir_filters
+   ligolw
+
+.. .. toctree::
+..   :caption: Developer Guides
+..   :hidden:
+..   :maxdepth: 2
 
 Indices and tables
 ==================

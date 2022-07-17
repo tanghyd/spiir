@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 # SPIIR Library Development Guide
 
 ## Documentation
@@ -28,6 +29,9 @@ in the style of Python's most modern type hint style, which leverages Python typ
 directly (i.e. list, tuple, dict instead of typing.List, typing.Tuple, typing.Dict) 
 =======
 # SPIIR Python Library Development Guide
+=======
+# SPIIR Library Development Guide
+>>>>>>> Test github pages
 
 ## Documentation
 
@@ -73,6 +77,7 @@ to Python3.10.
 ### Building Documentation With Sphinx
 
 The documentation for this package can be built using Sphinx by calling `make docs` in 
+<<<<<<< HEAD
 <<<<<<< HEAD
 the `docsrc/` directory. A number of packages will first need to be installed to run 
 Sphinx - we recommend creating a virtual environment with the packages specified in the 
@@ -171,6 +176,11 @@ well as adding a `make github` command to `docsrc/Makefile`.
 >>>>>>> Edit CONTRIBUTING.md
 =======
 the `docsrc/` directory.
+=======
+the `docsrc/` directory. A number of packages will first need to be installed to run 
+Sphinx - we recommend creating a virtual environment with the packages specified in the 
+`requirements-docs.txt` file.
+>>>>>>> Test github pages
 
 The `docs` target will run a series of commands that auto-generate .rst files for the 
 documentation from the package using `sphinx-apidoc`, render the documentation as HTML 

@@ -12,7 +12,7 @@ Scientific Collaboration.
 
 .. note::
    
-   This documentation is a work in progress! Hold tight...
+   This documentation is a work in progress! Please wait...
 
 
 Legacy Formats

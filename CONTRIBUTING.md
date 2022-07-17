@@ -73,6 +73,7 @@ to Python3.10.
 ### Building Documentation With Sphinx
 
 The documentation for this package can be built using Sphinx by calling `make docs` in 
+<<<<<<< HEAD
 the `docsrc/` directory. A number of packages will first need to be installed to run 
 Sphinx - we recommend creating a virtual environment with the packages specified in the 
 `requirements-docs.txt` file.
@@ -168,3 +169,15 @@ This documentation was originally produced by calling `sphinx-quickstart` in the
 `docsrc/` directory, and making the necessary changes to `docsrc/source/conf.py`, as 
 well as adding a `make github` command to `docsrc/Makefile`.
 >>>>>>> Edit CONTRIBUTING.md
+=======
+the `docsrc/` directory.
+
+The `docs` target will run a series of commands that auto-generate .rst files for the 
+documentation from the package using `sphinx-apidoc`, render the documentation as HTML 
+files, and prepare them for hosting. After being built, the repository changes can be 
+committed and pushed to GitHub where the documentation will be hosted via GitHub Pages.
+
+This documentation was originally produced by calling `sphinx-quickstart` in the 
+`docsrc/` directory, and making the necessary changes to `docsrc/source/conf.py`, as 
+well as adding a `make docs` command to `docsrc/Makefile`.
+>>>>>>> Rerun with make docs

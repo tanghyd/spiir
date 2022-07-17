@@ -1,21 +1,16 @@
 spiir.distribution.transform package
 ====================================
 
-Submodules
-----------
-
-spiir.distribution.transform.transform module
----------------------------------------------
-
-.. automodule:: spiir.distribution.transform.transform
+.. automodule:: spiir.distribution.transform
    :members:
    :undoc-members:
    :show-inheritance:
 
-Module contents
----------------
+Submodules
+----------
 
-.. automodule:: spiir.distribution.transform
+
+.. automodule:: spiir.distribution.transform.transform
    :members:
    :undoc-members:
    :show-inheritance:

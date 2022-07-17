@@ -19,8 +19,9 @@ help:
 %: Makefile
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
-github:
-	@make html
+docs:
+	@sphinx-apidoc -fME -o ./source ../src/spiir
+	@make clean && make html
 	@rm -r ../docs
 	@cp -a build/html/. ../docs
 	@touch ../docs/.nojekyll

@@ -1,11 +1,6 @@
 spiir.io.ligolw package
 =======================
 
-.. automodule:: spiir.io.ligolw
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 Submodules
 ----------
 
@@ -37,6 +32,14 @@ spiir.io.ligolw.table module
 ----------------------------
 
 .. automodule:: spiir.io.ligolw.table
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: spiir.io.ligolw
    :members:
    :undoc-members:
    :show-inheritance:

@@ -57,6 +57,7 @@
 <li class="toctree-l4"><a class="reference internal" href="spiir.io.html">spiir.io package</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="spiir.html#module-spiir">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -89,8 +90,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-spiir.distribution">
-<span id="spiir-distribution-package"></span><h1>spiir.distribution package<a class="headerlink" href="#module-spiir.distribution" title="Permalink to this heading"></a></h1>
+  <section id="spiir-distribution-package">
+<h1>spiir.distribution package<a class="headerlink" href="#spiir-distribution-package" title="Permalink to this heading"></a></h1>
 <section id="subpackages">
 <h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading"></a></h2>
 <div class="toctree-wrapper compound">
@@ -99,11 +100,13 @@
 <li class="toctree-l2"><a class="reference internal" href="spiir.distribution.constraint.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="spiir.distribution.constraint.html#module-spiir.distribution.constraint.constraint">spiir.distribution.constraint.constraint module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="spiir.distribution.constraint.html#module-spiir.distribution.constraint.pycbc">spiir.distribution.constraint.pycbc module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spiir.distribution.constraint.html#module-spiir.distribution.constraint">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="spiir.distribution.transform.html">spiir.distribution.transform package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="spiir.distribution.transform.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="spiir.distribution.transform.html#module-spiir.distribution.transform.transform">spiir.distribution.transform.transform module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spiir.distribution.transform.html#module-spiir.distribution.transform">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -125,8 +128,8 @@
 <dd></dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="spiir.distribution.config.load_priors_from_config">
-<span class="sig-prename descclassname"><span class="pre">spiir.distribution.config.</span></span><span class="sig-name descname"><span class="pre">load_priors_from_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distributions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'distributions'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transforms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'transforms'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constraints</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'constraints'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#spiir.distribution.distribution.JointDistribution" title="spiir.distribution.distribution.JointDistribution"><span class="pre">JointDistribution</span></a></span></span><a class="headerlink" href="#spiir.distribution.config.load_priors_from_config" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="spiir.distribution.config.load_joint_distribution_from_config">
+<span class="sig-prename descclassname"><span class="pre">spiir.distribution.config.</span></span><span class="sig-name descname"><span class="pre">load_joint_distribution_from_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distributions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'distributions'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transforms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'transforms'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constraints</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'constraints'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#spiir.distribution.distribution.JointDistribution" title="spiir.distribution.distribution.JointDistribution"><span class="pre">JointDistribution</span></a></span></span><a class="headerlink" href="#spiir.distribution.config.load_joint_distribution_from_config" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -181,7 +184,10 @@ until n valid samples have been drawn. Follows a similar method from PyCBC:
 <a class="reference external" href="https://github.com/gwastro/pycbc/blob/master/pycbc/distributions/joint.py#L305">https://github.com/gwastro/pycbc/blob/master/pycbc/distributions/joint.py#L305</a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>n</strong> (<em>int</em>) – The number of samples to return</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> (<em>int</em>) – The number of samples to return</p></li>
+<li><p><strong>redraw</strong> (<em>bool</em>) – Whether or not to redraw samples if a constraint is not satisfied.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Parameter samples</p>
@@ -242,6 +248,9 @@ until n valid samples have been drawn. Follows a similar method from PyCBC:
 
 </dd></dl>
 
+</section>
+<section id="module-spiir.distribution">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-spiir.distribution" title="Permalink to this heading"></a></h2>
 </section>
 </section>
 

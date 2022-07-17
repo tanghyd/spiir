@@ -10,5 +10,5 @@ from .config import (
     load_constraints_from_config,
     load_distributions_from_config,
     load_transforms_from_config,
-    load_priors_from_config,
+    load_joint_distribution_from_config,
 )

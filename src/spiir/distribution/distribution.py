@@ -1,6 +1,5 @@
 import logging
 from copy import deepcopy
-from functools import partial
 from typing import Optional, Union, Tuple
 
 import numpy as np
@@ -111,7 +110,6 @@ class NumPyDistribution(Distribution):
         self._distribution = self._load_distribution()
 
     def _load_distribution(self):
-        # return partial(getattr(self._rng, self.distribution), **self.kwargs)
         return getattr(self._rng, self.distribution)
 
     def draw(
@@ -231,7 +229,7 @@ class JointDistribution:
         transforms: Optional[Union[Transform, Tuple[Transform, ...]]] = None,
         constraints: Optional[Union[Constraint, Tuple[Constraint, ...]]] = None,
     ):
-        self.distributions: tuple[Distribution, ...] = (
+        self.distributions: Tuple[Distribution, ...] = (
             (distributions,)
             if isinstance(distributions, Distribution)
             else distributions
@@ -257,6 +255,8 @@ class JointDistribution:
         ----------
         n: int
             The number of samples to return
+        redraw: bool
+            Whether or not to redraw samples if a constraint is not satisfied.
 
         Returns
         -------

@@ -28,8 +28,8 @@ help:
 # 6. add empty .nojekyll file so github pages does not use jekyll to render
 docs:
 	@rm -f ./source/spiir*.rst
+	@rm -rf ../docs
 	@sphinx-apidoc -fME -o ./source ../src/spiir
-	@make clean && make html
-	@rm -r ../docs
+	@make html
 	@cp -a build/html/. ../docs
 	@touch ../docs/.nojekyll

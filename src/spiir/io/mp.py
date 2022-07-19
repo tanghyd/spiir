@@ -38,8 +38,8 @@ def validate_cpu_count(nproc: int) -> int:
 def apply_parallel_array_func(
     func: Callable,
     array: np.ndarray,
-    output_dtype: Optional[type]=None,
-    output_shape: tuple=(),
+    dtype: Optional[type]=None,
+    shape: tuple=(),
     nproc: int=4,
     chunk_size: Optional[int]=None,
     desc: Optional[str]=None,
@@ -48,10 +48,10 @@ def apply_parallel_array_func(
     """Simple multiprocessing for arbitrary functions or class methods on large arrays.
     
     This function will break up an input `array` into chunks of size `chunk_size`, and 
-    pass each chunk to the pool of `nproc` processes that each runs the `func` callable.
-    The input array is iterated over its **first dimension only**, and will return an 
-    output array of equal length with an output dtype and shape specified by 
-    `output_dtype` and `output_shape`.
+    pass each chunk to the pool of `nproc` processes that each runs the `func` callable 
+    using concurrent.futures.ProcessPoolExecutor. The input array is iterated over its 
+    **first dimension only**, and will return an output array of equal length with an 
+    output dtype and shape specified by `dtype` and `shape` respectively.
 
     Parameters
     ----------
@@ -63,9 +63,9 @@ def apply_parallel_array_func(
         An n-dimensional array of samples that match the dimensions of data fitted to 
         the model provided - i.e. if a function input requires 2-dimensional data, 
         then we would require array to be of shape (n, 2), where n is the array length.
-    output_dtype: type | None
+    dtype: type | None
         The dtype of the output array. If None, copies the dtype of the input `array`.
-    output_shape: tuple
+    shape: tuple
         The shape of each output array element. If output_sample_shape=(), then the 
         output array would be a 1-dimensional array of length `len(array)`. If, for 
         example output_sample_shape=(2, 128), then we would have an output array 
@@ -142,7 +142,7 @@ def apply_parallel_array_func(
     if not (1 <= chunk_size <= total):
         raise ValueError(f"chunk_size {chunk_size} must be 1 <= chunk_size <= {total}")
 
-    output = np.empty((total, *output_shape), dtype=output_dtype or array.dtype)
+    output = np.empty((total, *shape), dtype=dtype or array.dtype)
     with tqdm(total=total, desc=desc, disable=not verbose) as pbar:
         with concurrent.futures.ProcessPoolExecutor(max_workers=nproc) as executor:
             futures = {}

@@ -1,11 +1,17 @@
+from ast import Index
 import concurrent.futures
 import logging
 import multiprocessing as mp
-from collections import Callable
+from collections import Callable, Iterable
+from functools import partial
+from operator import indexOf
+from xml.dom import INDEX_SIZE_ERR
+from xmlrpc.client import INVALID_XMLRPC
 from tqdm import tqdm
-from typing import Optional
+from typing import Optional, Union, Any
 
 import numpy as np
+import pandas as pd
 
 from spiir.io.array import chunk_iterable
 
@@ -35,45 +41,44 @@ def validate_cpu_count(nproc: int) -> int:
     return nproc
 
 
-def apply_parallel_array_func(
+def apply_func_in_parallel(
     func: Callable,
-    array: np.ndarray,
-    dtype: Optional[type]=None,
-    shape: tuple=(),
+    data: Union[Iterable, np.ndarray, pd.DataFrame],
     nproc: int=4,
     chunk_size: Optional[int]=None,
+    concat: bool=True,
     desc: Optional[str]=None,
     verbose: bool=True,
-) -> np.ndarray:
+    *args,
+    **kwargs,
+) -> Any:
     """Simple multiprocessing for arbitrary functions or class methods on large arrays.
     
-    This function will break up an input `array` into chunks of size `chunk_size`, and 
-    pass each chunk to the pool of `nproc` processes that each runs the `func` callable 
-    using concurrent.futures.ProcessPoolExecutor. The input array is iterated over its 
-    **first dimension only**, and will return an output array of equal length with an 
-    output dtype and shape specified by `dtype` and `shape` respectively.
+    This function will break up input data into chunks of size `chunk_size`, and passes 
+    each chunk to the pool of `nproc` processes that each runs the `func` callable 
+    using concurrent.futures.ProcessPoolExecutor. The input data is iterated over its 
+    length (i.e. **first dimension**), and will return an output of equal length 
+    according to the output signature of the specified function if `concat` is True. If 
+    `concat` is False, the values of chunked array processing will be returned as 
+    separated elements within the returned list.
 
     Parameters
     ----------
     func: Callable
-        An instantiated class' method or function that processes arrays when called.
-    array: np.ndarray
-        An n-dimensional array of samples that match the dimensions of data fitted to 
-        the model provided - i.e. if a function input requires 2-dimensional data, 
-        then we would require array to be of shape (n, 2), where n is the array length.
-    dtype: type | None
-        The dtype of the output array. If None, copies the dtype of the input `array`.
-    shape: tuple
-        The shape of each output array element. If output_sample_shape=(), then the 
-        output array would be a 1-dimensional array of length `len(array)`. If, for 
-        example output_sample_shape=(2, 128), then we would have an output array 
-        of shape (len(array), 2, 128).
+        An instantiated class' method or function that processes arrays when called. 
+        Any args or kwargs passed to this function will be passed through to `func`.
+    data: Iterable | np.ndarray | pd.DataFrame
+        An iterable n-dimensional list, np.ndarray, pd.DataFrame that is a valid input 
+        argument to `func` - i.e. if the function requires 2-dimensional data, then 
+        we would require data to be of shape (n, 2), where n is its iterable length.
     nproc: int = 4
         The number of CPU processes to use for multiprocessing.
     chunk_size: int | None
         The intermediate size to break the input array before being passed to processes.
-        If None, chunks will be evenly split over the number of processes with a 
-        ceiling if the array length is not evenly divisible by the number of processes.
+        If None, chunks will be (approximately) evenly split between each process with a
+        ceiling if the data length is not evenly divisible by the number of processes.
+    concat: bool
+        Whether to concatenate the output result chunks together according to its dtype.
     desc: str | None
         The text description for the progress bar.
     verbose: bool
@@ -81,20 +86,20 @@ def apply_parallel_array_func(
 
     Returns
     -------
-    np.ndarray:
-        The output array computed by `func` for each element in the input array.
+    Any:
+        The output computed by `func` given the input data.
 
     Notes
     -----
-    If any parameters need to be passed to the `func` function beforehand, we recommend 
-    using functools.partial to partially instantiate a version of their function with 
-    their appropriate arguments and keyword arguments, as `apply_parallel_array_func` 
-    does not provide the functionality to do this inside its execution logic.
+    If any parameters need to be passed to the `func` function beforehand, they can be 
+    passed as *args and **kwargs inputs respectively, which uses functools.partial to 
+    partially instantiate a version of their function with their appropriate arguments 
+    and keyword arguments before being passed to each multiprocessing worker.
 
-    For more complex cases (e.g. having different function parameters for each sample, 
-    or where multiple multiprocessing steps are required per sample), we recommend that 
-    the user writes their own multiprocessing implementation using the code in this 
-    function as a skeleton.
+    For more complex cases (e.g. having different function parameters for each element
+    of the input data, or where multiple multiprocessing steps are required per 
+    element), we recommend that the user writes their own multiprocessing 
+    implementation using the code in this function as a skeleton.
 
     Examples
     --------
@@ -111,7 +116,7 @@ def apply_parallel_array_func(
     >>> import numpy as np    
     >>> from sklearn.neighbors import KernelDensity
     ...
-    >>> # assume we have some 2-dimensional data we want to fit a KDE to
+    >>> # assume we have some 2-dimensional np.ndarray data we want to fit a KDE to
     >>> seed = 100
     >>> rng = np.random.default_rng(seed)
     >>> data = np.stack([
@@ -129,30 +134,56 @@ def apply_parallel_array_func(
     >>> kde.fit(train)  # cannot parallelise .fit method
     ...
     >>> # estimate likelihood scores for test samples with 4 workers in parallel
-    >>> log_density = apply_parallel_array_func(kde.score_samples, test, nproc=4)
+    >>> log_density = apply_func_in_parallel(kde.score_samples, test, nproc=4)
     """
     # validate chunk size
     nproc = validate_cpu_count(nproc)
-    total = len(array)
+    total = len(data)
     chunk_size = chunk_size or int(np.ceil(total / nproc))
     if not isinstance(chunk_size, int):
         raise TypeError(f"chunk_size {chunk_size} must be an integer.")
     if not (1 <= chunk_size <= total):
         raise ValueError(f"chunk_size {chunk_size} must be 1 <= chunk_size <= {total}")
+    logger.debug(f"Calling {str(func)} with nproc {nproc} and chunk_size {chunk_size}.")
 
-    output = np.empty((total, *shape), dtype=dtype or array.dtype)
+    _func = partial(func, *args, **kwargs)
     with tqdm(total=total, desc=desc, disable=not verbose) as pbar:
         with concurrent.futures.ProcessPoolExecutor(max_workers=nproc) as executor:
-            futures = {}
-            # submit futures to worker pool while keeping track of indices
-            for chunk in chunk_iterable(range(total), size=chunk_size):
-                indices = list(chunk)  # converts from an iterable to list for indexing
-                future = executor.submit(func, array[indices])
-                futures[future] = indices  # stores array indices with future object
-                
-            for future in concurrent.futures.as_completed(futures):
-                # assign result to correct output array indices (dict value)
-                output[futures[future]] = future.result()
-                pbar.update(chunk_size)
+            # NOTE: futures may complete in a different order than they are submitted
+            #   so we enumerate chunks to can keep track of futures after submission
+            future_to_chunk_idx = {}
+            chunk_idx_size = {}
+            for idx, chunk in enumerate(chunk_iterable(range(total), size=chunk_size)):
+                indices = list(chunk)  # converts from iterable to list for indexing
+                if not isinstance(data, pd.DataFrame):
+                    data_chunk = data[indices]
+                else:
+                    data_chunk = data.iloc[indices]
+                future = executor.submit(_func, data_chunk)
+                future_to_chunk_idx[future] = idx  # futures stored as keys in this dict
+                chunk_idx_size[idx] = len(indices)  # len may change for last chunk(s)
+
+            # as_completed will block later code until all futures have finished
+            for future in concurrent.futures.as_completed(future_to_chunk_idx):
+                idx = future_to_chunk_idx[future]
+                pbar.update(chunk_idx_size[idx])
             pbar.refresh()
-    return output
+
+            # join all futures in order of submission (sorted by chunk_idx value)
+            ordered_futures = sorted(future_to_chunk_idx.items(), key=lambda it: it[1])
+            results = [future[0].result() for future in ordered_futures]
+
+            if concat:
+                # concatenate results together based on first result type
+                if isinstance(results[0], np.ndarray):
+                    logger.debug(f"Concatenating {idx+1} chunks as a np.ndarray...")
+                    return np.concatenate(results)
+                elif isinstance(results[0], pd.DataFrame):
+                    logger.debug(f"Concatenating {idx+1} chunks as a pd.DataFrame...")
+                    return pd.concat(results)
+                else:
+                    logger.debug(f"Flattening {idx+1} chunks together as a list...")
+                    return [x for chunk in results for x in chunk]
+            else:
+                logger.debug(f"Returning result chunks without concatenation...")
+                return results

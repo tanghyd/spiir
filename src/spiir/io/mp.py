@@ -56,9 +56,7 @@ def apply_parallel_array_func(
     Parameters
     ----------
     func: Callable
-        An instantiated class object or function that processes numpy arrays when 
-        called. It must either have a method named accordingly given the `method` 
-        input argument, else it must have a `__call__` method.
+        An instantiated class' method or function that processes arrays when called.
     array: np.ndarray
         An n-dimensional array of samples that match the dimensions of data fitted to 
         the model provided - i.e. if a function input requires 2-dimensional data, 
@@ -84,7 +82,7 @@ def apply_parallel_array_func(
     Returns
     -------
     np.ndarray:
-        The model output array computed for each sample in the input array.
+        The output array computed by `func` for each element in the input array.
 
     Notes
     -----

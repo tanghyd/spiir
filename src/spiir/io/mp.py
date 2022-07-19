@@ -48,7 +48,7 @@ def apply_func_in_parallel(
     chunk_size: Optional[int]=None,
     concat: bool=True,
     desc: Optional[str]=None,
-    verbose: bool=True,
+    verbose: bool=False,
     *args,
     **kwargs,
 ) -> Any:
@@ -65,7 +65,7 @@ def apply_func_in_parallel(
     Parameters
     ----------
     func: Callable
-        An instantiated class' method or function that processes arrays when called. 
+        An instantiated class method or function that processes arrays when called. 
         Any args or kwargs passed to this function will be passed through to `func`.
     data: Iterable | np.ndarray | pd.DataFrame
         An iterable n-dimensional list, np.ndarray, pd.DataFrame that is a valid input 

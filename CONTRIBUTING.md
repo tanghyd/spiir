@@ -26,6 +26,7 @@ encoding, as described in [lexical analysis](https://docs.python.org/3/reference
 
 When type hints are written into the documentation, we strongly recommend writing them 
 in the style of Python's most modern type hint style, which leverages Python types 
+<<<<<<< HEAD
 directly (i.e. list, tuple, dict instead of typing.List, typing.Tuple, typing.Dict) 
 =======
 # SPIIR Python Library Development Guide
@@ -70,6 +71,11 @@ being written in Python3.8, and so the latest Python3.9 and Python3.10 typing fe
 won't be available in the actual code itself. Nevertherless, the new approach is more 
 readable and will be suitable for future updates when the library is eventually ported 
 to Python3.10.
+=======
+directly (i.e. `list`, `tuple`, `dict` instead of `List`, `Tuple`, `Dict` from the 
+`typing` module) as well as the new typing operators for union (`|` instead of `Union`) 
+and optionals (`| None` instead of `Optional`).
+>>>>>>> Minor changes to CONTRIBUTING.md
 
 <<<<<<< HEAD
 <<<<<<< HEAD

@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-from ast import Index
-import concurrent.futures
-import logging
-=======
 """Utilities for multiprocessing.
 
 This module demonstrates documentation as specified by the `NumPy
@@ -14,13 +9,11 @@ are created with a section header followed by an underline of equal length.
 
 """
 
->>>>>>> Add module level docstrings
+import concurrent.futures
+import logging
 import multiprocessing as mp
 from collections.abc import Callable, Iterable
 from functools import partial
-from operator import indexOf
-from xml.dom import INDEX_SIZE_ERR
-from xmlrpc.client import INVALID_XMLRPC
 from tqdm import tqdm
 from typing import Optional, Union, Any
 

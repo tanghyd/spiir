@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-from collections.abc import Iterable
-=======
 """Utilities for array processing.
 
 This module demonstrates documentation as specified by the `NumPy
@@ -12,8 +9,7 @@ are created with a section header followed by an underline of equal length.
 
 """
 
-from collections import Iterable
->>>>>>> Add module level docstrings
+from collections.abc import Iterable
 from itertools import chain, islice
 
 

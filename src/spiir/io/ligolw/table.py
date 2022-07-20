@@ -67,7 +67,6 @@ def load_ligolw_tables(
     event_table_read_kwargs = dict(
         format="ligolw",
         tablename=table,
-        verbose=verbose,
         nproc=nproc,
     )
 

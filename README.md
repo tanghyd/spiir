@@ -61,11 +61,3 @@ If the user would like to use this virtual environment in a Jupyter notebook ker
   pip install ipykernel
   python -m ipykernel install --user --name=spiir
   ```
-
-## Current Problems
-
-### Python3.10 and legacy 'ilwd:char' LIGO_LW type incompatibility
-
-Using the GWPy XML reader functionality (i.e. `gwpy.table.EventTable`) is a very useful tool for our LIGO_LW XML document handling. Unfortunately, the XML reader used to parse legacy ilwd:char types seems to break on Python3.10 with the following `SystemError: PY_SSIZE_T_CLEAN macro must be defined for '#' formats`. 
-
-As a work-around, we intend to develop this package in Python3.8 until a more appropriate processing tool is used to convert ilwd:char types (or standalone conversion script), or the ilwd:char type is removed from the SPIIR research and development workflow entirely. Note that backporting from Python3.10 to Python3.9 should be sufficient but it is not installed as an environment module in SPIIR's main R&D environments on OzStar.

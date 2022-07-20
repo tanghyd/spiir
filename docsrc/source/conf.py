@@ -16,7 +16,7 @@ import sys
 from typing import List
 
 sys.path.insert(0, os.path.abspath('../../src/'))
-sys.path.insert(0, os.path.abspath('../src'))
+# sys.path.insert(0, os.path.abspath('../src'))
 
 # -- Project information -----------------------------------------------------
 
@@ -41,7 +41,6 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx_copybutton',
     'sphinx_toggleprompt',
-    # 'numpydoc',
 ]
 
 napoleon_google_docstring = False

@@ -2,4 +2,3 @@ sphinx_rtd_theme
 sphinx
 sphinx-copybutton
 sphinx-toggleprompt
-numpydoc

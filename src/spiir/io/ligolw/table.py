@@ -75,14 +75,14 @@ def load_ligolw_tables(
     if columns is not None:
         event_table_read_kwargs["columns"] = columns
 
-    if (ilwdchar_compat or legacy_postcoh_compat) and table == "postcoh":
+    if ilwdchar_compat or legacy_postcoh_compat:
         # strip ilwdchar types and store output in tempfiles, with multiprocessing
         if not isinstance(paths, Iterable):
             paths = [paths]
 
         try:
             # create temporary files to strip xmldocs before being read in by gwpy
-            temp_dir = tempfile.mkdtemp(prefix="temp_postcoh_tables_")
+            temp_dir = tempfile.mkdtemp(prefix="temp_ligolw_tables_")
             logger.debug(
                 f"Creating temp directory {temp_dir} for ilwd:char conversion."
             )
@@ -114,12 +114,13 @@ def load_ligolw_tables(
             logger.debug(f"Removing temp files under {temp_dir}.")
 
     else:
-        # no need to do tempfile processing on custom tables
         if table == "postcoh":
             warning_msg = f"Warning! Loading postcoh tables usually requires backward \
                 compatibility arguments, but ilwdchar_compat={ilwdchar_compat} and \
                 legacy_postcoh_compat={legacy_postcoh_compat}."
-            logger.warning(warning_msg)
+            logger.warning(warning_msg)  # TODO: remove when spiir updates postcoh
+
+        # no need to do tempfile processing on non-legacy tables
         event_table = EventTable.read(paths, **event_table_read_kwargs)
 
     if df:

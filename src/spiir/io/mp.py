@@ -99,7 +99,7 @@ def parallel_apply(
     Notes
     -----
     If any parameters need to be passed to the `func` function beforehand, they can be 
-    passed as *args and **kwargs inputs respectively, which uses functools.partial to 
+    passed as args and kwargs inputs respectively, which uses functools.partial to 
     partially instantiate a version of their function with their appropriate arguments 
     and keyword arguments before being passed to each multiprocessing worker.
 

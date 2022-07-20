@@ -2,7 +2,7 @@ from ast import Index
 import concurrent.futures
 import logging
 import multiprocessing as mp
-from collections import Callable, Iterable
+from collections.abc import Callable, Iterable
 from functools import partial
 from operator import indexOf
 from xml.dom import INDEX_SIZE_ERR
@@ -41,7 +41,7 @@ def validate_cpu_count(nproc: int) -> int:
     return nproc
 
 
-def apply_func_in_parallel(
+def parallel_apply(
     func: Callable,
     data: Union[Iterable, np.ndarray, pd.DataFrame],
     nproc: int=4,
@@ -134,7 +134,7 @@ def apply_func_in_parallel(
     >>> kde.fit(train)  # cannot parallelise .fit method
     ...
     >>> # estimate likelihood scores for test samples with 4 workers in parallel
-    >>> log_density = apply_func_in_parallel(kde.score_samples, test, nproc=4)
+    >>> log_density = parallel_apply(kde.score_samples, test, nproc=4)
     """
     # validate chunk size
     nproc = validate_cpu_count(nproc)

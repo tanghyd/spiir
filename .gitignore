@@ -1,7 +1,9 @@
 # temp ignore
-./backup/
-src/spiir/waveform/iir
-src/spiir/waveform/bank.py
+src/spiir/waveform
+src/spiir/strain
+src/spiir/ml
+src/spiir/interferometer
+src/spiir/analysis
 
 # workspace and data
 ./notebooks/

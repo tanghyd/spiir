@@ -2,7 +2,7 @@ from ast import Index
 import concurrent.futures
 import logging
 import multiprocessing as mp
-from collections.abc import Callable, Iterable
+from collections.abc import Callable, Sequence
 from functools import partial
 from operator import indexOf
 from xml.dom import INDEX_SIZE_ERR
@@ -43,7 +43,7 @@ def validate_cpu_count(nproc: int) -> int:
 
 def parallel_apply(
     func: Callable,
-    data: Union[Iterable, np.ndarray, pd.DataFrame],
+    data: Union[Sequence, np.ndarray, pd.DataFrame],
     nproc: int=4,
     chunk_size: Optional[int]=None,
     concat: bool=True,
@@ -67,7 +67,7 @@ def parallel_apply(
     func: Callable
         An instantiated class method or function that processes arrays when called. 
         Any args or kwargs passed to this function will be passed through to `func`.
-    data: Iterable | np.ndarray | pd.DataFrame
+    data: Sequence | np.ndarray | pd.DataFrame
         An iterable n-dimensional list, np.ndarray, pd.DataFrame that is a valid input 
         argument to `func` - i.e. if the function requires 2-dimensional data, then 
         we would require data to be of shape (n, 2), where n is its iterable length.
@@ -156,7 +156,8 @@ def parallel_apply(
             for idx, chunk in enumerate(chunk_iterable(range(total), size=chunk_size)):
                 indices = list(chunk)  # converts from iterable to list for indexing
                 if not isinstance(data, pd.DataFrame):
-                    data_chunk = data[indices]
+                    # NOTE: mypy complains this could return either Any or List[Any]
+                    data_chunk = data[indices]  # type: ignore
                 else:
                     data_chunk = data.iloc[indices]
                 future = executor.submit(_func, data_chunk)

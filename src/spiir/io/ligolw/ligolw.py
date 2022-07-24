@@ -66,12 +66,12 @@ def load_ligolw_xmldoc(
         path, verbose=verbose, contenthandler=contenthandler
     )
 
-    if ilwdchar_compat:
-        xmldoc = strip_ilwdchar(xmldoc)
-
     if legacy_postcoh_compat:
         xmldoc = postcoh.rename_legacy_postcoh_columns(xmldoc)
         xmldoc = postcoh.include_missing_postcoh_columns(xmldoc, nullable=nullable)
+
+    if ilwdchar_compat:
+        xmldoc = strip_ilwdchar(xmldoc)
 
     return xmldoc
 

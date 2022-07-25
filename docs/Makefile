@@ -41,6 +41,5 @@ help:
 # 3. create html from .rst
 #    a .nojeykll file is created via actions-gh-pages with enable_jekyll: False
 docs:
-	@rm -r ./source/spiir*.rst
 	@sphinx-apidoc -fE -o ./source ../src/spiir
 	@make html

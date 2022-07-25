@@ -38,12 +38,16 @@ directory. A number of packages will first need to be installed to run Sphinx - 
 recommend creating a virtual environment with the packages specified in the 
 `docs/requirements.txt` file.
 
+### Hosting Documentation with GitHub Pages
+
 The `make docs` target will run a series of commands that auto-generate .rst files from 
 the package using `sphinx-apidoc`, render the documentation as HTML files, and prepare 
 them for hosting. After being built, the repository changes can be committed and pushed 
 to GitHub where the documentation will be hosted via GitHub Pages. The GitHub Actions 
-script in `.github/workflows/sphinx.yaml` will automatically push to the source files 
-in `docs/build/html` to a stand-alone branch called `gh-pages` for hosting the HTML.
+script in `.github/workflows/sphinx.yaml` will automatically run `make docs` for you 
+and move the rendered HTML files from `docs/build/html` to the root directory of a 
+stand-alone branch called `gh-pages` for hosting the documentation.
+
 For more information, see the [Sphinx GitHub Pages Deployment Tutorial][] from Sphinx.
 
 <!-- # References -->

@@ -13,7 +13,6 @@
 
 import os
 import sys
-import spiir
 
 sys.path.insert(0, os.path.abspath('../../src/'))
 

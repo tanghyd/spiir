@@ -1,8 +1,10 @@
+# this file is expected to be run with the following command:
+# pip install -r docs/requirements.txt
 wheel
+sphinx<5.1  # https://github.com/sphinx-doc/sphinx/issues/10701
 sphinx_rtd_theme
-sphinx
 sphinx-copybutton
 sphinx-toggleprompt
 furo
 docutils>=0.14,<0.18
--e .
+-e .  # will fail if called inside docs/ directory - must be up one level

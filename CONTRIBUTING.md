@@ -45,7 +45,7 @@ the package using `sphinx-apidoc`, render the documentation as HTML files, and p
 them for hosting. After being built, the repository changes can be committed and pushed 
 to GitHub where the documentation will be hosted via GitHub Pages. The GitHub Actions 
 script in `.github/workflows/sphinx.yaml` will automatically run `make docs` for you 
-and move the rendered HTML files from `docs/build/html` to the root directory of a 
+and move the rendered HTML files from `docs/build/html/` to the root directory of a 
 stand-alone branch called `gh-pages` for hosting the documentation.
 
 For more information, see the [Sphinx GitHub Pages Deployment Tutorial][] from Sphinx.

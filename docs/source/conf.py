@@ -14,8 +14,10 @@
 import os
 import sys
 from typing import List
+import spiir
 
 sys.path.insert(0, os.path.abspath('../../src/'))
+
 
 # -- Project information -----------------------------------------------------
 

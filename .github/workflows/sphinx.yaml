@@ -10,6 +10,8 @@ jobs:
     - name: Build HTML
       uses: ammaraskar/sphinx-action@0.4
       with:
+        docs-folder: "docs/"
+        pre-build-command: "pip install -e ."
         build-command: make docs
     - name: Upload artifacts
       uses: actions/upload-artifact@v3
@@ -21,5 +23,5 @@ jobs:
       if: github.ref == 'refs/heads/feature_docs'
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: docs/build/html
+        publish_dir: ./docs/build/html
         force_orphan: true

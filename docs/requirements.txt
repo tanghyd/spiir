@@ -1,8 +1,10 @@
 # this file is expected to be run with the following command:
-# pip install -r docs/requirements.txt
+# pip install -r docs/requirements.txt, see:
+# https://github.com/ammaraskar/sphinx-action/blob/master/sphinx_action/action.py#L98
 wheel
 sphinx<5.1  # https://github.com/sphinx-doc/sphinx/issues/10701
 sphinx_rtd_theme
 sphinx-copybutton
 sphinx-toggleprompt
 furo
+-e .  # replace with "spiir" when package is published to PyPi

@@ -29,9 +29,13 @@ and optionals (`| None` instead of `Optional`).
 
 ### Building Documentation With Sphinx
 
-The documentation for this package can be built using Sphinx by calling `make docs` in 
-the `docs/` directory. A number of packages will first need to be installed to run 
-Sphinx - we recommend creating a virtual environment with the packages specified in the 
+The source files for the documentation were originally produced by calling 
+`sphinx-quickstart` in the `docs/` directory, and making the necessary changes to 
+`docs/source/conf.py`, as well as adding a `make docs` command to `docs/Makefile`.
+
+Next, the documentation can be built using Sphinx by calling `make docs` in the `docs/` 
+directory. A number of packages will first need to be installed to run Sphinx - we 
+recommend creating a virtual environment with the packages specified in the 
 `docs/requirements.txt` file.
 
 The `make docs` target will run a series of commands that auto-generate .rst files from 
@@ -40,12 +44,7 @@ them for hosting. After being built, the repository changes can be committed and
 to GitHub where the documentation will be hosted via GitHub Pages. The GitHub Actions 
 script in `.github/workflows/sphinx.yaml` will automatically push to the source files 
 in `docs/build/html` to a stand-alone branch called `gh-pages` for hosting the HTML.
-For more information, see the [Sphinx GitHub Pages Deployment Tutorial][] from Sphinvx.
-
-This documentation was originally produced by calling `sphinx-quickstart` in the 
-`docs/` directory, and making the necessary changes to `docs/source/conf.py`, as 
-well as adding a `make docs` command to `docs/Makefile`.
-
+For more information, see the [Sphinx GitHub Pages Deployment Tutorial][] from Sphinx.
 
 <!-- # References -->
 [NumPy Documentation Style Guide]: https://numpydoc.readthedocs.io/en/latest/format.html

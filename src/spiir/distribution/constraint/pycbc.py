@@ -45,8 +45,6 @@ class PyCBCConstraint(Constraint):
         apply:
             Some description.
         """
-        from pycbc.io import record
-        from pycbc.transforms import apply_transforms
         from pycbc.distributions.constraints import constraints
 
         assert package == getattr(PyCBCConstraint, "package")
@@ -89,6 +87,9 @@ class MassConstraint:
         _constraint:
             Sample description.
         """
+        from pycbc.io import record
+        from pycbc.transforms import apply_transforms
+
         self.constraint_arg = constraint_arg
         self.transforms = transforms
         for kwarg in kwargs.keys():

@@ -11,7 +11,9 @@ jobs:
       uses: ammaraskar/sphinx-action@0.4
       with:
         docs-folder: "docs/"
-        pre-build-command: "apt-get update -y && apt-get install -y gcc"
+        pre-build-command: "apt-get update -y \
+          && apt-get install -y gcc \
+          && pip install ."
         build-command: make docs
     - name: Upload artifacts
       uses: actions/upload-artifact@v3

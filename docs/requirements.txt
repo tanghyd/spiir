@@ -7,4 +7,4 @@ sphinx_rtd_theme
 sphinx-copybutton
 sphinx-toggleprompt
 furo
--e .  # replace with "spiir" when package is published to PyPi
+# -e .  # replace with "spiir" when package is published to PyPi

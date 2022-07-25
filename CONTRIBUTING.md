@@ -31,15 +31,20 @@ and optionals (`| None` instead of `Optional`).
 ### Building Documentation With Sphinx
 
 The documentation for this package can be built using Sphinx by calling `make docs` in 
-the `docsrc/` directory. A number of packages will first need to be installed to run 
+the `docs/` directory. A number of packages will first need to be installed to run 
 Sphinx - we recommend creating a virtual environment with the packages specified in the 
-`requirements-docs.txt` file.
+`docs/requirements.txt` file.
 
-The `docs` target will run a series of commands that auto-generate .rst files for the 
-documentation from the package using `sphinx-apidoc`, render the documentation as HTML 
-files, and prepare them for hosting. After being built, the repository changes can be 
-committed and pushed to GitHub where the documentation will be hosted via GitHub Pages.
+The `make docs` target will run a series of commands that auto-generate .rst files from 
+the package using `sphinx-apidoc`, render the documentation as HTML files, and prepare 
+them for hosting. After being built, the repository changes can be committed and pushed 
+to GitHub where the documentation will be hosted via GitHub Pages. The GitHub Actions 
+script in `.github/workflows/sphinx.yaml` will automatically push to the source files 
+in `docs/build/html` to a stand-alone branch called `gh-pages` for hosting the HTML.
+For more information, see the [Sphinx GitHub Pages Deployment Tutorial][] from Sphinx.
 
 This documentation was originally produced by calling `sphinx-quickstart` in the 
-`docsrc/` directory, and making the necessary changes to `docsrc/source/conf.py`, as 
-well as adding a `make docs` command to `docsrc/Makefile`.
+`docs/` directory, and making the necessary changes to `docs/source/conf.py`, as 
+well as adding a `make docs` command to `docs/Makefile`.
+
+[Sphinx GitHub Pages Deployment Tutorial]: https://www.sphinx-doc.org/en/master/tutorial/deploying.html#id5

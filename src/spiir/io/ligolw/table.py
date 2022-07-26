@@ -6,7 +6,7 @@ import shutil
 from collections.abc import Iterable
 from functools import partial
 from os import PathLike
-from typing import Optional, Union, List
+from typing import Optional, Union, List, Iterable
 
 import pandas as pd
 
@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 
 
 def load_ligolw_tables(
-    paths: Union[str, bytes, PathLike, List[Union[str, bytes, PathLike]]],
+    paths: Union[str, bytes, PathLike, Iterable[Union[str, bytes, PathLike]]],
     table: str,
     columns: Optional[List[str]] = None,
     ilwdchar_compat: bool = True,
@@ -76,7 +76,7 @@ def load_ligolw_tables(
 
     if ilwdchar_compat or legacy_postcoh_compat:
         # strip ilwdchar types and store output in tempfiles, with multiprocessing
-        if not isinstance(paths, Iterable):
+        if isinstance(paths, Union[str, bytes, PathLike]):
             paths = [paths]
 
         try:

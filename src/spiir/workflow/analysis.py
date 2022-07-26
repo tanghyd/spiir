@@ -92,14 +92,14 @@ def match_coincident_zerolags(
     
     """
     # validate columns for injection dataframes
-    required_injection_cols = ["mchirp", "h_end_time", "h_end_time_ns"]
+    required_injection_cols = ["mchirp", "geocent_end_time", "geocent_end_time_ns"]
     for col in required_injection_cols:
         if col not in injections.columns:
             raise AttributeError(f"injections do not contain required column {col}.")
 
     # validate columns for zerolag dataframes
     required_zerolag_cols = ["far", "cmbchisq", "mchirp"]
-    required_zerolag_cols += ["end_time_sngl_H1", "end_time_ns_sngl_H1"]
+    required_zerolag_cols += ["end_time", "end_time_ns"]
 
     # handle tie_break column specifications
     if tie_break is not None:
@@ -142,15 +142,23 @@ def match_coincident_zerolags(
                 & (candidate_mchirp[:, None] <= upper_mchirp)
             )
 
-            # FIXME: checking only one ifo for the time condition can be improved
+            # # FIXME: checking only one ifo for the time condition can be improved
+            # mid_time = (
+            #     (injections["h_end_time"]
+            #     + injections["h_end_time_ns"]*1e-9)
+            # ).to_numpy()
             mid_time = (
-                (injections["h_end_time"]
-                + injections["h_end_time_ns"]*1e-9)
+                (injections["geocent_end_time"]
+                + injections["geocent_end_time_ns"]*1e-9)
             ).to_numpy()
             lower_time, upper_time = mid_time - time_interval, mid_time + time_interval
+            # candidate_time = (
+            #     candidates["end_time_sngl_H1"] 
+            #     + candidates["end_time_ns_sngl_H1"]*1e-9
+            # ).to_numpy()
             candidate_time = (
-                candidates["end_time_sngl_H1"] 
-                + candidates["end_time_ns_sngl_H1"]*1e-9
+                candidates["end_time"] 
+                + candidates["end_time_ns"]*1e-9
             ).to_numpy()
             is_valid_time = (
                 (candidate_time[:, None] >= lower_time)

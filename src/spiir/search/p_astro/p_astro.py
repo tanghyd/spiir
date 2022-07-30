@@ -1,12 +1,12 @@
-import numpy as np
+# import numpy as np
 
-from .mass_contour import predict_source_p_astro
+# from .mass_contour import predict_source_p_astro
 
-def estimate_bayes_factor(
+def approximate_bayes_factor(
     far: float,
-    cohsnr: float,
+    snr: float,
     far_threshold: float=1e-4,
-    cohsnr_threshold: float=6,
+    snr_threshold: float=4,
 ) -> float:
     """
     Compute bayesfactor for using an approximate ("Toy") model.
@@ -15,11 +15,11 @@ def estimate_bayes_factor(
     ----------
     far: float
         false alarm rate of the event
-    cohsnr: float
+    snr: float
         Coherent SNR of the event
     far_threshold : float
         threshold false alarm rate
-    cohsnr_threshold : float
+    snr_threshold : float
         threshold Coherent SNR
 
     Returns
@@ -28,7 +28,7 @@ def estimate_bayes_factor(
         bayesfactor of event
     """
     # Compute astrophysical bayesfactor for GraceDB event
-    foreground = 3 * cohsnr_threshold**3 / (cohsnr**4)
+    foreground = 3 * snr_threshold**3 / (snr**4)
     background = far / far_threshold
     return foreground / background
 
@@ -133,72 +133,72 @@ def estimate_bayes_factor(
 #         p_astro[label] = value
 #     return p_astro
 
-def p_astro_update(category, event_bayesfac_dict, mean_values_dict):
-    """
-    Compute `p_astro` for a new event using mean values of Poisson expected
-    counts constructed from all the previous events. Invoked with every new
-    GraceDB entry.
+# def p_astro_update(category, event_bayesfac_dict, mean_values_dict):
+#     """
+#     Compute `p_astro` for a new event using mean values of Poisson expected
+#     counts constructed from all the previous events. Invoked with every new
+#     GraceDB entry.
 
-    Parameters
-    ----------
-    category : string
-        source category
-    event_bayesfac_dict : dictionary
-        event Bayes factors
-    mean_values_dict : dictionary
-        mean values of Poisson counts
+#     Parameters
+#     ----------
+#     category : string
+#         source category
+#     event_bayesfac_dict : dictionary
+#         event Bayes factors
+#     mean_values_dict : dictionary
+#         mean values of Poisson counts
 
-    Returns
-    -------
-    p_astro : float
-        p_astro by source category
-    """
-    if category == "counts_Terrestrial":
-        numerator = mean_values_dict["counts_Terrestrial"]
-    else:
-        numerator = event_bayesfac_dict[category] * mean_values_dict[category]
+#     Returns
+#     -------
+#     p_astro : float
+#         p_astro by source category
+#     """
+#     if category == "counts_Terrestrial":
+#         numerator = mean_values_dict["counts_Terrestrial"]
+#     else:
+#         numerator = event_bayesfac_dict[category] * mean_values_dict[category]
 
-    denominator = (
-        mean_values_dict["counts_Terrestrial"]
-        + np.sum([
-            mean_values_dict[key] * event_bayesfac_dict[key] 
-            for key in event_bayesfac_dict
-        ])
-    )
+#     denominator = (
+#         mean_values_dict["counts_Terrestrial"]
+#         + np.sum([
+#             mean_values_dict[key] * event_bayesfac_dict[key] 
+#             for key in event_bayesfac_dict
+#         ])
+#     )
 
-    return numerator / denominator
+#     return numerator / denominator
 
 
-def compute_p_astro(
-    # astro_bayesfac: float,
-#     mean_values_dict: dict[str, float],
-    coefficients: dict[str, float],
-    mchirp: float,
-    cohsnr: float,
-    far: float,
-    eff_distance: float,
-    m_bounds: tuple[float, float],
-    mgap_bounds: tuple[float, float],
-    far_threshold: float=1e-4,
-    cohsnr_threshold: float=8.5,
-) -> dict[str, float]:
+# def compute_p_astro(
+#     # astro_bayesfac: float,
+# #     mean_values_dict: dict[str, float],
+#     coefficients: dict[str, float],
+#     mchirp: float,
+#     cohsnr: float,
+#     far: float,
+#     eff_distance: float,
+#     m_bounds: tuple[float, float],
+#     mgap_bounds: tuple[float, float],
+#     far_threshold: float=1e-4,
+#     cohsnr_threshold: float=8.5,
+# ) -> dict[str, float]:
 
-    astro_probs = predict_source_p_astro(
-        coefficients,
-        mchirp,
-        cohsnr,
-        eff_distance,
-        m_bounds,
-        mgap_bounds,
-        group_mgap=True,
-        lal_cosmology=True,
-        truncate_lower_dist=0.003,
-    )
+#     astro_probs = predict_source_p_astro(
+#         coefficients,
+#         mchirp,
+#         cohsnr,
+#         eff_distance,
+#         m_bounds,
+#         mgap_bounds,
+#         group_mgap=True,
+#         lal_cosmology=True,
+#         truncate_lower_dist=0.003,
+#     )
 
-    # Compute category-wise Bayes factors from astrophysical Bayes factor
-    astro_bayesfac = estimate_bayes_factor(far, cohsnr, far_threshold, cohsnr_threshold)
+#     # Compute category-wise Bayes factors from astrophysical Bayes factor
+#     astro_bayesfac = estimate_bayes_factor(far, cohsnr, far_threshold, cohsnr_threshold)
 
-    return {
-        "Terrestrial": (64/86400)*14394240,
-        **{key: val*len(astro_probs)*astro_bayesfac for key, val in astro_probs.items()}
-    }
+#     return {
+#         "Terrestrial": (64/86400)*14394240,
+#         **{key: val*len(astro_probs)*astro_bayesfac for key, val in astro_probs.items()}
+#     }

@@ -364,6 +364,30 @@ class JointDistribution:
         str_repr += "\n)"
         return str_repr
 
+    @classmethod
+    def from_yaml(
+        cls,
+        path: Union[str, bytes, PathLike],
+        distributions: Optional[str] = "distributions",
+        transforms: Optional[str] = "transforms",
+        constraints: Optional[str] = "constraints",
+    ):
+        import yaml
+        with open(path) as file:
+            config = yaml.safe_load(file)
+
+        _distributions = load_distributions_from_config(config, key=distributions)
+        if _distributions is None:
+            raise KeyError(f"No distributions found in config[{distributions}]")
+        _transforms = load_transforms_from_config(config, key=transforms)
+        _constraints = load_constraints_from_config(config, key=constraints)
+
+        return cls(
+            distributions=tuple(_distributions),
+            transforms=tuple(_transforms) if _transforms is not None else None,
+            constraints=tuple(_constraints) if _constraints is not None else None,
+        )
+
 
 def load_distributions_from_config(
     config: dict, key: Optional[str] = "distributions"

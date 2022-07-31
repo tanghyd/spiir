@@ -1,13 +1,15 @@
 import logging
 from copy import deepcopy
-from functools import partial
-from typing import Optional, Union, Tuple
+from os import PathLike
+from typing import Optional, Union, Tuple, List, Dict, Any
 
 import numpy as np
 import pandas as pd
 import scipy.stats
 
-from spiir.distribution import Constraint, Transform
+from .config import parse_config
+from .constraint import Constraint, load_constraints_from_config
+from .transform import Transform, load_transforms_from_config
 
 logger = logging.getLogger(__name__)
 
@@ -111,7 +113,6 @@ class NumPyDistribution(Distribution):
         self._distribution = self._load_distribution()
 
     def _load_distribution(self):
-        # return partial(getattr(self._rng, self.distribution), **self.kwargs)
         return getattr(self._rng, self.distribution)
 
     def draw(
@@ -246,6 +247,8 @@ class JointDistribution:
             (constraints,) if isinstance(constraints, Constraint) else constraints
         )
 
+    
+
     def draw(self, n: int, redraw: bool = True) -> pd.DataFrame:
         """Draws samples from all stored Distribution objects.
 
@@ -360,3 +363,40 @@ class JointDistribution:
             str_repr += "\n  )"
         str_repr += "\n)"
         return str_repr
+
+
+def load_distributions_from_config(
+    config: dict, key: Optional[str] = "distributions"
+) -> Optional[List[Distribution]]:
+    if key in config:
+        distribution_config = deepcopy(config[key])
+        for kwargs in distribution_config:
+            # assign shared random seed if not present in each distribution config
+            if "seed" not in kwargs:
+                kwargs["seed"] = int(config["seed"]) if "seed" in config else None
+
+        return [Distribution(**parse_config(kwargs)) for kwargs in distribution_config]
+    else:
+        logger.info(f"No distributions found in config[{key}].")
+        return None
+
+
+def load_joint_distribution_from_config(
+    config: Dict[str, Any],
+    distributions: Optional[str] = "distributions",
+    transforms: Optional[str] = "transforms",
+    constraints: Optional[str] = "constraints",
+) -> JointDistribution:
+    _distributions = load_distributions_from_config(config, key=distributions)
+    if _distributions is None:
+        raise KeyError(f"No distributions found in config[{distributions}]")
+    assert _distributions is not None  # to prevent mypy linting warning
+    _transforms = load_transforms_from_config(config, key=transforms)
+    _constraints = load_constraints_from_config(config, key=constraints)
+
+    # we prefer immutable tuples for our JointDistribution to preserve ordering
+    return JointDistribution(
+        distributions=tuple(_distributions),
+        transforms=tuple(_transforms) if _transforms is not None else None,
+        constraints=tuple(_constraints) if _constraints is not None else None,
+    )

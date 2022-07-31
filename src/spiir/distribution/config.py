@@ -1,11 +1,7 @@
 import logging
-from copy import deepcopy
-from os import PathLike
-from typing import Optional, Union, Any, Dict, List
+from typing import Any, Dict
 
 import numpy as np
-
-from spiir.distribution import Distribution, JointDistribution, Constraint, Transform
 
 logger = logging.getLogger(__name__)
 
@@ -36,63 +32,63 @@ def parse_config(
     return kwargs
 
 
-def load_distributions_from_config(
-    config: dict, key: Optional[str] = "distributions"
-) -> Optional[List[Distribution]]:
-    if key in config:
-        distribution_config = deepcopy(config[key])
-        for kwargs in distribution_config:
-            # assign shared random seed if not present in each distribution config
-            if "seed" not in kwargs:
-                kwargs["seed"] = int(config["seed"]) if "seed" in config else None
+# def load_distributions_from_config(
+#     config: dict, key: Optional[str] = "distributions"
+# ) -> Optional[List[Distribution]]:
+#     if key in config:
+#         distribution_config = deepcopy(config[key])
+#         for kwargs in distribution_config:
+#             # assign shared random seed if not present in each distribution config
+#             if "seed" not in kwargs:
+#                 kwargs["seed"] = int(config["seed"]) if "seed" in config else None
 
-        return [Distribution(**parse_config(kwargs)) for kwargs in distribution_config]
-    else:
-        logger.info(f"No distributions found in config[{key}].")
-        return None
-
-
-def load_transforms_from_config(
-    config: Dict[str, Any], key: Optional[str] = "transforms"
-) -> Optional[List[Transform]]:
-    if key in config:
-        return [Transform(**parse_config(kwargs)) for kwargs in config[key]]
-    else:
-        logger.info(f"No transforms found in config[{key}].")
-        return None
+#         return [Distribution(**parse_config(kwargs)) for kwargs in distribution_config]
+#     else:
+#         logger.info(f"No distributions found in config[{key}].")
+#         return None
 
 
-def load_constraints_from_config(
-    config: Dict[str, Any], key: Optional[str] = "constraints"
-) -> Optional[List[Constraint]]:
-    if key in config:
-        return [Constraint(**parse_config(kwargs)) for kwargs in config[key]]
-    else:
-        logger.info(f"No constraints found in config[{key}].")
-        return None
+# def load_transforms_from_config(
+#     config: Dict[str, Any], key: Optional[str] = "transforms"
+# ) -> Optional[List[Transform]]:
+#     if key in config:
+#         return [Transform(**parse_config(kwargs)) for kwargs in config[key]]
+#     else:
+#         logger.info(f"No transforms found in config[{key}].")
+#         return None
 
 
-def load_joint_distribution_from_config(
-    config: Dict[str, Any],
-    distributions: Optional[str] = "distributions",
-    transforms: Optional[str] = "transforms",
-    constraints: Optional[str] = "constraints",
-) -> JointDistribution:
-    _distributions = load_distributions_from_config(config, key=distributions)
-    logger.debug(f"_distributions: {_distributions}")
-    if _distributions is None:
-        raise KeyError(f"No distributions found in config[{distributions}]")
-    assert _distributions is not None  # to prevent mypy linting warning
-    _transforms = load_transforms_from_config(config, key=transforms)
-    _constraints = load_constraints_from_config(config, key=constraints)
-
-    # we prefer immutable tuples for our JointDistribution to preserve ordering
-    return JointDistribution(
-        distributions=tuple(_distributions),
-        transforms=tuple(_transforms) if _transforms is not None else None,
-        constraints=tuple(_constraints) if _constraints is not None else None,
-    )
+# def load_constraints_from_config(
+#     config: Dict[str, Any], key: Optional[str] = "constraints"
+# ) -> Optional[List[Constraint]]:
+#     if key in config:
+#         return [Constraint(**parse_config(kwargs)) for kwargs in config[key]]
+#     else:
+#         logger.info(f"No constraints found in config[{key}].")
+#         return None
 
 
-def parse_pycbc_config(path: Union[str, bytes, PathLike]) -> Dict[str, Any]:
-    raise NotImplementedError
+# def load_joint_distribution_from_config(
+#     config: Dict[str, Any],
+#     distributions: Optional[str] = "distributions",
+#     transforms: Optional[str] = "transforms",
+#     constraints: Optional[str] = "constraints",
+# ) -> JointDistribution:
+#     _distributions = load_distributions_from_config(config, key=distributions)
+#     logger.debug(f"_distributions: {_distributions}")
+#     if _distributions is None:
+#         raise KeyError(f"No distributions found in config[{distributions}]")
+#     assert _distributions is not None  # to prevent mypy linting warning
+#     _transforms = load_transforms_from_config(config, key=transforms)
+#     _constraints = load_constraints_from_config(config, key=constraints)
+
+#     # we prefer immutable tuples for our JointDistribution to preserve ordering
+#     return JointDistribution(
+#         distributions=tuple(_distributions),
+#         transforms=tuple(_transforms) if _transforms is not None else None,
+#         constraints=tuple(_constraints) if _constraints is not None else None,
+#     )
+
+
+# def parse_pycbc_config(path: Union[str, bytes, PathLike]) -> Dict[str, Any]:
+#     raise NotImplementedError

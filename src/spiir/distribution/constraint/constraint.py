@@ -1,9 +1,11 @@
 import logging
 from functools import partial
-from typing import Optional, Union, Tuple
+from typing import Optional, Union, Tuple, List, Dict, Any
 
 import numpy as np
 import pandas as pd
+
+from ..config import parse_config
 
 logger = logging.getLogger(__name__)
 
@@ -12,7 +14,6 @@ logger = logging.getLogger(__name__)
 #   - PyCBC defines constraint variable in class
 #   - NumPY gets constraint variable at run-time
 #   - We should reconsider this mis-match in approach and how _load_constraint works
-
 
 class Constraint:
     """Abstract Base Class for Constraint classes"""
@@ -142,3 +143,15 @@ class SPIIRConstraint(Constraint):
 
     def apply(self, samples: pd.DataFrame):
         raise NotImplementedError
+
+
+
+def load_constraints_from_config(
+    config: Dict[str, Any], key: Optional[str] = "constraints"
+) -> Optional[List[Constraint]]:
+    if key in config:
+        return [Constraint(**parse_config(kwargs)) for kwargs in config[key]]
+    else:
+        logger.info(f"No constraints found in config[{key}].")
+        return None
+

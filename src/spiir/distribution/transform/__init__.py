@@ -1,2 +1,4 @@
-from .transform import Transform, NumPyTransform, SPIIRTransform
-# from .sigmasq import SigmaSqTransform
+from .transform import (
+    Transform, NumPyTransform, SPIIRTransform,
+    load_transforms_from_config
+)

@@ -1,9 +1,11 @@
 import logging
 from functools import partial
-from typing import Optional, Union, Any, Dict, Tuple
+from typing import Optional, Union, Tuple, List, Dict, Any
 
 import numpy as np
 import pandas as pd
+
+from ..config import parse_config
 
 # custom transforms dictionary
 # from .sigmasq import SigmaSqTransform
@@ -167,3 +169,13 @@ class SPIIRTransform(Transform):
 
     def apply(self, samples: pd.DataFrame) -> pd.DataFrame:
         return self._transform.apply(samples)
+
+
+def load_transforms_from_config(
+    config: Dict[str, Any], key: Optional[str] = "transforms"
+) -> Optional[List[Transform]]:
+    if key in config:
+        return [Transform(**parse_config(kwargs)) for kwargs in config[key]]
+    else:
+        logger.info(f"No transforms found in config[{key}].")
+        return None

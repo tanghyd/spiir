@@ -72,7 +72,7 @@ def load_constraints_from_config(
         return None
 
 
-def load_priors_from_config(
+def load_joint_distribution_from_config(
     config: Dict[str, Any],
     distributions: Optional[str] = "distributions",
     transforms: Optional[str] = "transforms",

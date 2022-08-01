@@ -8,10 +8,10 @@ import toml
 from igwn_alert import client
 from ligo.gracedb.rest import GraceDb
 
-from spiir.search.p_astro.mass_contour import MassContourEstimator
+
+from spiir.search.p_astro.mass_contour import MassContourModel
 
 logger = logging.getLogger(__name__)
-
 
 def run_igwn_alert_consumer(
     server: str = "kafka://kafka.scima.org/",
@@ -88,7 +88,7 @@ class IGWNAlertConsumer:
         # instantiate pastro model - to do: load from config + save coeffs with preds
         # coefficients = {"m0": 0.01, "a0": 0.75, "b0": -0.322, "b1": -0.516}  # pycbc
         coefficients = {"m0": 0.01, "a0": 0.76, "b0": -0.685, "b1": 0.467}  # spiir
-        self.pastro = MassContourEstimator(coefficients)
+        self.model = MassContourModel(**coefficients)
 
         logger.info(f"Initialized {self.id}.")
 
@@ -140,7 +140,7 @@ class IGWNAlertConsumer:
             eff_dist = min(sngl["eff_distance"] for sngl in data["SingleInspiral"])
 
             # compute pastro prediction
-            probs = self.pastro(mchirp, snr, eff_dist)
+            probs = self.model.predict(snr, mchirp, eff_dist)
             logger.debug(f"{gid} pastro: {probs}")
 
             # upload pastro to gracedb

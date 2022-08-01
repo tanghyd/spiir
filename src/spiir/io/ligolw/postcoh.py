@@ -4,7 +4,7 @@ from tqdm import tqdm
 from xml.sax.xmlreader import AttributesImpl
 
 import glue.ligolw.lsctables
-from ligo.lw import ligolw, lsctables, table, array, param, utils
+from ligo.lw import ligolw, lsctables, table, array, param
 from lal import LIGOTimeGPS
 
 logger = logging.getLogger(__name__)
@@ -46,7 +46,7 @@ def rename_legacy_postcoh_columns(xmldoc: ligolw.Element) -> ligolw.Element:
         A valid LIGO_LW XML Document or Element with the required LIGO_LW elements.
 
     Returns
-    ----------
+    -------
     ligo.lw.ligolw.Element
         The same LIGO_LW Document object with updated table column names.
     """
@@ -86,11 +86,10 @@ def include_missing_postcoh_columns(
         otherwise it is set to an appropriate default value given the column type.
 
     Returns
-    ----------
+    -------
     ligo.lw.ligolw.Element
         The same LIGO_LW Document object with updated table column names.
     """
-
     def default_value(name: str, dtype: str) -> Union[float, int, str]:
         """Helper function to fill a sensible default value to a given column type."""
         if dtype in ["real_4", "real_8"]:
@@ -230,22 +229,20 @@ glue.ligolw.lsctables.TableByName.update(TableByName)  # legacy compatibility
 
 
 def use_in(ContentHandler):
-    """
-        Modify ContentHandler, a sub-class of
-        ligo.lw.ligolw.LIGOLWContentHandler, to cause it to use the Table
-        classes defined in this module when parsing XML documents.
+    """Modify ContentHandler, a sub-class of ligo.lw.ligolw.LIGOLWContentHandler, to
+    cause it to use the Table classes defined in this module when parsing XML documents.
 
     NOTE: This function has not been tested and should not be assumed to work correctly.
 
-        Examples
+    Examples
     --------
+    >>> from glue.ligolw import ligolw
+    >>> class MyContentHandler(ligolw.LIGOLWContentHandler):
+    ...	pass
+    ...
+    >>> use_in(MyContentHandler)
+    <class 'glue.ligolw.lsctables.MyContentHandler'>
 
-        >>> from glue.ligolw import ligolw
-        >>> class MyContentHandler(ligolw.LIGOLWContentHandler):
-        ...	pass
-        ...
-        >>> use_in(MyContentHandler)
-        <class 'glue.ligolw.lsctables.MyContentHandler'>
     """
     ContentHandler = array.use_in(ContentHandler)
     ContentHandler = param.use_in(ContentHandler)

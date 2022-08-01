@@ -52,7 +52,7 @@ def load_all_ligolw_frequency_arrays(
 
     Examples
     --------
-        >> psds = load_all_ligolw_frequency_arrays("coinc.xml")
+    >>> psds = load_all_ligolw_frequency_arrays("coinc.xml")
 
     """
     xmldoc = load_ligolw_xmldoc(path, ilwdchar_compat=ilwdchar_compat, verbose=verbose)

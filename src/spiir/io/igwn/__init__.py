@@ -1,0 +1,1 @@
+from .alert_consumer import run_igwn_alert_consumer

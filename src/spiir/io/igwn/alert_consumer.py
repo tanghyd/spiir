@@ -8,10 +8,10 @@ import toml
 from igwn_alert import client
 from ligo.gracedb.rest import GraceDb
 
-
 from spiir.search.p_astro.mass_contour import MassContourModel
 
 logger = logging.getLogger(__name__)
+
 
 def run_igwn_alert_consumer(
     server: str = "kafka://kafka.scima.org/",

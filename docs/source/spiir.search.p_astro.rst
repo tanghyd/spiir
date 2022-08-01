@@ -1,7 +1,7 @@
-spiir.io package
-================
+spiir.search.p\_astro package
+=============================
 
-.. automodule:: spiir.io
+.. automodule:: spiir.search.p_astro
    :members:
    :undoc-members:
    :show-inheritance:
@@ -12,20 +12,19 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
-   spiir.io.igwn
-   spiir.io.ligolw
+   spiir.search.p_astro.models
 
 Submodules
 ----------
 
 
-.. automodule:: spiir.io.array
+.. automodule:: spiir.search.p_astro.fgmc
    :members:
    :undoc-members:
    :show-inheritance:
 
 
-.. automodule:: spiir.io.mp
+.. automodule:: spiir.search.p_astro.mass_contour
    :members:
    :undoc-members:
    :show-inheritance:

@@ -356,10 +356,7 @@ def predict_source_p_astro(
     chirp mass uncertainty, the luminosity distance (and its uncertainty)
     and the redshift (and its uncertainty). Probability is estimated to be
     directly proportional to the area of the corresponding CBC region.
-
-    $$ \tilde{D}_L = a_0 \cdot min(\tilde{D}_{eff, i}) $$
-    $$ \tilde{\sigma}_{D_L} = e^{b_0} \cdot \tilde{D}_L \cdot\rho_{c}^{b_1} $$
-
+    
     Parameters
     ----------
     coefficients: float

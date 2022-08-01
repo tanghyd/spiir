@@ -14,3 +14,5 @@ Subpackages
 
    spiir.distribution
    spiir.io
+   spiir.search
+   spiir.workflow

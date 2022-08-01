@@ -13,7 +13,8 @@ jobs:
         docs-folder: "docs/"
         pre-build-command: "apt-get update -y \
           && apt-get install -y gcc \
-          && pip install ."
+          && pip install --upgrade pip \
+          && pip install -e .[pycbc]"
         build-command: make docs
     - name: Upload artifacts
       uses: actions/upload-artifact@v3

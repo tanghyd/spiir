@@ -7,10 +7,6 @@ from typing import Optional, Union, Tuple
 import numpy as np
 import pandas as pd
 
-from pycbc.io import record
-from pycbc.transforms import apply_transforms
-from pycbc.distributions.constraints import constraints
-
 from .constraint import Constraint
 
 logger = logging.getLogger(__name__)
@@ -49,6 +45,7 @@ class PyCBCConstraint(Constraint):
         apply:
             Some description.
         """
+        from pycbc.distributions.constraints import constraints
 
         assert package == getattr(PyCBCConstraint, "package")
         super().__init__(constraint, variables, name, package, **kwargs)
@@ -90,6 +87,9 @@ class MassConstraint:
         _constraint:
             Sample description.
         """
+        from pycbc.io import record
+        from pycbc.transforms import apply_transforms
+
         self.constraint_arg = constraint_arg
         self.transforms = transforms
         for kwarg in kwargs.keys():

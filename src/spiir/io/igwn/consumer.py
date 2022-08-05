@@ -84,7 +84,7 @@ def run_igwn_alert_consumer(
 
     # Initialize the client sesion
     logger.debug(
-        ' '.join([f"{k}: {v}" for k, v in client_args.items() if k != "password"] + ".")
+        ' '.join([f"{k}: {v}" for k, v in client_args.items() if k != "password"]) + "."
     )
 
     alert_client = client(**client_args)

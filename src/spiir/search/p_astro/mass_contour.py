@@ -11,9 +11,11 @@ Additional edits drawn from prior work done by V. Villa-Ortega:
 https://github.com/veronica-villa/source_probabilities_estimation_pycbclive
 
 """
-
+import json
 import logging
 import math
+from pathlib import Path
+from os import PathLike
 from typing import Optional, Union, Tuple, Dict
 
 import numpy as np
@@ -601,7 +603,7 @@ class MassContourModel:
         a0: Optional[float] = None,
         b0: Optional[float] = None,
         b1: Optional[float] = None,
-        m0: Optional[float] = 0.01,
+        m0: Optional[float] = None,
         m_bounds: Tuple[float, float] = (1.0, 45.0),
         mgap_bounds: Tuple[float, float] = (3.0, 5.0),
         group_mgap: bool = True,
@@ -728,6 +730,7 @@ class MassContourModel:
 
 #         self._coefficients = coeffs
 
+
     # define distance estimation functions
     def _estimate_lum_dist(
         self,
@@ -739,6 +742,7 @@ class MassContourModel:
         """
         assert self.a0 is not None, f"a0 coefficient is not initialised."
         return eff_distance*self.a0
+
 
     def _estimate_lum_dist_std(
         self,
@@ -760,6 +764,7 @@ class MassContourModel:
         )
 
         return lum_dist_std
+
 
     def fit(
         self,
@@ -816,6 +821,7 @@ class MassContourModel:
         self.b1, self.b0 = b.convert().coef
         logger.info(f"Fitted coefficients for {self.__repr__}.")
         return self
+
 
     def predict(
         self,
@@ -875,8 +881,26 @@ class MassContourModel:
 
         return probs
 
-    def save(self):
-        pass
 
-    def load(self):
-        pass
+    def save_json(self, path: Union[str, bytes, PathLike]):
+        try:
+            with Path(path).open(mode="w") as f:
+                json.dump(self.coefficients, f, sort_keys=True, indent=4)
+            logger.info(f"Saved MassContourModel coefficients to JSON at {path}")
+        except Exception as exc:
+            logger.warning(f"Error loading MassContourModel from {path}: {exc}")
+
+
+    def load_json(self, path: Union[str, bytes, PathLike]):
+        try:
+            with Path(path).open(mode="r") as f:
+                coefficients = json.load(f)
+            
+            for key in ["a0", "b0", "b1", "m0"]:
+                if key in coefficients:
+                    setattr(self, key, coefficients[key])
+                else:
+                    logger.info(f"Coefficient {key} not present in {path}.")
+            logger.info(f"Loaded MassContourModel coefficients from JSON at {path}")
+        except Exception as exc:
+            logger.warning(f"Error loading MassContourModel from {path}: {exc}")

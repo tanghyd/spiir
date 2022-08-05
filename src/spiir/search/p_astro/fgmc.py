@@ -1389,7 +1389,6 @@ class TwoComponentFGMCToyModel:
         snr_threshold: float=8,
         prior_type: str="Uniform"
     ):
-
         # set FAR and SNR thresholds to classify as astro source for bayes factor model
         self.far_threshold = far_threshold
         self.snr_threshold = snr_threshold
@@ -1462,29 +1461,10 @@ class TwoComponentFGMCToyModel:
             mean_values_dict=self.mean_counts,
         )
 
-
     def save_pkl(self, path: Union[str, bytes, PathLike]):
-        model = type(self).__name__
-        try:
-            with Path(path).open(mode="wb") as f:
-                pickle.dump(self.__dict__, f)
-                logger.info(f"Saved {model} state to pickle at {path}")
-            
-        except Exception as exc:
-            logger.warning(f"Error saving {model} to {path}: {exc}")
-
+        with Path(path).open(mode="wb") as f:
+            pickle.dump(self.__dict__, f)
 
     def load_pkl(self, path: Union[str, bytes, PathLike]):
-        model = type(self).__name__
-        try:
-            with Path(path).open(mode="rb") as f:
-                self.__dict__ = pickle.load(f)
-
-            for key in ["a0", "b0", "b1", "m0"]:
-                if getattr(self, key, None) is None:
-                    logger.info(f"Coefficient {key} not initialised.")
-                    
-            logger.info(f"Loaded {model} state from pickle at {path}")
-            
-        except Exception as exc:
-            logger.warning(f"Error loading {model} from {path}: {exc}")
+        with Path(path).open(mode="rb") as f:
+            self.__dict__ = pickle.load(f)

@@ -284,8 +284,8 @@ def predict_redshift(
     lal_cosmology: bool = True,
     truncate_lower_dist: Optional[float] = None,
 ) -> Tuple[float, float]:
-    logger.debug(f"truncate_lower_dist: {truncate_lower_dist}")
     # compute estimated luminosity distance and redshift and their uncertainties
+    # logger.debug(f"truncate_lower_dist: {truncate_lower_dist}")
     dist_est = a0 * eff_distance
     dist_std_est = dist_est * math.exp(b0) * np.power(snr, b1)
     z, z_std = estimate_redshift_from_distance(
@@ -882,56 +882,28 @@ class MassContourModel:
 
         return probs
 
-
     def save_pkl(self, path: Union[str, bytes, PathLike]):
-        model = type(self).__name__
-        try:
-            with Path(path).open(mode="wb") as f:
-                pickle.dump(self.__dict__, f)
-                logger.info(f"Saved {model} state to pickle at {path}")
-            
-        except Exception as exc:
-            logger.warning(f"Error saving {model} to {path}: {exc}")
+        with Path(path).open(mode="wb") as f:
+            pickle.dump(self.__dict__, f)
 
     def load_pkl(self, path: Union[str, bytes, PathLike]):
-        model = type(self).__name__
-        try:
-            with Path(path).open(mode="rb") as f:
-                self.__dict__ = pickle.load(f)
+        with Path(path).open(mode="rb") as f:
+            self.__dict__ = pickle.load(f)
 
-            for key in ["a0", "b0", "b1", "m0"]:
-                if getattr(self, key, None) is None:
-                    logger.info(f"Coefficient {key} not initialised.")
-                    
-            logger.info(f"Loaded {model} state from pickle at {path}")
-            
-        except Exception as exc:
-            logger.warning(f"Error loading {model} from {path}: {exc}")
-
+        for key in ["a0", "b0", "b1", "m0"]:
+            if getattr(self, key, None) is None:
+                logger.info(f"{type(self).__name__} coefficient {key} not initialised.")
 
     def save_json(self, path: Union[str, bytes, PathLike], indent: int=4):
-        model = type(self).__name__
-        try:
-            with Path(path).open(mode="w") as f:
-                json.dump(self.__dict__, f, indent=indent)
-            logger.info(f"Saved {model} state to JSON at {path}")
-        except Exception as exc:
-            logger.warning(f"Error saving {model} to {path}: {exc}")
-
+        with Path(path).open(mode="w") as f:
+            json.dump(self.__dict__, f, indent=indent)
 
     def load_json(self, path: Union[str, bytes, PathLike]):
-        model = type(self).__name__
-        try:
-            with Path(path).open(mode="r") as f:
-                state = json.load(f)
-            for key in state:
-                setattr(self, key, state[key])
-            
-            for key in ["a0", "b0", "b1", "m0"]:
-                if getattr(self, key, None) is None:
-                    logger.info(f"Coefficient {key} not initialised.")
-
-            logger.info(f"Loaded {model} state from JSON at {path}")
-
-        except Exception as exc:
-            logger.warning(f"Error loading {model} from {path}: {exc}")
+        with Path(path).open(mode="r") as f:
+            state = json.load(f)
+        for key in state:
+            setattr(self, key, state[key])
+        
+        for key in ["a0", "b0", "b1", "m0"]:
+            if getattr(self, key, None) is None:
+                logger.info(f"{type(self).__name__} coefficient {key} not initialised.")

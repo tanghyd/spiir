@@ -87,6 +87,7 @@ def run_igwn_alert_consumer(
     alert_client = client(**client_args)
 
     try:
+        logger.debug(f"Listening to topics: {topics}.")
         alert_client.listen(consumer.process_alert, topics)
 
     except (KeyboardInterrupt, SystemExit):

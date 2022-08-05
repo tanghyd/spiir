@@ -83,11 +83,14 @@ def run_igwn_alert_consumer(
         logger.debug(f"Loading default credentials from {auth_fp}")
 
     # Initialize the client sesion
-    logger.debug({k: v for k, v in client_args.items() if k != "password"})
+    logger.debug(
+        ' '.join([f"{k}: {v}" for k, v in client_args.items() if k != "password"] + ".")
+    )
+
     alert_client = client(**client_args)
 
     try:
-        logger.debug(f"Listening to topics: {topics}.")
+        logger.debug(f"Listening to topics: {', '.join(topics)}.")
         alert_client.listen(consumer.process_alert, topics)
 
     except (KeyboardInterrupt, SystemExit):

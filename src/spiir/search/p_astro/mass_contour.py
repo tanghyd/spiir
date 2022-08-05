@@ -13,6 +13,7 @@ https://github.com/veronica-villa/source_probabilities_estimation_pycbclive
 """
 import json
 import logging
+import pickle
 import math
 from pathlib import Path
 from os import PathLike
@@ -882,25 +883,51 @@ class MassContourModel:
         return probs
 
 
+    def save_pkl(self, path: Union[str, bytes, PathLike]):
+        try:
+            with Path(path).open(mode="wb") as f:
+                pickle.dump(self.__dict__, f)
+                logger.info(f"Saved MassContourModel state to pickle at {path}")
+            
+        except Exception as exc:
+            logger.warning(f"Error saving MassContourModel to {path}: {exc}")
+
+    def load_pkl(self, path: Union[str, bytes, PathLike]):
+        try:
+            with Path(path).open(mode="rb") as f:
+                self.__dict__ = pickle.load(f)
+
+            for key in ["a0", "b0", "b1", "m0"]:
+                if getattr(self, key, None) is None:
+                    logger.info(f"Coefficient {key} not initialised.")
+                    
+            logger.info(f"Loaded MassContourModel state from pickle at {path}")
+            
+        except Exception as exc:
+            logger.warning(f"Error loading MassContourModel from {path}: {exc}")
+
+
     def save_json(self, path: Union[str, bytes, PathLike]):
         try:
             with Path(path).open(mode="w") as f:
-                json.dump(self.coefficients, f, sort_keys=True, indent=4)
-            logger.info(f"Saved MassContourModel coefficients to JSON at {path}")
+                json.dump(self.__dict__, f, sort_keys=True, indent=4)
+            logger.info(f"Saved MassContourModel state to JSON at {path}")
         except Exception as exc:
-            logger.warning(f"Error loading MassContourModel from {path}: {exc}")
+            logger.warning(f"Error saving MassContourModel to {path}: {exc}")
 
 
     def load_json(self, path: Union[str, bytes, PathLike]):
         try:
             with Path(path).open(mode="r") as f:
-                coefficients = json.load(f)
+                state = json.load(f)
+            for key in state:
+                setattr(self, key, state[key])
             
             for key in ["a0", "b0", "b1", "m0"]:
-                if key in coefficients:
-                    setattr(self, key, coefficients[key])
-                else:
-                    logger.info(f"Coefficient {key} not present in {path}.")
-            logger.info(f"Loaded MassContourModel coefficients from JSON at {path}")
+                if getattr(self, key, None) is None:
+                    logger.info(f"Coefficient {key} not initialised.")
+
+            logger.info(f"Loaded MassContourModel state from JSON at {path}")
+
         except Exception as exc:
             logger.warning(f"Error loading MassContourModel from {path}: {exc}")

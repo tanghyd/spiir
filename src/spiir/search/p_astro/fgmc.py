@@ -509,7 +509,7 @@ class Posterior(CountPosteriorElements):
         self.priorDict["Jeffreys"] = Posterior.priorJeffreys
 
         if self.verbose:
-            print("Posterior class instantiation complete.")
+            logger.info("Posterior class instantiation complete.")
 
     def reduced_log_likelihood_terr(self, **lambdas):
         """
@@ -675,7 +675,7 @@ class Posterior(CountPosteriorElements):
         of the array returned by this function.
         """
         if self.verbose:
-            print(
+            logger.info(
                 "Regularizing FGMC posterior to avoid ",
                 "numerical over-/under-flows ...",
             )
@@ -696,7 +696,7 @@ class Posterior(CountPosteriorElements):
         with the regularization constant removed.
         """
         if self.verbose:
-            print("Normalizing FGMC posterior ...")
+            logger.info("Normalizing FGMC posterior ...")
         return np.sum(np.exp(self.norm_array - self.reg_const))
 
     def poissonLogWeight(self, **lambdas):  # noqa: N802
@@ -863,7 +863,7 @@ class MarginalizedPosterior(Posterior):
             **astro_sources
         )
         if self.verbose:
-            print("MarginalizedPosterior class instantiation complete.")
+            logger.info("MarginalizedPosterior class instantiation complete.")
 
     def posterior(self, **lambdas):
 

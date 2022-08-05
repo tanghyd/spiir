@@ -909,11 +909,11 @@ class MassContourModel:
             logger.warning(f"Error loading {model} from {path}: {exc}")
 
 
-    def save_json(self, path: Union[str, bytes, PathLike]):
+    def save_json(self, path: Union[str, bytes, PathLike], indent: int=4):
         model = type(self).__name__
         try:
             with Path(path).open(mode="w") as f:
-                json.dump(self.__dict__, f, sort_keys=True, indent=4)
+                json.dump(self.__dict__, f, indent=indent)
             logger.info(f"Saved {model} state to JSON at {path}")
         except Exception as exc:
             logger.warning(f"Error saving {model} to {path}: {exc}")

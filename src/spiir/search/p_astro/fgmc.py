@@ -4,9 +4,12 @@ Code sourced from https://git.ligo.org/lscsoft/p-astro/-/tree/master/ligo.
 """
 
 import logging
+import pickle
 import itertools
 from collections.abc import Sequence
 from copy import deepcopy
+from pathlib import Path
+from os import PathLike
 from typing import Optional, Union, Tuple, List, Dict
 
 import numpy as np
@@ -454,14 +457,14 @@ class Posterior(CountPosteriorElements):
         assert astro_sources != {}, "Need at least one astrophysical source."
         assert terr_source != {}, "Terrestrial source required."
 
-        self.args_astro = astro_sources.values()
+        self.args_astro = tuple(astro_sources.values())
         self.arg_terr = terr_source
         self.args_all = list(self.args_astro) + [self.arg_terr]
         self.keys_all = [arg.label for arg in self.args_all]
         self.key_terr = self.arg_terr.label
         self.keys_astro = [arg.label for arg in self.args_astro]
         self.fix_sources = fix_sources
-        self.keys_fixed = self.fix_sources.keys()
+        self.keys_fixed = tuple(self.fix_sources.keys())
         self.mcmc = mcmc
 
         assert len(self.f_divby_b) == int(
@@ -1459,8 +1462,27 @@ class TwoComponentFGMCToyModel:
             mean_values_dict=self.mean_counts,
         )
 
-    def save(self):
-        pass
 
-    def load(self):
-        pass
+    def save_pkl(self, path: Union[str, bytes, PathLike]):
+        try:
+            with Path(path).open(mode="wb") as f:
+                pickle.dump(self.__dict__, f)
+                logger.info(f"Saved MassContourModel state to pickle at {path}")
+            
+        except Exception as exc:
+            logger.warning(f"Error saving MassContourModel to {path}: {exc}")
+
+
+    def load_pkl(self, path: Union[str, bytes, PathLike]):
+        try:
+            with Path(path).open(mode="rb") as f:
+                self.__dict__ = pickle.load(f)
+
+            for key in ["a0", "b0", "b1", "m0"]:
+                if getattr(self, key, None) is None:
+                    logger.info(f"Coefficient {key} not initialised.")
+                    
+            logger.info(f"Loaded MassContourModel state from pickle at {path}")
+            
+        except Exception as exc:
+            logger.warning(f"Error loading MassContourModel from {path}: {exc}")

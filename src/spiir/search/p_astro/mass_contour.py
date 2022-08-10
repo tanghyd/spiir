@@ -586,7 +586,7 @@ def _draw_prob_pie_axes(ax: Axes, probabilities: Dict[str, float]) -> Axes:
 
 
 def plot_prob_pie_figure(
-    probabilities: dict[str, float],
+    probabilities: Dict[str, float],
     figsize: Tuple[float, float] = (8, 6),
 ) -> Figure:
     fig, ax = plt.subplots(figsize=figsize)

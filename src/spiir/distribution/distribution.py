@@ -232,7 +232,7 @@ class JointDistribution:
         transforms: Optional[Union[Transform, Tuple[Transform, ...]]] = None,
         constraints: Optional[Union[Constraint, Tuple[Constraint, ...]]] = None,
     ):
-        self.distributions: tuple[Distribution, ...] = (
+        self.distributions: Tuple[Distribution, ...] = (
             (distributions,)
             if isinstance(distributions, Distribution)
             else distributions
@@ -260,6 +260,8 @@ class JointDistribution:
         ----------
         n: int
             The number of samples to return
+        redraw: bool
+            Whether or not to redraw samples if a constraint is not satisfied.
 
         Returns
         -------

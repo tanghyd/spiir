@@ -42,5 +42,5 @@ help:
 #    a .nojeykll file is created via actions-gh-pages with enable_jekyll: False
 docs:
 	@rm -f ./source/spiir*.rst
-	@sphinx-apidoc -fME -o ./source ../src/spiir
+	@sphinx-apidoc -fE -o ./source ../src/spiir
 	@make html

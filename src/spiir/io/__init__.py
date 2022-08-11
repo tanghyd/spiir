@@ -1,1 +1,1 @@
-from . import ligolw, igwn, array, mp
+from . import ligolw, array, mp

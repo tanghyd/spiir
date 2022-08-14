@@ -11,6 +11,7 @@ from typing import Optional, Union, Tuple, Dict, Sequence, Any
 import astropy
 import astropy_healpix as ah
 import ligo.skymap.io
+import ligo.skymap.plot
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np

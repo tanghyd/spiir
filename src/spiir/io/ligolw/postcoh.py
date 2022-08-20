@@ -1,6 +1,5 @@
 import logging
 from typing import Union
-from tqdm import tqdm
 from xml.sax.xmlreader import AttributesImpl
 
 import glue.ligolw.lsctables
@@ -12,7 +11,6 @@ logger = logging.getLogger(__name__)
 # TO DO:
 # - Port compatibility with C postcoh table
 # - Check compatibility with dbtables
-# - Handle changing column names (i.e. KAGRA addition, name changes)
 
 # database compatibility for ilwd:char - review this
 # from glue.ligolw import dbtables
@@ -37,17 +35,17 @@ _LEGACY_COLUMN_MAP.update(
 )
 
 
-def rename_legacy_postcoh_columns(xmldoc: ligolw.Element) -> ligolw.Element:
+def rename_legacy_postcoh_columns(xmldoc: ligolw.Document) -> ligolw.Document:
     """Updates legacy PostcohInspiralTable table column names to their latest versions.
 
     Parameters
     ----------
-    xmldoc: ligo.lw.ligo.lw.ligolw.Element
-        A valid LIGO_LW XML Document or Element with the required LIGO_LW elements.
+    xmldoc: ligo.lw.ligo.lw.ligolw.Document
+        A valid LIGO_LW XML Document element with a PostcohInspiralTable element.
 
     Returns
     -------
-    ligo.lw.ligolw.Element
+    ligo.lw.ligolw.Document
         The same LIGO_LW Document object with updated table column names.
     """
     for elem in xmldoc.getElements(lambda e: e.tagName == table.Table.tagName):
@@ -68,9 +66,9 @@ def rename_legacy_postcoh_columns(xmldoc: ligolw.Element) -> ligolw.Element:
 
 
 def include_missing_postcoh_columns(
-    xmldoc: ligolw.Element,
+    xmldoc: ligolw.Document,
     nullable: bool = True,
-) -> ligolw.Element:
+) -> ligolw.Document:
     """Adds any missing PostcohInspiralTable columns and fills them with default values.
 
     NOTE: This function assumes that all legacy PostcohInspiralTable columns have been
@@ -79,15 +77,15 @@ def include_missing_postcoh_columns(
 
     Parameters
     ----------
-    xmldoc: ligo.lw.ligo.lw.ligolw.Element
-        A valid LIGO_LW XML Document or Element with the required LIGO_LW elements.
+    xmldoc: ligo.lw.ligo.lw.ligolw.Document
+        A valid LIGO_LW XML Document element with a PostcohInspiralTable element.
     nullable: bool
         If True, sets the values for missing postcoh columns to NoneType,
         otherwise it is set to an appropriate default value given the column type.
 
     Returns
     -------
-    ligo.lw.ligolw.Element
+    ligo.lw.ligolw.Document
         The same LIGO_LW Document object with updated table column names.
     """
     def default_value(name: str, dtype: str) -> Union[float, int, str]:
@@ -96,7 +94,7 @@ def include_missing_postcoh_columns(
             return 0.0
         elif dtype in ["int_4s", "int_8s"]:  # this case includes row IDs
             return 0
-        elif dtype == "lstring":
+        elif dtype in ["char_s", "char_v", "string", "lstring"]:
             return ""
         else:
             raise NotImplementedError(f"Cannot initialize col {name} of type {dtype}.")
@@ -106,14 +104,14 @@ def include_missing_postcoh_columns(
             if elem.Name == "postcoh":
                 # insert missing column to postcoh table columns in order of valid cols
                 valid_columns = lsctables.TableByName[elem.Name].validcolumns
-                present_columns = elem.getElementsByTagName(ligolw.Column.tagName)
+                present_columns = elem.getElementsByTagName(table.Column.tagName)
                 present_column_names = [col.Name for col in present_columns]
                 missing_columns = []
-                for idx, name in enumerate(valid_columns):
+                for name in valid_columns:
                     if name not in present_column_names:
                         column_type = valid_columns[name]
                         attrs = {"Name": "%s" % name, "Type": column_type}
-                        column = ligolw.Column(AttributesImpl(attrs))
+                        column = table.Column(AttributesImpl(attrs))
                         streams = elem.getElementsByTagName(ligolw.Stream.tagName)
                         if streams:
                             elem.insertBefore(column, streams[0])

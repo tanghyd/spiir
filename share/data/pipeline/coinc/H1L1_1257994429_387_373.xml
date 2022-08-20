@@ -1,0 +1,296 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE LIGO_LW SYSTEM "http://ldas-sw.ligo.caltech.edu/doc/ligolwAPI/html/ligolw_dtd.txt">
+<LIGO_LW>
+	<Table Name="process:table">
+		<Column Name="process:comment" Type="lstring"/>
+		<Column Name="process:cvs_entry_time" Type="int_4s"/>
+		<Column Name="process:cvs_repository" Type="lstring"/>
+		<Column Name="process:domain" Type="lstring"/>
+		<Column Name="process:end_time" Type="int_4s"/>
+		<Column Name="process:ifos" Type="lstring"/>
+		<Column Name="process:is_online" Type="int_4s"/>
+		<Column Name="process:jobid" Type="int_4s"/>
+		<Column Name="process:node" Type="lstring"/>
+		<Column Name="process:process_id" Type="ilwd:char"/>
+		<Column Name="process:program" Type="lstring"/>
+		<Column Name="process:start_time" Type="int_4s"/>
+		<Column Name="process:unix_procid" Type="int_4s"/>
+		<Column Name="process:username" Type="lstring"/>
+		<Column Name="process:version" Type="lstring"/>
+		<Stream Delimiter="," Name="process:table" Type="Local">
+			,,,,,"H1,L1",0,0,"john76","process:process_id:1","gstlal_inspiral_postcohspiir_online",1338898628,35223,"dtang",,
+		</Stream>
+	</Table>
+	<Table Name="process_params:table">
+		<Column Name="process_params:param" Type="lstring"/>
+		<Column Name="process_params:process_id" Type="ilwd:char"/>
+		<Column Name="process_params:program" Type="lstring"/>
+		<Column Name="process_params:type" Type="lstring"/>
+		<Column Name="process_params:value" Type="lstring"/>
+		<Stream Delimiter="," Name="process_params:table" Type="Local">
+			"--psd-fft-length","process:process_id:1","gstlal_inspiral_postcohspiir_online","int_8s","16",
+			"--cohfar-accumbackground-output-prefix","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring","/fred/oz016/dtang/analysis/pastro/injection/bbh/bbh_bg_1257992907-604800-created_06-10-22_21-59-11/HL_000/bank0384_stats",
+			"--cohfar-accumbackground-output-prefix","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring","/fred/oz016/dtang/analysis/pastro/injection/bbh/bbh_bg_1257992907-604800-created_06-10-22_21-59-11/HL_000/bank0385_stats",
+			"--cohfar-accumbackground-output-prefix","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring","/fred/oz016/dtang/analysis/pastro/injection/bbh/bbh_bg_1257992907-604800-created_06-10-22_21-59-11/HL_000/bank0386_stats",
+			"--cohfar-accumbackground-output-prefix","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring","/fred/oz016/dtang/analysis/pastro/injection/bbh/bbh_bg_1257992907-604800-created_06-10-22_21-59-11/HL_000/bank0387_stats",
+			"--veto-segments-name","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring","vetoes",
+			"--nxydump-directory","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring",".",
+			"--shared-memory-block-size","process:process_id:1","gstlal_inspiral_postcohspiir_online","int_8s","4096",
+			"--iir-bank","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring","H1:/fred/oz016/manoj/pre-O4/banks/O3/filt/gstlal_iir_bank_b0optmin97pc_ER14a_0/iir_H1-GSTLAL_SPLIT_BANK_0384-a1-0-0.xml.gz,L1:/fred/oz016/manoj/pre-O4/banks/O3/filt/gstlal_iir_bank_b0optmin97pc_ER14a_0/iir_L1-GSTLAL_SPLIT_BANK_0384-a1-0-0.xml.gz",
+			"--iir-bank","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring","H1:/fred/oz016/manoj/pre-O4/banks/O3/filt/gstlal_iir_bank_b0optmin97pc_ER14a_0/iir_H1-GSTLAL_SPLIT_BANK_0385-a1-0-0.xml.gz,L1:/fred/oz016/manoj/pre-O4/banks/O3/filt/gstlal_iir_bank_b0optmin97pc_ER14a_0/iir_L1-GSTLAL_SPLIT_BANK_0385-a1-0-0.xml.gz",
+			"--iir-bank","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring","H1:/fred/oz016/manoj/pre-O4/banks/O3/filt/gstlal_iir_bank_b0optmin97pc_ER14a_0/iir_H1-GSTLAL_SPLIT_BANK_0386-a1-0-0.xml.gz,L1:/fred/oz016/manoj/pre-O4/banks/O3/filt/gstlal_iir_bank_b0optmin97pc_ER14a_0/iir_L1-GSTLAL_SPLIT_BANK_0386-a1-0-0.xml.gz",
+			"--iir-bank","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring","H1:/fred/oz016/manoj/pre-O4/banks/O3/filt/gstlal_iir_bank_b0optmin97pc_ER14a_0/iir_H1-GSTLAL_SPLIT_BANK_0387-a1-0-0.xml.gz,L1:/fred/oz016/manoj/pre-O4/banks/O3/filt/gstlal_iir_bank_b0optmin97pc_ER14a_0/iir_L1-GSTLAL_SPLIT_BANK_0387-a1-0-0.xml.gz",
+			"--finalsink-cluster-window","process:process_id:1","gstlal_inspiral_postcohspiir_online","real_8","1.0",
+			"--block-size","process:process_id:1","gstlal_inspiral_postcohspiir_online","int_8s","67108864",
+			"--cohfar-assignfar-silent-time","process:process_id:1","gstlal_inspiral_postcohspiir_online","int_8s","0",
+			"--finalsink-fapupdater-interval","process:process_id:1","gstlal_inspiral_postcohspiir_online","real_8","1800.0",
+			"--nds-channel-type","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring","online",
+			"--frame-cache","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring","/fred/oz016/dtang/analysis/pastro/O3b-early-frames.cache",
+			"--shared-memory-assumed-duration","process:process_id:1","gstlal_inspiral_postcohspiir_online","int_8s","4",
+			"--gps-end-time","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring","1258597707",
+			"--cuda-postcoh-detrsp-refresh-interval","process:process_id:1","gstlal_inspiral_postcohspiir_online","int_8s","86400",
+			"--finalsink-need-online-perform","process:process_id:1","gstlal_inspiral_postcohspiir_online","int_8s","1",
+			"--cuda-postcoh-hist-trials","process:process_id:1","gstlal_inspiral_postcohspiir_online","int_8s","100",
+			"--finalsink-gracedb-group","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring","Test",
+			"--finalsink-opa-cohsnr-thresh","process:process_id:1","gstlal_inspiral_postcohspiir_online","int_8s","8",
+			"--finalsink-far-factor","process:process_id:1","gstlal_inspiral_postcohspiir_online","real_8","8.0",
+			"--data-source","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring","frames",
+			"--finalsink-gracedb-far-threshold","process:process_id:1","gstlal_inspiral_postcohspiir_online","real_8","0.0001",
+			"--finalsink-gracedb-service-url","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring","https://gracedb-playground.ligo.org/api/",
+			"--code-version","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring","spiir-O4-EW-development",
+			"--finalsink-superevent-thresh","process:process_id:1","gstlal_inspiral_postcohspiir_online","real_8","0.0001",
+			"--cohfar-assignfar-input-fname","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring","/fred/oz016/dtang/analysis/pastro/background/bbh-2wk/bbh_bg_1256783307-1209600-created_06-04-22_13-00-29/HL_000/HL_000_marginalized_stats_2w.xml.gz,/fred/oz016/dtang/analysis/pastro/background/bbh-2wk/bbh_bg_1256783307-1209600-created_06-04-22_13-00-29/HL_000/HL_000_marginalized_stats_1d.xml.gz,/fred/oz016/dtang/analysis/pastro/background/bbh-2wk/bbh_bg_1256783307-1209600-created_06-04-22_13-00-29/HL_000/HL_000_marginalized_stats_2h.xml.gz",
+			"--channel-name","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring","H1=GDS-GATED_STRAIN",
+			"--channel-name","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring","L1=GDS-GATED_STRAIN",
+			"--ht-gate-threshold","process:process_id:1","gstlal_inspiral_postcohspiir_online","real_8","15.0",
+			"--mode","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring","Online",
+			"--finalsink-singlefar-veto-thresh","process:process_id:1","gstlal_inspiral_postcohspiir_online","real_8","0.5",
+			"--finalsink-fapupdater-output-fname","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring","/fred/oz016/dtang/analysis/pastro/injection/bbh/bbh_bg_1257992907-604800-created_06-10-22_21-59-11/HL_000/HL_000_marginalized_stats_2w.xml.gz,/fred/oz016/dtang/analysis/pastro/injection/bbh/bbh_bg_1257992907-604800-created_06-10-22_21-59-11/HL_000/HL_000_marginalized_stats_1d.xml.gz,/fred/oz016/dtang/analysis/pastro/injection/bbh/bbh_bg_1257992907-604800-created_06-10-22_21-59-11/HL_000/HL_000_marginalized_stats_2h.xml.gz",
+			"--finalsink-gracedb-search","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring","LowMass",
+			"--request-data","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring","O2Replay_H1_L1_V1",
+			"--finalsink-chisq-ratio-thresh","process:process_id:1","gstlal_inspiral_postcohspiir_online","int_8s","8",
+			"--cuda-postcoh-cohsnr-thresh","process:process_id:1","gstlal_inspiral_postcohspiir_online","real_8","1.05",
+			"--gps-start-time","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring","1257992907",
+			"--fir-whitener","process:process_id:1","gstlal_inspiral_postcohspiir_online","int_8s","0",
+			"--state-vector-on-bits","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring","H1=483",
+			"--state-vector-on-bits","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring","L1=483",
+			"--track-psd","process:process_id:1","gstlal_inspiral_postcohspiir_online",,,
+			"--cuda-postcoh-detrsp-fname","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring","/fred/oz016/dtang/analysis/pastro/artifacts/H1L1V1_1257992907_detrsp_map.xml",
+			"--chisq-type","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring","autochisq",
+			"--finalsink-snapshot-interval","process:process_id:1","gstlal_inspiral_postcohspiir_online","real_8","86400.0",
+			"--gpu-acc","process:process_id:1","gstlal_inspiral_postcohspiir_online",,,
+			"--finalsink-gracedb-pipeline","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring","spiir",
+			"--injections","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring","/fred/oz016/dtang/analysis/pastro/injection/bbh/bbh_allo3pop_aligned-1257992907-1258597707.xml",
+			"--state-vector-off-bits","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring","H1=0",
+			"--state-vector-off-bits","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring","L1=0",
+			"--state-channel-name","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring","H1=GDS-CALIB_STATE_VECTOR",
+			"--state-channel-name","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring","L1=GDS-CALIB_STATE_VECTOR",
+			"--cohfar-assignfar-refresh-interval","process:process_id:1","gstlal_inspiral_postcohspiir_online","int_8s","3600",
+			"--cuda-postcoh-output-skymap","process:process_id:1","gstlal_inspiral_postcohspiir_online","int_8s","100",
+			"--finalsink-fapupdater-collect-walltime","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring","1209600,86400,7200",
+			"--finalsink-output-prefix","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring","/fred/oz016/dtang/analysis/pastro/injection/bbh/bbh_bg_1257992907-604800-created_06-10-22_21-59-11/HL_000/HL_000_zerolag",
+			"--cuda-postcoh-snglsnr-thresh","process:process_id:1","gstlal_inspiral_postcohspiir_online","real_8","4.0",
+			"--nds-port","process:process_id:1","gstlal_inspiral_postcohspiir_online","int_8s","31200",
+			"--job-tag","process:process_id:1","gstlal_inspiral_postcohspiir_online","lstring","/fred/oz016/dtang/analysis/pastro/injection/bbh/bbh_bg_1257992907-604800-created_06-10-22_21-59-11/HL_000",
+			"--cohfar-accumbackground-snapshot-interval","process:process_id:1","gstlal_inspiral_postcohspiir_online","int_8s","3600",
+			"--check-time-stamps","process:process_id:1","gstlal_inspiral_postcohspiir_online",,,
+		</Stream>
+	</Table>
+	<Table Name="sngl_inspiral:table">
+		<Column Name="sngl_inspiral:Gamma0" Type="real_4"/>
+		<Column Name="sngl_inspiral:Gamma1" Type="real_4"/>
+		<Column Name="sngl_inspiral:bank_chisq" Type="real_4"/>
+		<Column Name="sngl_inspiral:bank_chisq_dof" Type="int_4s"/>
+		<Column Name="sngl_inspiral:chisq" Type="real_4"/>
+		<Column Name="sngl_inspiral:chisq_dof" Type="int_4s"/>
+		<Column Name="sngl_inspiral:coa_phase" Type="real_4"/>
+		<Column Name="sngl_inspiral:eff_distance" Type="real_4"/>
+		<Column Name="sngl_inspiral:end_time" Type="int_4s"/>
+		<Column Name="sngl_inspiral:end_time_ns" Type="int_4s"/>
+		<Column Name="sngl_inspiral:event_id" Type="ilwd:char"/>
+		<Column Name="sngl_inspiral:ifo" Type="lstring"/>
+		<Column Name="sngl_inspiral:mass1" Type="real_4"/>
+		<Column Name="sngl_inspiral:mass2" Type="real_4"/>
+		<Column Name="sngl_inspiral:process_id" Type="ilwd:char"/>
+		<Column Name="sngl_inspiral:sigmasq" Type="real_8"/>
+		<Column Name="sngl_inspiral:snr" Type="real_4"/>
+		<Column Name="sngl_inspiral:spin1x" Type="real_4"/>
+		<Column Name="sngl_inspiral:spin1y" Type="real_4"/>
+		<Column Name="sngl_inspiral:spin1z" Type="real_4"/>
+		<Column Name="sngl_inspiral:spin2x" Type="real_4"/>
+		<Column Name="sngl_inspiral:spin2y" Type="real_4"/>
+		<Column Name="sngl_inspiral:spin2z" Type="real_4"/>
+		<Column Name="sngl_inspiral:search" Type="lstring"/>
+		<Column Name="sngl_inspiral:channel" Type="lstring"/>
+		<Column Name="sngl_inspiral:end_time_gmst" Type="real_8"/>
+		<Column Name="sngl_inspiral:impulse_time" Type="int_4s"/>
+		<Column Name="sngl_inspiral:impulse_time_ns" Type="int_4s"/>
+		<Column Name="sngl_inspiral:template_duration" Type="real_8"/>
+		<Column Name="sngl_inspiral:event_duration" Type="real_8"/>
+		<Column Name="sngl_inspiral:amplitude" Type="real_4"/>
+		<Column Name="sngl_inspiral:mchirp" Type="real_4"/>
+		<Column Name="sngl_inspiral:mtotal" Type="real_4"/>
+		<Column Name="sngl_inspiral:eta" Type="real_4"/>
+		<Column Name="sngl_inspiral:kappa" Type="real_4"/>
+		<Column Name="sngl_inspiral:chi" Type="real_4"/>
+		<Column Name="sngl_inspiral:tau0" Type="real_4"/>
+		<Column Name="sngl_inspiral:tau2" Type="real_4"/>
+		<Column Name="sngl_inspiral:tau3" Type="real_4"/>
+		<Column Name="sngl_inspiral:tau4" Type="real_4"/>
+		<Column Name="sngl_inspiral:tau5" Type="real_4"/>
+		<Column Name="sngl_inspiral:ttotal" Type="real_4"/>
+		<Column Name="sngl_inspiral:psi0" Type="real_4"/>
+		<Column Name="sngl_inspiral:psi3" Type="real_4"/>
+		<Column Name="sngl_inspiral:alpha" Type="real_4"/>
+		<Column Name="sngl_inspiral:alpha1" Type="real_4"/>
+		<Column Name="sngl_inspiral:alpha2" Type="real_4"/>
+		<Column Name="sngl_inspiral:alpha3" Type="real_4"/>
+		<Column Name="sngl_inspiral:alpha4" Type="real_4"/>
+		<Column Name="sngl_inspiral:alpha5" Type="real_4"/>
+		<Column Name="sngl_inspiral:alpha6" Type="real_4"/>
+		<Column Name="sngl_inspiral:beta" Type="real_4"/>
+		<Column Name="sngl_inspiral:f_final" Type="real_4"/>
+		<Column Name="sngl_inspiral:cont_chisq" Type="real_4"/>
+		<Column Name="sngl_inspiral:cont_chisq_dof" Type="int_4s"/>
+		<Column Name="sngl_inspiral:rsqveto_duration" Type="real_4"/>
+		<Column Name="sngl_inspiral:Gamma2" Type="real_4"/>
+		<Column Name="sngl_inspiral:Gamma3" Type="real_4"/>
+		<Column Name="sngl_inspiral:Gamma4" Type="real_4"/>
+		<Column Name="sngl_inspiral:Gamma5" Type="real_4"/>
+		<Column Name="sngl_inspiral:Gamma6" Type="real_4"/>
+		<Column Name="sngl_inspiral:Gamma7" Type="real_4"/>
+		<Column Name="sngl_inspiral:Gamma8" Type="real_4"/>
+		<Column Name="sngl_inspiral:Gamma9" Type="real_4"/>
+		<Stream Delimiter="," Name="sngl_inspiral:table" Type="Local">
+			0,0,0,0,0.66735327,4,-0.85512865,882.76314,1257994429,537597656,"sngl_inspiral:event_id:0","H1",4.5595298,4.4450731,"process:process_id:1",0,5.9207196,0,0,0.86212945,0,0,0.53826451,"/fred/oz016/dtang/analysis/pastro/injection/bbh/bbh_bg_1257992907-604800-created_06-10-22_21-59-11/HL_000","GDS-GATED_STRAIN",0,0,0,55.55837922118422,0,0,3.919101,9.0046024,0.2499596,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1024,0,0,0,0,0,0,0,0,0,0,0,
+			0,0,0,0,0.86575943,4,2.1275196,793.08995,1257994429,536621094,"sngl_inspiral:event_id:1","L1",4.5595298,4.4450731,"process:process_id:1",0,7.3465905,0,0,0.86212945,0,0,0.53826451,"/fred/oz016/dtang/analysis/pastro/injection/bbh/bbh_bg_1257992907-604800-created_06-10-22_21-59-11/HL_000","GDS-GATED_STRAIN",0,0,0,55.55837922118422,0,0,3.919101,9.0046024,0.2499596,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1024,0,0,0,0,0,0,0,0,0,0,0
+		</Stream>
+	</Table>
+	<Table Name="coinc_definer:table">
+		<Column Name="coinc_definer:coinc_def_id" Type="ilwd:char"/>
+		<Column Name="coinc_definer:description" Type="lstring"/>
+		<Column Name="coinc_definer:search" Type="lstring"/>
+		<Column Name="coinc_definer:search_coinc_type" Type="int_4u"/>
+		<Stream Delimiter="," Name="coinc_definer:table" Type="Local">
+			"coinc_definer:coinc_def_id:3","sngl_inspiral&lt;--&gt;sngl_inspiral coincidences","inspiral",0
+		</Stream>
+	</Table>
+	<Table Name="coinc_event:table">
+		<Column Name="coinc_event:coinc_def_id" Type="ilwd:char"/>
+		<Column Name="coinc_event:coinc_event_id" Type="ilwd:char"/>
+		<Column Name="coinc_event:instruments" Type="lstring"/>
+		<Column Name="coinc_event:likelihood" Type="real_8"/>
+		<Column Name="coinc_event:nevents" Type="int_4u"/>
+		<Column Name="coinc_event:process_id" Type="ilwd:char"/>
+		<Column Name="coinc_event:time_slide_id" Type="ilwd:char"/>
+		<Stream Delimiter="," Name="coinc_event:table" Type="Local">
+			"coinc_definer:coinc_def_id:3","coinc_event:coinc_event_id:1","H1,L1",0,2,"process:process_id:1","time_slide:time_slide_id:6"
+		</Stream>
+	</Table>
+	<Table Name="coinc_event_map:table">
+		<Column Name="coinc_event_map:coinc_event_id" Type="ilwd:char"/>
+		<Column Name="coinc_event_map:event_id" Type="ilwd:char"/>
+		<Column Name="coinc_event_map:table_name" Type="char_v"/>
+		<Stream Delimiter="," Name="coinc_event_map:table" Type="Local">
+			"coinc_event:coinc_event_id:1","sngl_inspiral:event_id:0","sngl_inspiral",
+			"coinc_event:coinc_event_id:1","sngl_inspiral:event_id:1","sngl_inspiral"
+		</Stream>
+	</Table>
+	<Table Name="time_slide:table">
+		<Column Name="time_slide:instrument" Type="lstring"/>
+		<Column Name="time_slide:offset" Type="real_8"/>
+		<Column Name="time_slide:process_id" Type="ilwd:char"/>
+		<Column Name="time_slide:time_slide_id" Type="ilwd:char"/>
+		<Stream Delimiter="," Name="time_slide:table" Type="Local">
+			"H1",0,"process:process_id:1","time_slide:time_slide_id:6",
+			"L1",0,"process:process_id:1","time_slide:time_slide_id:6"
+		</Stream>
+	</Table>
+	<Table Name="coinc_inspiral:table">
+		<Column Name="coinc_inspiral:coinc_event_id" Type="ilwd:char"/>
+		<Column Name="coinc_inspiral:combined_far" Type="real_8"/>
+		<Column Name="coinc_inspiral:end_time" Type="int_4s"/>
+		<Column Name="coinc_inspiral:end_time_ns" Type="int_4s"/>
+		<Column Name="coinc_inspiral:false_alarm_rate" Type="real_8"/>
+		<Column Name="coinc_inspiral:ifos" Type="lstring"/>
+		<Column Name="coinc_inspiral:mass" Type="real_8"/>
+		<Column Name="coinc_inspiral:mchirp" Type="real_8"/>
+		<Column Name="coinc_inspiral:minimum_duration" Type="real_8"/>
+		<Column Name="coinc_inspiral:snr" Type="real_8"/>
+		<Stream Delimiter="," Name="coinc_inspiral:table" Type="Local">
+			"coinc_event:coinc_event_id:1",5.846783892593521e-07,1257994429,537597656,0,"H1,L1",9.004602432250977,3.919100999832153,55.55837922118422,9.435428613159155
+		</Stream>
+	</Table>
+	<Table Name="postcoh:table">
+		<Column Name="postcoh:bankid" Type="int_4s"/>
+		<Column Name="postcoh:chisq_H1" Type="real_4"/>
+		<Column Name="postcoh:chisq_L1" Type="real_4"/>
+		<Column Name="postcoh:chisq_V1" Type="real_4"/>
+		<Column Name="postcoh:cmbchisq" Type="real_4"/>
+		<Column Name="postcoh:coaphase_H1" Type="real_4"/>
+		<Column Name="postcoh:coaphase_L1" Type="real_4"/>
+		<Column Name="postcoh:coaphase_V1" Type="real_4"/>
+		<Column Name="postcoh:cohsnr" Type="real_4"/>
+		<Column Name="postcoh:dec" Type="real_8"/>
+		<Column Name="postcoh:deff_H1" Type="real_8"/>
+		<Column Name="postcoh:deff_L1" Type="real_8"/>
+		<Column Name="postcoh:deff_V1" Type="real_8"/>
+		<Column Name="postcoh:end_time" Type="int_4s"/>
+		<Column Name="postcoh:end_time_ns" Type="int_4s"/>
+		<Column Name="postcoh:end_time_ns_sngl_H1" Type="int_4s"/>
+		<Column Name="postcoh:end_time_ns_sngl_L1" Type="int_4s"/>
+		<Column Name="postcoh:end_time_ns_sngl_V1" Type="int_4s"/>
+		<Column Name="postcoh:end_time_sngl_H1" Type="int_4s"/>
+		<Column Name="postcoh:end_time_sngl_L1" Type="int_4s"/>
+		<Column Name="postcoh:end_time_sngl_V1" Type="int_4s"/>
+		<Column Name="postcoh:eta" Type="real_4"/>
+		<Column Name="postcoh:event_id" Type="ilwd:char"/>
+		<Column Name="postcoh:f_final" Type="real_4"/>
+		<Column Name="postcoh:fap" Type="real_4"/>
+		<Column Name="postcoh:far" Type="real_4"/>
+		<Column Name="postcoh:far_1d" Type="real_4"/>
+		<Column Name="postcoh:far_1d_sngl_H1" Type="real_4"/>
+		<Column Name="postcoh:far_1d_sngl_L1" Type="real_4"/>
+		<Column Name="postcoh:far_1d_sngl_V1" Type="real_4"/>
+		<Column Name="postcoh:far_1w" Type="real_4"/>
+		<Column Name="postcoh:far_1w_sngl_H1" Type="real_4"/>
+		<Column Name="postcoh:far_1w_sngl_L1" Type="real_4"/>
+		<Column Name="postcoh:far_1w_sngl_V1" Type="real_4"/>
+		<Column Name="postcoh:far_2h" Type="real_4"/>
+		<Column Name="postcoh:far_2h_sngl_H1" Type="real_4"/>
+		<Column Name="postcoh:far_2h_sngl_L1" Type="real_4"/>
+		<Column Name="postcoh:far_2h_sngl_V1" Type="real_4"/>
+		<Column Name="postcoh:far_sngl_H1" Type="real_4"/>
+		<Column Name="postcoh:far_sngl_L1" Type="real_4"/>
+		<Column Name="postcoh:far_sngl_V1" Type="real_4"/>
+		<Column Name="postcoh:ifos" Type="lstring"/>
+		<Column Name="postcoh:is_background" Type="int_4s"/>
+		<Column Name="postcoh:livetime" Type="int_4s"/>
+		<Column Name="postcoh:mass1" Type="real_4"/>
+		<Column Name="postcoh:mass2" Type="real_4"/>
+		<Column Name="postcoh:mchirp" Type="real_4"/>
+		<Column Name="postcoh:mtotal" Type="real_4"/>
+		<Column Name="postcoh:nullsnr" Type="real_4"/>
+		<Column Name="postcoh:pivotal_ifo" Type="lstring"/>
+		<Column Name="postcoh:pix_idx" Type="int_4s"/>
+		<Column Name="postcoh:process_id" Type="ilwd:char"/>
+		<Column Name="postcoh:ra" Type="real_8"/>
+		<Column Name="postcoh:rank" Type="real_8"/>
+		<Column Name="postcoh:skymap_fname" Type="lstring"/>
+		<Column Name="postcoh:snglsnr_H1" Type="real_4"/>
+		<Column Name="postcoh:snglsnr_L1" Type="real_4"/>
+		<Column Name="postcoh:snglsnr_V1" Type="real_4"/>
+		<Column Name="postcoh:spearman_pval" Type="real_4"/>
+		<Column Name="postcoh:spin1x" Type="real_4"/>
+		<Column Name="postcoh:spin1y" Type="real_4"/>
+		<Column Name="postcoh:spin1z" Type="real_4"/>
+		<Column Name="postcoh:spin2x" Type="real_4"/>
+		<Column Name="postcoh:spin2y" Type="real_4"/>
+		<Column Name="postcoh:spin2z" Type="real_4"/>
+		<Column Name="postcoh:template_duration" Type="real_8"/>
+		<Column Name="postcoh:tmplt_idx" Type="int_4s"/>
+		<Stream Delimiter="," Name="postcoh:table" Type="Local">
+			387,0.66735327,0.86575943,0,0.76655638,-0.85512865,2.1275196,0,9.4354286,-67.93492863347986,882.7631386012827,793.0899491181254,0,1257994429,537597656,537597656,536621094,537597656,1257994429,1257994429,1257994429,0.2499596,"postcoh:event_id:2341",1024,0,5.8467839e-07,4.9898075e-10,5.1983345e-05,1.3249968e-07,0,7.3084799e-08,0.00013036658,3.5642788e-07,0,0,0,0,0,0.0010429326,2.851423e-06,0,"H1L1",0,1522,4.5595298,4.4450731,3.919101,9.0046024,0,"H1",10344,"process:process_id:0",230.9999999472558,0,"",5.9207196,7.3465905,0,0,0,0,0.86212945,0,0,0.53826451,55.55837922118422,373
+		</Stream>
+	</Table>
+</LIGO_LW>

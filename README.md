@@ -4,17 +4,17 @@ This repository is an `pip` importable Python package that provides comprehensiv
 
 ## Installation
 
-The instructions below detail how to install this package 
+The instructions below detail how to install this package.
 
 ### OzStar
 
-If installing on the OzStar supercomputer, we recommend the following environment
-modules be loaded first:
+For example, if one was to install this package on the OzStar supercomputer with 
+Python 3.1.0.4, we recommend loading the following environment modules:
 
   ```
   module load gcc/9.2.0 openmpi/4.0.2
   module load git/2.18.0
-  module load python/3.8.5
+  module load python/3.10.4
   ```
 
 Then proceed with the instructions for a installation with Virtualenv.

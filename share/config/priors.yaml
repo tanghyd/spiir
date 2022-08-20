@@ -1,0 +1,55 @@
+# https://docs.ansible.com/ansible/latest/reference_appendices/YAMLSyntax.html
+seed: 21
+
+distributions:
+  - variable: mass_1
+    distribution: truncnorm
+    package: scipy
+    a: 1
+    b: np.inf
+    loc: 10
+    scale: 3
+  - variable: mass_2
+    distribution: truncnorm
+    package: scipy
+    a: 1
+    b: 5
+    loc: 2.5
+    scale: 1
+  - variable: phase
+    distribution: uniform
+    low: 0.0
+    high: np.pi
+  - variable: chi_1
+    distribution: uniform
+    low: 0.0
+    high: 0.88
+  - variable: chi_2
+    distribution: uniform
+    low: 0.0
+    high: 0.88
+  - variable: theta_1
+    distribution: sin_angle
+    package: pycbc
+  - variable: theta_2
+    distribution: sin_angle
+    package: pycbc
+  - variable: theta_jn
+    distribution: sin_angle
+    package: pycbc
+  - variable: phi_12
+    distribution: uniform
+    low: 0.0
+    high: np.pi
+  - variable: phi_jl
+    distribution: uniform
+    low: 0.0
+    high: np.pi
+
+constraints:
+  - constraint: greater
+    variables: [ "mass_1", 1 ]
+  - constraint: greater
+    variables: [ "mass_2", 1 ]
+  - constraint: greater_equal
+    variables: [ "mass_1", "mass_2" ]

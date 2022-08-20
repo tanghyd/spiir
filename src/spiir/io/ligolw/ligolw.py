@@ -1,22 +1,25 @@
 import logging
 from os import PathLike
 from typing import Optional, Union
-from tqdm import tqdm
 
-import lal.series
-import pandas as pd
-import numpy as np
+from . import postcoh  # edits ligo.lw.lsctables
 
-from . import postcoh
-
-import ligo.lw.ligolw
 import ligo.lw.array
+import ligo.lw.ligolw
+import ligo.lw.lsctables
 import ligo.lw.param
 import ligo.lw.table
-import ligo.lw.lsctables
+import ligo.lw.types
 import ligo.lw.utils
 
 logger = logging.getLogger(__name__)
+
+
+# Look-up table mapping LIGO_LW XML data types to NumPy compatible array types
+_NUMPY_TYPE_MAP = ligo.lw.types.ToNumPyType.copy()
+_NUMPY_TYPE_MAP.update({
+    k: "object" for k in ("char_s", "char_v", "lstring", "string")
+})
 
 
 @ligo.lw.array.use_in
@@ -31,8 +34,7 @@ def load_ligolw_xmldoc(
     path: Union[str, bytes, PathLike],
     ilwdchar_compat: bool = True,
     legacy_postcoh_compat: bool = True,
-    nullable: bool = False,
-    verbose: bool = False,
+    nullable: bool = True,
     contenthandler: Optional[ligo.lw.ligolw.LIGOLWContentHandler] = None,
 ) -> ligo.lw.ligolw.Document:
     """Reads a valid LIGO_LW XML Document from a file path and returns a dictionary containing
@@ -51,8 +53,6 @@ def load_ligolw_xmldoc(
     nullable: bool
         If True, sets the values for missing postcoh columns to NoneType,
         otherwise it is set to an appropriate default value given the column type.
-    verbose: bool
-        Whether to enable verbose output for ligo.lw.utils.load_filename.
 
     Returns
     -------
@@ -63,8 +63,9 @@ def load_ligolw_xmldoc(
     if contenthandler is None:
         contenthandler = LIGOLWContentHandler
 
+    logger.debug(f"Reading {str(path)}...")
     xmldoc = ligo.lw.utils.load_filename(
-        path, verbose=verbose, contenthandler=contenthandler
+        path, verbose=False, contenthandler=contenthandler
     )
 
     if legacy_postcoh_compat:
@@ -77,7 +78,67 @@ def load_ligolw_xmldoc(
     return xmldoc
 
 
-def strip_ilwdchar(xmldoc: ligo.lw.ligolw.Element) -> ligo.lw.ligolw.Element:
+
+# based on gwpy.io.ligow.py
+def get_ligolw_element(
+    xmldoc: ligo.lw.ligolw.Document,
+    index: int = 0,
+) -> ligo.lw.ligolw.LIGO_LW:
+    """Find an existing LIGO_LW element in an LIGO_LW XML Document, selected by index.
+    
+    This code is sourced from gwpy.io.ligolw.
+
+    Parameters
+    ----------
+    xmldoc: ligo.lw.ligolw.Document
+        A valid LIGO_LW XML Document object with the required LIGO_LW elements.
+    index: int
+        The index position of LIGO_LW elements to select.
+        If index = 0, select the first; if index = 1, select the second, etc.
+
+    Returns
+    -------
+    ligo.lw.ligolw.Document
+        The same LIGO_LW Document object with ilwd:char types converted to integers.
+    """
+    if isinstance(xmldoc, ligo.lw.ligolw.LIGO_LW):
+        return xmldoc
+    
+    i = 0
+    for elem in ligo.lw.ligolw.WalkChildren(xmldoc):
+        if isinstance(elem, ligo.lw.ligolw.LIGO_LW):
+            if i == index:
+                return elem
+            else:
+                i += 1
+    raise ValueError(f"Cannot find {index+1} LIGO_LW element(s) in the XML Document.")
+
+
+
+# def write_ligolw_xmldoc(
+#     xmldoc: ligo.lw.ligolw.Document,
+#     path: Union[str, bytes, PathLike],
+#     verbose: bool = False,
+#     compress: bool = False,
+#     # overwrite: bool = False,
+#     # append: bool = False,
+#     **kwargs,
+# ):
+#     """Writes a provided LIGO_LW xmldoc Document object to a file specified by path.
+
+#     Parameters
+#     ----------
+#     ----------
+#     xmldoc: ligo.lw.ligo.lw.ligolw.Element
+#         A valid LIGO_LW XML Document.
+#     path: str | bytes | PathLike
+#         The location to write the .xml file to.
+#     """
+#     with open(path, mode="w") as f:
+#         ligo.lw.utils.write_filename(xmldoc, f, verbose, compress, **kwargs)
+
+
+def strip_ilwdchar(xmldoc: ligo.lw.ligolw.Document) -> ligo.lw.ligolw.Document:
     """Transforms a document containing tabular data using ilwd:char style row
     IDs to plain integer row IDs. This is used to translate documents in the
     older format for compatibility with the modern version of the LIGO Light
@@ -88,14 +149,13 @@ def strip_ilwdchar(xmldoc: ligo.lw.ligolw.Element) -> ligo.lw.ligolw.Element:
 
     Parameters
     ----------
-    xmldoc: ligo.lw.ligo.lw.ligolw.Element
-        A valid LIGO_LW XML Document or Element with the required LIGO_LW elements.
+    xmldoc: ligo.lw.ligolw.Document
+        A valid LIGO_LW XML Document objectwith the required LIGO_LW elements.
 
     Returns
     -------
-    ligo.lw.ligolw.Element
-        The same LIGO_LW Document object passed as input with ilwd:char types
-        converted to integers.
+    ligo.lw.ligolw.Document
+        The same LIGO_LW Document object with ilwd:char types converted to integers.
 
     Notes
     -----
@@ -150,7 +210,9 @@ def strip_ilwdchar(xmldoc: ligo.lw.ligolw.Element) -> ligo.lw.ligolw.Element:
                 value = getattr(elem, "value", None)
                 setattr(elem, "Type", "int_8s")
                 if value is not None:
-                    new_value = int(value.split(":")[-1])
+                    # FIXME: this may cause problems for columns with extra ":"
+                    #   i.e. "background_feature:H1_lgsnr_lgchisq_rate:array"
+                    new_value = int(value.split(":",)[-1])
                     setattr(elem, "value", new_value)
 
     return xmldoc

@@ -33,7 +33,7 @@ def get_array_from_xmldoc(
 
     Parameters
     ----------
-    xmldoc: ligo.lw.ligolw.Document
+    xmldoc: :class:`~ligo.lw.ligolw.Document`
         A valid LIGO_LW XML Document element that contains Array element(s).
     array: str
         The array to retrieve from the XML Document element.
@@ -55,11 +55,11 @@ def load_array_from_xml(
 
     Parameters
     ----------
-    xmldoc: ligo.lw.ligolw.Document
+    xmldoc: :class:`~ligo.lw.ligolw.Document`
         A valid LIGO_LW XML Document element that contains Array element(s).
     array: str
         The array to retrieve from the XML Document element.
-    ilwdchar_compat: bool
+    ilwdchar_compat: bool, default: `True`
         Whether to add ilwdchar conversion compatibility.
 
     Return
@@ -79,9 +79,9 @@ def get_arrays_from_xmldoc(
 
     Parameters
     ----------
-    xmldoc: ligo.lw.ligolw.Document
+    xmldoc: :class:`~ligo.lw.ligolw.Document`
         A valid LIGO_LW XML Document element that contains Array element(s).
-    arrays: Sequence[str] | None
+    arrays: :class:`~Sequence[str]`, optional
         If provided, retrieve the specified arrays by their name.
         Otherwise if arrays is None, retrieve all arrays from the xmldoc object.
 
@@ -112,17 +112,17 @@ def load_arrays_from_xml(
 
     Parameters
     ----------
-    xmldoc: ligo.lw.ligolw.Document
+    xmldoc: :class:`~ligo.lw.ligolw.Document`
         A valid LIGO_LW XML Document element that contains Array element(s).
-    arrays: Sequence[str] | None
+    arrays: :class:`~Sequence[str]`, optional
         If provided, retrieve the specified arrays by their name.
         Otherwise if arrays is None, retrieve all arrays from the xmldoc object.
-    ilwdchar_compat: bool
+    ilwdchar_compat: bool, default: `True`
         Whether to add ilwdchar conversion compatibility.
 
     Return
     ------
-    dict[str, np.ndarray]
+    dict[str, :class:`~np.ndarray`]
         A dictionary where keys are array names are values are the numpy arrays.
     """
     xmldoc = load_ligolw_xmldoc(path, ilwdchar_compat=ilwdchar_compat)
@@ -144,21 +144,21 @@ def load_arrays_from_xmls(
 
     Parameters
     ----------
-    xmldoc: ligo.lw.ligolw.Document
+    xmldoc: :class:`~ligo.lw.ligolw.Document`
         A valid LIGO_LW XML Document element that contains Array element(s).
-    arrays: Sequence[str] | None
+    arrays: :class:`~Sequence[str]`, optional
         If provided, retrieve the specified arrays by their name.
         Otherwise if arrays is None, retrieve all arrays from the xmldoc object.
-    ilwdchar_compat: bool
+    ilwdchar_compat: bool, default: `True`
         Whether to add ilwdchar conversion compatibility.
-    verbose: bool
+    verbose: bool, default: `True`
         If True, displays a loading progress bar.
-    nproc: int
+    nproc: int, default: 1
         Number of CPU processes to use for multiprocessing. Default: 1, recommended: 4.
 
     Return
     ------
-    dict[str, np.ndarray]
+    dict[str, :class:`~np.ndarray`]
         A dictionary where keys are array names are values are the numpy arrays.
     """
     if isinstance(paths, (str, bytes, PathLike)):
@@ -192,6 +192,7 @@ def build_array_element(
     name: str,
     dim_names: Optional[Union[str, Sequence[str]]]=None,
 ) -> ligo.lw.array.Array:
+    """Convenience function to build a LIGO_LW Array element."""
     return ligo.lw.array.Array.build(name, array, dim_names)
 
 
@@ -210,7 +211,7 @@ def append_array_to_xmldoc(
         the document to write into
     array : `list` of :class:`~ligo.lw.table.Table`
         the set of arrays to write
-    overwrite : `bool`, optional, default: `False`
+    overwrite : `bool`, optional, default: `True`
         if `True`, delete an all existing instances matching the provided array name, 
         else append the array to the document as is.
     """
@@ -247,12 +248,12 @@ def build_psd_series_from_xmldoc(
 
     Parameters
     ----------
-    xmldoc: ligo.lw.ligolw.Document
+    xmldoc: :class:`~ligo.lw.ligolw.Document`
         A LIGO_LW XML Document element, containing the necessary PSD array elements.
 
     Returns
     -------
-    dict[str, pd.Series]
+    dict[str, :class:`~pd.Series`]
         A dictionary of pd.Series where the key refers to the interferometer name,
         and the values contain the respective real-valued frequency array.
     """
@@ -308,14 +309,14 @@ def load_psd_series_from_xml(
 
     Parameters
     ----------
-    path: str | bytes | PathLike
+    path: str | bytes | :class:`~os.PathLike`
         A path-like to an XML file containing a valid LIGO_LW XML Document.
-    ilwdchar_compat: bool
+    ilwdchar_compat: bool, default: `True`
         Whether to add ilwdchar conversion compatibility.
 
     Returns
     -------
-    dict[str, pd.Series]
+    dict[str, :class:`~pd.Series`]
         A dictionary of pd.Series where the key refers to the interferometer name,
         and the values contain the respective real-valued frequency array.
 
@@ -341,17 +342,28 @@ def append_psd_series_to_ligolw(
     delta_f: Optional[float]=None,
     epoch_time: Union[lal.LIGOTimeGPS, float]=0.,
 ) -> ligo.lw.ligolw.Document:
-    """Assembles a LIGO_LW REAL8FrequencySeries Array from a dictionary where keys are 
-    ifo strings and values are a lal.REAL8FrequencySeries object of the mean-psd for
-    each ifo already retrieved from the pipeline.
-
+    """Assembles and append a LIGO_LW REAL8FreqencySeries array to a LIGO_LW XML.
+    
+    The LIGO_LW REAL8FrequencySeries Array is assembled from a dictionary where keys 
+    are ifo strings and values are the PSD as aa np.ndarray or pd.Series for each ifo.
     The PSD LIGO_LW element will be appended to the xmldoc containing both a 
     REAL8FrequencySeries Array object and a Param object that specifies the ifo string.
 
     Parameters
     ----------
-    psds: dict[str, lal.REAL8FrequencySeries]
-        A dictionary of frequency series that refer to the psd for each ifo.
+    psds: dict[str, :class:`~pd.Series` | :class:`~np.ndarray`]
+        A dictionary of frequency series that refer to the PSD for each ifo.
+    f0: float, default: 0.
+        The lower bound minimum frequency considered during analysis of the strain.
+    delta_f: float, optional
+        The increment between each frequency bin of the array (the index) of the PSD.
+    epoch_time: float | :class:`~lal.LIGOTimeGPS`, default: 0.
+        The GPS epoch time at the time the estimated PSD was calculated.
+
+    Returns
+    -------
+    :class:`~ligo.lw.ligow.Document`
+        The LIGO_LW XML Document element with the LIGO_LW PSD element attached.
     """
     ligo_lw_psds = ligo.lw.ligolw.LIGO_LW(attrs={"Name": "psd"})
     for ifo, psd in psds.items():
@@ -400,14 +412,14 @@ def build_snr_series_from_xmldoc(
 
     Parameters
     ----------
-    xmldoc: ligo.lw.ligolw.Document
+    xmldoc: :class:`~ligo.lw.ligolw.Document`
         A LIGO_LW XML Document element containing the necessary SNR series elements.
-    add_epoch_time: bool
-        Whether to add the epoch time to each SNR series array for correct timestamps.
+    add_epoch_time: bool, default: `True`
+        If True, adds the GPS epoch time to the SNR series for correct timestamps.
 
     Returns
     -------
-    dict[str, pd.Series]
+    dict[str, :class:`~pd.Series`]
         A dictionary of pd.Series where the key refers to the sngl_inspiral ifo,
         and the values contain the respective SNR timeseries array
         (each with their own timestamped indices).
@@ -485,16 +497,16 @@ def load_snr_series_from_xml(
 
     Parameters
     ----------
-    path: str | bytes | PathLike
+    path: str | bytes | :class:`~os.PathLike`
         A path-like to an XML file containing a valid LIGO_LW XML Document.
-    add_epoch_time: bool
+    add_epoch_time: bool, default: `True`
         Whether to add the epoch time to each SNR series array for correct timestamps.
-    ilwdchar_compat: bool
+    ilwdchar_compat: bool, default: `True`
         Whether to add ilwdchar conversion compatibility.
 
     Returns
     -------
-    dict[str, pd.Series]
+    dict[str, :class:`~pd.Series`]
         A dictionary of pd.Series where the key refers to the sngl_inspiral ifo,
         and the values contain the respective SNR timeseries array
         (each with their own timestamped indices).
@@ -522,6 +534,36 @@ def append_snr_series_to_ligolw(
     event_id: Optional[int]=None,
     epoch_time: Optional[Union[lal.LIGOTimeGPS, float]]=None,
 ) -> ligo.lw.ligolw.Document:
+    """Assembles and append a LIGO_LW COMPLEX8TimeSeries array to a LIGO_LW XML.
+    
+    The LIGO_LW COMPLEX8TimeSeries Array is assembled from a np.ndarray or pd.Series 
+    that defines the SNR series and an ifo string that specifies the interfereometer.
+    The SNR LIGO_LW element will be appended to the xmldoc containing both a 
+    COMPLEX8TimeSeries Array object and a Param object that specifies an event_id that 
+    maps to a corresponding sngl_inspiral table row in an LIGO_LW Table element.
+    
+    Parameters
+    ----------
+    xmldoc: :class:`~ligo.lw.ligolw.Document`
+        A valid LIGO_LW XML Document element with a sngl_inspiral table element.
+    snr: dict[str, :class:`~pd.Series` | :class:`~np.ndarray`]
+        A dictionary of the complex time series that refers to the SNR for an ifo.
+    ifo: str
+        The name of the interferometer as a string, e.g. H1, L1, V1, or K1.
+    f0: float, default: 0.
+        The lower bound minimum frequency considered during analysis of the strain.
+    delta_t: float, optional
+        The increment between each time bin of the array (the index) of the SNR series.
+    event_id: int, optional
+        An id that maps to an event_id of a sngl_inspiral table row of the LIGO_LW XML.
+    epoch_time: float | :class:`~lal.LIGOTimeGPS`, default: 0.
+        The GPS epoch time at the time the estimated SNR was calculated.
+
+    Returns
+    -------
+    :class:`~ligo.lw.ligow.Document`
+        The LIGO_LW XML Document element with the LIGO_LW PSD element attached.
+    """
     if event_id is None:
         # get inspiral rows from sngl_inspiral table to map event_id automatically
         sngl_inspiral_table = ligo.lw.table.Table.get_table(xmldoc, "sngl_inspiral")

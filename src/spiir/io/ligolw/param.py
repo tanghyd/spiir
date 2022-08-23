@@ -51,7 +51,7 @@ def get_params_from_xmldoc(
 
     return parameters
 
-def load_parameters_from_xml(
+def load_params_from_xml(
     path: Union[str, bytes, PathLike],
     params: Optional[Union[Sequence[str], str]] = None,
 ) -> dict:

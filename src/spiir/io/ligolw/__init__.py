@@ -13,7 +13,7 @@ from .array import (
     append_psd_series_to_ligolw, append_snr_series_to_ligolw
 )
 from .param import (
-    get_params_from_xmldoc, load_parameters_from_xml,
+    get_params_from_xmldoc, load_params_from_xml,
     get_p_astro_from_xmldoc, append_p_astro_to_ligolw
 )
 from .coinc import save_coinc_xml, load_coinc_xml

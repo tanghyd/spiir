@@ -1,9 +1,7 @@
 # temp ignore
-src/spiir/waveform
 src/spiir/strain
 src/spiir/ml
 src/spiir/interferometer
-src/spiir/analysis
 
 # workspace and data
 ./notebooks/

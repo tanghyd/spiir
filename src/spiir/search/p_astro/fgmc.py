@@ -4,9 +4,12 @@ Code sourced from https://git.ligo.org/lscsoft/p-astro/-/tree/master/ligo.
 """
 
 import logging
+import pickle
 import itertools
 from collections.abc import Sequence
 from copy import deepcopy
+from pathlib import Path
+from os import PathLike
 from typing import Optional, Union, Tuple, List, Dict
 
 import numpy as np
@@ -454,14 +457,14 @@ class Posterior(CountPosteriorElements):
         assert astro_sources != {}, "Need at least one astrophysical source."
         assert terr_source != {}, "Terrestrial source required."
 
-        self.args_astro = astro_sources.values()
+        self.args_astro = tuple(astro_sources.values())
         self.arg_terr = terr_source
         self.args_all = list(self.args_astro) + [self.arg_terr]
         self.keys_all = [arg.label for arg in self.args_all]
         self.key_terr = self.arg_terr.label
         self.keys_astro = [arg.label for arg in self.args_astro]
         self.fix_sources = fix_sources
-        self.keys_fixed = self.fix_sources.keys()
+        self.keys_fixed = tuple(self.fix_sources.keys())
         self.mcmc = mcmc
 
         assert len(self.f_divby_b) == int(
@@ -506,7 +509,7 @@ class Posterior(CountPosteriorElements):
         self.priorDict["Jeffreys"] = Posterior.priorJeffreys
 
         if self.verbose:
-            print("Posterior class instantiation complete.")
+            logger.info("Posterior class instantiation complete.")
 
     def reduced_log_likelihood_terr(self, **lambdas):
         """
@@ -672,7 +675,7 @@ class Posterior(CountPosteriorElements):
         of the array returned by this function.
         """
         if self.verbose:
-            print(
+            logger.info(
                 "Regularizing FGMC posterior to avoid ",
                 "numerical over-/under-flows ...",
             )
@@ -693,7 +696,7 @@ class Posterior(CountPosteriorElements):
         with the regularization constant removed.
         """
         if self.verbose:
-            print("Normalizing FGMC posterior ...")
+            logger.info("Normalizing FGMC posterior ...")
         return np.sum(np.exp(self.norm_array - self.reg_const))
 
     def poissonLogWeight(self, **lambdas):  # noqa: N802
@@ -860,7 +863,7 @@ class MarginalizedPosterior(Posterior):
             **astro_sources
         )
         if self.verbose:
-            print("MarginalizedPosterior class instantiation complete.")
+            logger.info("MarginalizedPosterior class instantiation complete.")
 
     def posterior(self, **lambdas):
 
@@ -1386,7 +1389,6 @@ class TwoComponentFGMCToyModel:
         snr_threshold: float=8,
         prior_type: str="Uniform"
     ):
-
         # set FAR and SNR thresholds to classify as astro source for bayes factor model
         self.far_threshold = far_threshold
         self.snr_threshold = snr_threshold
@@ -1459,8 +1461,10 @@ class TwoComponentFGMCToyModel:
             mean_values_dict=self.mean_counts,
         )
 
-    def save(self):
-        pass
+    def save_pkl(self, path: Union[str, bytes, PathLike]):
+        with Path(path).open(mode="wb") as f:
+            pickle.dump(self.__dict__, f)
 
-    def load(self):
-        pass
+    def load_pkl(self, path: Union[str, bytes, PathLike]):
+        with Path(path).open(mode="rb") as f:
+            self.__dict__ = pickle.load(f)

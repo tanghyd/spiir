@@ -164,7 +164,7 @@ def load_arrays_from_xmls(
     if isinstance(paths, (str, bytes, PathLike)):
         return load_arrays_from_xml(paths, arrays, ilwdchar_compat)
     else:
-        nproc = min(validate_cpu_count(nproc), len(paths))
+        nproc = validate_cpu_count(nproc)
         _load_arrays_from_xml = partial(
             load_arrays_from_xml,
             arrays=arrays,

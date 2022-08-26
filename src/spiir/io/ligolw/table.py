@@ -129,6 +129,7 @@ def load_table_from_xmls(
     nullable: bool = False,
     verbose: bool = False,
     nproc: int = 1,
+    skip_exceptions: bool = False,
 ) -> pd.DataFrame:
     """Loads a table from one or multiple LIGO_LW XML and returns a pandas DataFrame.
 
@@ -153,6 +154,8 @@ def load_table_from_xmls(
         If True, displays a loading progress bar.
     nproc: int
         Number of CPU processes to use for multiprocessing. Default: 1, recommended: 4.
+    skip_exceptions: bool
+        If True, exceptions raised by a process during mulitprocessing will be ignored.
 
     Returns
     -------
@@ -169,6 +172,8 @@ def load_table_from_xmls(
             nullable=nullable,
         )
     else:
+        if len(paths) == 0:
+            raise IndexError("No paths provided as len(paths) == 0.")
         nproc = min(validate_cpu_count(nproc), len(paths))
         _load_table_from_xml: Callable = partial(
             load_table_from_xml,
@@ -183,12 +188,20 @@ def load_table_from_xmls(
         with tqdm(total=len(paths), desc=desc, disable=not verbose) as pbar:
             with concurrent.futures.ProcessPoolExecutor(max_workers=nproc) as executor:
                 futures = [executor.submit(_load_table_from_xml, p) for p in paths]
+
                 results = []
                 for future in concurrent.futures.as_completed(futures):
-                    results.append(future.result())
+                    if future.exception() is not None:
+                        if skip_exceptions:
+                            logger.debug(f"Exception raised: {future.exception()}")
+                        else:
+                            raise Exception from future.exception()
+                    else:
+                        results.append(future.result())
                     pbar.update(1)
+                
                     
-        return pd.concat(results)
+        return pd.concat(results, ignore_index=True)
 
 
 def get_tables_from_xmldoc(
@@ -302,6 +315,7 @@ def load_tables_from_xmls(
     nullable: bool = False,
     verbose: bool = False,
     nproc: int = 1,
+    skip_exceptions: bool = False,
 ) -> Dict[str, pd.DataFrame]:
     """Convenience function to get one or more tables from one LIGO_LW xmldoc element.
     
@@ -337,6 +351,8 @@ def load_tables_from_xmls(
         If True, displays a loading progress bar.
     nproc: int
         Number of CPU processes to use for multiprocessing. Default: 1, recommended: 4.
+    skip_exceptions: bool
+        If True, exceptions raised by a process during mulitprocessing will be ignored.
     
     Returns
     -------
@@ -352,6 +368,8 @@ def load_tables_from_xmls(
             nullable=nullable,
         )
     else:
+        if len(paths) == 0:
+            raise IndexError("No paths provided as len(paths) == 0.")
         nproc = min(validate_cpu_count(nproc), len(paths))
         _load_tables_from_xml: Callable = partial(
             load_tables_from_xml,
@@ -368,7 +386,13 @@ def load_tables_from_xmls(
             
                 results = []
                 for future in concurrent.futures.as_completed(futures):
-                    results.append(future.result())
+                    if future.exception() is not None:
+                        if skip_exceptions:
+                            logger.debug(f"Exception raised: {future.exception()}")
+                        else:
+                            raise Exception from future.exception()
+                    else:
+                        results.append(future.result())
                     pbar.update(1)
                 
                 # every dict in results should have the same keys so this should work

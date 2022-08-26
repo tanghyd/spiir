@@ -11,9 +11,12 @@ Additional edits drawn from prior work done by V. Villa-Ortega:
 https://github.com/veronica-villa/source_probabilities_estimation_pycbclive
 
 """
-
+import json
 import logging
+import pickle
 import math
+from pathlib import Path
+from os import PathLike
 from typing import Optional, Union, Tuple, Dict
 
 import numpy as np
@@ -281,8 +284,8 @@ def predict_redshift(
     lal_cosmology: bool = True,
     truncate_lower_dist: Optional[float] = None,
 ) -> Tuple[float, float]:
-    logger.debug(f"truncate_lower_dist: {truncate_lower_dist}")
     # compute estimated luminosity distance and redshift and their uncertainties
+    # logger.debug(f"truncate_lower_dist: {truncate_lower_dist}")
     dist_est = a0 * eff_distance
     dist_std_est = dist_est * math.exp(b0) * np.power(snr, b1)
     z, z_std = estimate_redshift_from_distance(
@@ -601,7 +604,7 @@ class MassContourModel:
         a0: Optional[float] = None,
         b0: Optional[float] = None,
         b1: Optional[float] = None,
-        m0: Optional[float] = 0.01,
+        m0: Optional[float] = None,
         m_bounds: Tuple[float, float] = (1.0, 45.0),
         mgap_bounds: Tuple[float, float] = (3.0, 5.0),
         group_mgap: bool = True,
@@ -728,6 +731,7 @@ class MassContourModel:
 
 #         self._coefficients = coeffs
 
+
     # define distance estimation functions
     def _estimate_lum_dist(
         self,
@@ -739,6 +743,7 @@ class MassContourModel:
         """
         assert self.a0 is not None, f"a0 coefficient is not initialised."
         return eff_distance*self.a0
+
 
     def _estimate_lum_dist_std(
         self,
@@ -760,6 +765,7 @@ class MassContourModel:
         )
 
         return lum_dist_std
+
 
     def fit(
         self,
@@ -816,6 +822,7 @@ class MassContourModel:
         self.b1, self.b0 = b.convert().coef
         logger.info(f"Fitted coefficients for {self.__repr__}.")
         return self
+
 
     def predict(
         self,
@@ -875,8 +882,28 @@ class MassContourModel:
 
         return probs
 
-    def save(self):
-        pass
+    def save_pkl(self, path: Union[str, bytes, PathLike]):
+        with Path(path).open(mode="wb") as f:
+            pickle.dump(self.__dict__, f)
 
-    def load(self):
-        pass
+    def load_pkl(self, path: Union[str, bytes, PathLike]):
+        with Path(path).open(mode="rb") as f:
+            self.__dict__ = pickle.load(f)
+
+        for key in ["a0", "b0", "b1", "m0"]:
+            if getattr(self, key, None) is None:
+                logger.info(f"{type(self).__name__} coefficient {key} not initialised.")
+
+    def save_json(self, path: Union[str, bytes, PathLike], indent: int=4):
+        with Path(path).open(mode="w") as f:
+            json.dump(self.__dict__, f, indent=indent)
+
+    def load_json(self, path: Union[str, bytes, PathLike]):
+        with Path(path).open(mode="r") as f:
+            state = json.load(f)
+        for key in state:
+            setattr(self, key, state[key])
+        
+        for key in ["a0", "b0", "b1", "m0"]:
+            if getattr(self, key, None) is None:
+                logger.info(f"{type(self).__name__} coefficient {key} not initialised.")

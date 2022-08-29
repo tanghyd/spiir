@@ -5,8 +5,36 @@ from Cython.Build import cythonize
 import numpy as np
 
 
+# TODO: Investigate best method to handle installing C extension dependencies
+#   see: --no-build-isolation flag ? discussion: https://github.com/pypa/pip/issues/6144
+try:
+    # get include/lib from pre-installed location
+    # INCLUDE_DIR = 
+    # LIB_DIR =
+    raise NotImplementedError
+except NotImplementedError as e:
+    # install LAL/GSL in repo directory
+    # INCLUDE = Path(__file__).parent
+    # LIB_DIR = Path(__file__).parent
+    # install_dependencies()
+    pass
+
+INCLUDE_DIR = (Path(__file__).parent / "include").resolve()
+LIB_DIR = (Path(__file__).parent / "lib").resolve()
+
+extensions = [
+    "src/spiir/waveform/iir/_optimizer.pyx",
+    Extension(
+        "spiir.waveform.iir._spiir_decomp",
+        sources=["src/spiir/waveform/iir/_spiir_decomp.c"],
+        include_dirs=[np.get_include(), str(INCLUDE_DIR), "/usr/local/include"],
+        library_dirs=[str(LIB_DIR), "/usr/local/lib"],
+        libraries=["lal", "gsl", "lalinspiral"],
+        extra_compile_args=['-Wall']
+    ),
+]
+
 install_requirements = [
-    "wheel",
     "lalsuite",
     "ligo.skymap",
     "astropy",
@@ -27,27 +55,16 @@ extras_requirements = {
     "pycbc": ["pycbc"],
 }
 
-extensions = [
-    "src/spiir/waveform/iir/_optimizer.pyx",
-    Extension(
-        "spiir.waveform.iir._spiir_decomp",
-        sources=["src/spiir/waveform/iir/_spiir_decomp.c"],
-        include_dirs=[np.get_include()],
-        libraries=["lal", "gsl", "lalinspiral"],
-        extra_compile_args=['-Wall']
-    ),
-]
-
 setup(
     name="spiir",
     version="0.0.1",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
     python_requires=">=3.8",
-    seutp_requires=["setuptools"],
+    seutp_requires=["wheel", "setuptools"],
     install_requires=install_requirements,
     extras_require=extras_requirements,
-    ext_modules=cythonize(extensions, language_level = "3"),
+    # ext_modules=cythonize(extensions, language_level = "3"),
     include_package_data=True,
     description="A Python library for the SPIIR gravitational wave science pipeline.",
     long_description=(Path(__file__).parent / "README.md").read_text(),

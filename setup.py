@@ -45,8 +45,7 @@ install_requirements = [
     "numpy",
     "scipy",
     "pandas",
-    "matplotlib",
-    "Cython"
+    "matplotlib"
 ]
 
 extras_requirements = {
@@ -61,7 +60,7 @@ setup(
     packages=find_packages(where="src"),
     package_dir={"": "src"},
     python_requires=">=3.8",
-    seutp_requires=["wheel", "setuptools"],
+    setup_requires=["wheel", "setuptools", "Cython"],
     install_requires=install_requirements,
     extras_require=extras_requirements,
     # ext_modules=cythonize(extensions, language_level = "3"),

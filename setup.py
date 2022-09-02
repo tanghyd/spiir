@@ -1,5 +1,9 @@
+import os
+import platform
 from pathlib import Path
 from setuptools import setup, find_packages, Extension
+from setuptools.command.build_ext import build_ext
+from setuptools.command.install import install
 
 from Cython.Build import cythonize
 import numpy as np
@@ -54,6 +58,52 @@ extras_requirements = {
     "pycbc": ["pycbc"],
 }
 
+
+# class PreBuildExtCommand(build_ext):
+#     """Pre-build extension command for build_ext mode."""
+#     def install_lal(self):
+#         print(f"include_dirs: {self.include_dirs}")
+#         foundLAL = False
+#         for lib_dir in self.library_dirs:
+#             for path in Path(lib_dir).rglob("*"):
+#                 print(path)
+#                 if path.is_dir() and path.stem == "lal":
+#                     foundLAL = True
+                        
+#         if not foundLAL:
+#             current_OS = platform.system()
+#             print(current_OS)
+#             msg = "Required SPIIR dependency LAL not found"
+#             if current_OS == 'Ubuntu':
+#                 print(f"""{msg}, please install by running: 
+#                 bash -c 'cat > /etc/apt/sources.list.d/lscdebian.list' << EOF
+# deb [trusted=yes] https://hypatia.aei.mpg.de/lsc-$(dpkg --print-architecture)-$(. /etc/os-release; echo $VERSION_CODENAME) ./
+# EOF
+#                 apt install lal
+#                 """)
+#             elif current_OS == 'CentOS':
+#                 print(f"{msg}, please install by running:\n 'yum install liblal-dev'")
+#             else:
+#                 print(
+#                     f"{msg} (cannot determine system platform)" \
+#                     "first install 'liblal-dev' and try again"
+#                 )
+    
+#     def run(self):
+#         self.install_lal()
+#         print(f"PreBuildExtCommand: {os.getcwd()}")
+#         build_ext.run(self)
+#         os.system("cat testing.egg-info/PKG-INFO")
+#         os.system("echo PostBuildExtCommand HELLO WORLD")
+
+# class PreInstallCommand(install):
+#     """Pre-installation for installation mode."""
+#     def run(self):
+#         print(f"PostInstallCommand: {os.getcwd()}")
+#         install.run(self)
+#         os.system("cat testing.egg-info/PKG-INFO")
+#         os.system("echo PostInstallCommand HELLO WORLD")
+
 setup(
     name="spiir",
     version="0.0.1",
@@ -63,8 +113,9 @@ setup(
     setup_requires=["wheel", "setuptools", "Cython"],
     install_requires=install_requirements,
     extras_require=extras_requirements,
-    # ext_modules=cythonize(extensions, language_level = "3"),
+    ext_modules=cythonize(extensions, language_level = "3"),
     include_package_data=True,
+    # cmdclass={"build_ext": PreBuildExtCommand, "install": PreInstallCommand},
     description="A Python library for the SPIIR gravitational wave science pipeline.",
     long_description=(Path(__file__).parent / "README.md").read_text(),
     long_description_content_type="text/markdown",

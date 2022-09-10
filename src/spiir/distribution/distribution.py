@@ -200,7 +200,7 @@ class PyCBCDistribution(Distribution):
         # TODO: Work out a cleaner solution to handle PyCBC distribution particularities
         #   i.e. pycbc requires a variable name as keyword argument when instantiating
         #   some (but not all) distributions without bounds, so pass as None
-        distribs_without_variable_kwargs = "uniform_sky, uniform_solidangle"
+        distribs_without_variable_kwargs = ["uniform_sky", "uniform_solidangle"]
         if self.distribution not in distribs_without_variable_kwargs:
             if self.variable not in self.kwargs:
                 kwargs[self.variable] = None

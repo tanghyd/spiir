@@ -12,6 +12,7 @@ setup(
         "lalsuite",
         "astropy",
         "python-ligo-lw==1.8.1",
+        "ligo.skymap",
         "igwn-alert",
         "ligo-gracedb",
         "toml",

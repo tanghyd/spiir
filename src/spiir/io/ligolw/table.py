@@ -127,9 +127,10 @@ def load_table_from_xmls(
     ilwdchar_compat: bool = True,
     legacy_postcoh_compat: bool = True,
     nullable: bool = False,
-    verbose: bool = False,
-    nproc: int = 1,
+    concat: bool = True,
     skip_exceptions: bool = False,
+    nproc: int = 1,
+    verbose: bool = False,
 ) -> pd.DataFrame:
     """Loads a table from one or multiple LIGO_LW XML and returns a pandas DataFrame.
 
@@ -150,13 +151,15 @@ def load_table_from_xmls(
     nullable: bool
         If True, sets the values for missing postcoh columns to NoneType,
         otherwise it is set to an appropriate default value given the column type.
-    verbose: bool
-        If True, displays a loading progress bar.
-    nproc: int
-        Number of CPU processes to use for multiprocessing. Default: 1, recommended: 4.
+    concat: bool
+        If True, concatenates DataFrames together ignoring the index, else returns a 
+        list of DataFrames for each table in order.
     skip_exceptions: bool
         If True, exceptions raised by a process during mulitprocessing will be ignored.
-
+    nproc: int
+        Number of CPU processes to use for multiprocessing. Default: 1, recommended: 4.
+    verbose: bool
+        If True, displays a loading progress bar.
     Returns
     -------
     pd.DataFrame
@@ -184,7 +187,7 @@ def load_table_from_xmls(
             nullable=nullable,
         )
         
-        desc = f"Loading tables from LIGOLW XML files"
+        desc = f"Loading {table} tables from LIGOLW XML files"
         with tqdm(total=len(paths), desc=desc, disable=not verbose) as pbar:
             with concurrent.futures.ProcessPoolExecutor(max_workers=nproc) as executor:
                 futures = [executor.submit(_load_table_from_xml, p) for p in paths]
@@ -200,9 +203,9 @@ def load_table_from_xmls(
                         results.append(future.result())
                     pbar.update(1)
                 
-                    
-        return pd.concat(results, ignore_index=True)
-
+        if concat:
+            return pd.concat(results, ignore_index=True)
+        return results
 
 def get_tables_from_xmldoc(
     xmldoc: ligo.lw.ligolw.Document,
@@ -313,9 +316,10 @@ def load_tables_from_xmls(
     ilwdchar_compat: bool = True,
     legacy_postcoh_compat: bool = True,
     nullable: bool = False,
-    verbose: bool = False,
-    nproc: int = 1,
+    concat: bool = True,
     skip_exceptions: bool = False,
+    nproc: int = 1,
+    verbose: bool = False,
 ) -> Dict[str, pd.DataFrame]:
     """Convenience function to get one or more tables from one LIGO_LW xmldoc element.
     
@@ -347,12 +351,15 @@ def load_tables_from_xmls(
     nullable: bool
         If True, sets the values for missing postcoh columns to NoneType,
         otherwise it is set to an appropriate default value given the column type.
-    verbose: bool
-        If True, displays a loading progress bar.
-    nproc: int
-        Number of CPU processes to use for multiprocessing. Default: 1, recommended: 4.
+    concat: bool
+        If True, concatenates DataFrames together ignoring the index, else returns a 
+        list of DataFrames for each table in order.
     skip_exceptions: bool
         If True, exceptions raised by a process during mulitprocessing will be ignored.
+    nproc: int
+        Number of CPU processes to use for multiprocessing. Default: 1, recommended: 4.
+    verbose: bool
+        If True, displays a loading progress bar.
     
     Returns
     -------
@@ -379,7 +386,7 @@ def load_tables_from_xmls(
             nullable=nullable,
         )
 
-        desc = f"Loading tables from LIGOLW XML files"
+        desc = f"Loading {tables} tables from LIGOLW XML files"
         with tqdm(total=len(paths), desc=desc, disable=not verbose) as pbar:
             with concurrent.futures.ProcessPoolExecutor(max_workers=nproc) as executor:
                 futures = [executor.submit(_load_tables_from_xml, p) for p in paths]
@@ -396,13 +403,17 @@ def load_tables_from_xmls(
                     pbar.update(1)
                 
                 # every dict in results should have the same keys so this should work
-                return {
-                    key: pd.concat((data[key] for data in results), ignore_index=True)
-                    for key in results[0].keys()
-                }
+                if concat:
+                    return {
+                        k: pd.concat((data[k] for data in results), ignore_index=True)
+                        for k in results[0].keys()
+                    }
+                else:
+                    return {k: [data[k] for data in results] for k in results[0].keys()}
 
 
 def build_table_element(df: pd.DataFrame, table: str):
+    """Builds an LIGO_LW lsctable XML element by table name from a DataFrame."""
     tbl = ligo.lw.lsctables.New(ligo.lw.lsctables.TableByName[table])
     for _, row in df.sort_index(axis=1).iterrows():
         tbl.append(ligo.lw.table.Table.RowType(**row.to_dict()))
@@ -457,8 +468,8 @@ def load_ligolw_tables(
     ilwdchar_compat: bool = True,
     legacy_postcoh_compat: bool = True,
     nullable: bool = False,
-    verbose: bool = False,
     nproc: int = 1,
+    verbose: bool = False,
 ) -> pd.DataFrame:
     logger.warning(
         "spiir.io.ligolw.table deprecation warning: load_ligolw_tables will be " \
@@ -471,7 +482,7 @@ def load_ligolw_tables(
         ilwdchar_compat,
         legacy_postcoh_compat,
         nullable,
-        verbose,
-        nproc,
+        nproc=nproc,
+        verbose=verbose,
     )
 

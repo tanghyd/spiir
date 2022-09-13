@@ -134,8 +134,9 @@ def load_arrays_from_xmls(
     paths: Union[str, bytes, PathLike, Sequence[Union[str, bytes, PathLike]]],
     arrays: Optional[Sequence[str]] = None,
     ilwdchar_compat: bool = True,
-    verbose: bool = False,
+    skip_exceptions: bool = False,
     nproc: int = 1,
+    verbose: bool = False,
 ) -> Dict[str, np.ndarray]:
     """Loads one or more arrays from one LIGO_LW XML file path and returns a dictionary 
     of numpy arrays that have been stacked together.
@@ -151,10 +152,12 @@ def load_arrays_from_xmls(
         Otherwise if arrays is None, retrieve all arrays from the xmldoc object.
     ilwdchar_compat: bool, default: `True`
         Whether to add ilwdchar conversion compatibility.
-    verbose: bool, default: `True`
-        If True, displays a loading progress bar.
+    skip_exceptions: bool
+        If True, exceptions raised by a process during mulitprocessing will be ignored.
     nproc: int, default: 1
         Number of CPU processes to use for multiprocessing. Default: 1, recommended: 4.
+    verbose: bool, default: `True`
+        If True, displays a loading progress bar.
 
     Return
     ------
@@ -178,7 +181,13 @@ def load_arrays_from_xmls(
             
                 results = []
                 for future in concurrent.futures.as_completed(futures):
-                    results.append(future.result())
+                    if future.exception() is not None:
+                        if skip_exceptions:
+                            logger.debug(f"Exception raised: {future.exception()}")
+                        else:
+                            raise Exception from future.exception()
+                    else:
+                        results.append(future.result())
                     pbar.update(1)
 
                 return {

@@ -7,9 +7,10 @@ import numpy as np
 import scipy
 from tqdm import tqdm
 
-
 logger = logging.getLogger(__name__)
 
+
+MAX_DRAW_SIZE: int = int(1e7)
 
 # custom spiir distributions
 distributions: dict = {}
@@ -48,7 +49,7 @@ class Distribution(ABC):
         
         # NOTE: Use ratio of samples satisfying constraints to increase redraw
         #   size and speed up resample, see: pycbc.distributions.joint.py#L331
-        estimate_n_redraw = lambda n, ratio: int(min(1e6, np.ceil(n/ratio)))
+        estimate_n_redraw = lambda n, ratio: int(min(MAX_DRAW_SIZE, np.ceil(n/ratio)))
         n_draw = estimate_n_redraw(n, n_samples / (n+1))
 
         while n_remain:
@@ -292,7 +293,7 @@ class JointDistribution:
         
         # NOTE: Use ratio of samples satisfying constraints to increase redraw
         #   size and speed up resample, see: pycbc.distributions.joint.py#L331
-        estimate_n_redraw = lambda n, ratio: int(min(1e6, np.ceil(n/ratio)))
+        estimate_n_redraw = lambda n, ratio: int(min(MAX_DRAW_SIZE, np.ceil(n/ratio)))
         n_draw = estimate_n_redraw(n, n_samples / (n+1))
 
         while n_remain:

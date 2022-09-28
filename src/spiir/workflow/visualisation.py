@@ -191,6 +191,7 @@ def plot_skymap_from_fits(
     
     fig = plt.figure(figsize=figsize, facecolor="white")
     ax = plt.axes(projection='astro mollweide')
+    ax.grid()
     
     if title:
         if not isinstance(title, str): raise TypeError("title argument must be a str.")

@@ -9,7 +9,7 @@ The instructions below detail how to install this package.
 ### OzStar
 
 For example, if one was to install this package on the OzStar supercomputer with 
-Python 3.1.0.4, we recommend loading the following environment modules:
+Python 3.10.4, we recommend loading the following environment modules:
 
   ```
   module load gcc/9.2.0 openmpi/4.0.2
@@ -21,10 +21,10 @@ Then proceed with the instructions for a installation with Virtualenv.
 
 ### Virtualenv
 
-Installation with these commands requires an existing installation of Python3.8.
+Installation with these commands requires an existing installation of Python >= 3.8.
 
   ```
-  # you can change venv to "spiir"
+  # you can change venv to "spiir" (assuming you're not in the same folder as git clone)
   python -m venv venv
   source venv/bin/activate
 

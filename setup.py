@@ -20,6 +20,7 @@ setup(
         "scipy",
         "pandas",
         "matplotlib",
+        "click",
     ],
     extras_require={
         "tensorflow": ["tensorflow>=2.8", "tensorflow-probability", "scikit-learn"],

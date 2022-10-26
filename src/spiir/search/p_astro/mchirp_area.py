@@ -642,7 +642,7 @@ class ChirpMassAreaModel:
         lal_cosmology: bool = True,
     ):
         """Defines class-based Compact Binary Coalescence source classifier based on
-        the PyCBC Mass Plane Contour method by Villa-Ortega et. al. (2021).
+        the PyCBC Chirp Mass Area method by Villa-Ortega et. al. (2021).
 
         Parameters
         ----------
@@ -812,7 +812,7 @@ class ChirpMassAreaModel:
         snrs: np.ndarray,
         m0: Optional[float] = None,
     ):
-        """Fits a MassContour model with equal length arrays for BAYESTAR luminosity
+        """Fits a Chirp Mass Area model with equal length arrays for BAYESTAR luminosity
         distances against corresponding SNRs and (minimum) effective distances
         recovered by a gravitational wave search pipeline.
 

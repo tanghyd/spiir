@@ -403,7 +403,7 @@ def plot_mchirp_area_figure(
     z: float,
     z_std: float,
     mass_limits: Tuple[float, float],
-    mass_bdary: Tuple[float, float],
+    mass_bounds: Tuple[float, float],
     figsize: Tuple[float, float] = (8, 6),
     xlims: Optional[Tuple[float, float]] = None,
     ylims: Optional[Tuple[float, float]] = None,
@@ -418,7 +418,7 @@ def plot_mchirp_area_figure(
         z=z,
         z_std=z_std,
         mass_limits=mass_limits,
-        mass_bdary=mass_bdary,
+        mass_bounds=mass_bounds,
         xlims=xlims,
         ylims=ylims,
     )
@@ -433,7 +433,7 @@ def _draw_mchirp_area_axes(
     z: float,
     z_std: float,
     mass_limits: Tuple[float, float],
-    mass_bdary: Tuple[float, float],
+    mass_bounds: Tuple[float, float],
     xlims: Optional[Tuple[float, float]] = None,
     ylims: Optional[Tuple[float, float]] = None,
 ) -> Axes:
@@ -450,7 +450,7 @@ def _draw_mchirp_area_axes(
 
     # get mass boundary limits
     m2_min, m1_max = mass_limits
-    ns_max, gap_max = mass_bdary  # range to define mass gap class
+    ns_max, gap_max = mass_bounds  # range to define mass gap class
 
     lim_m1b = min(m1_max, mcm1_to_m2(mcb, m2_min))
     m1b = np.linspace(mib, lim_m1b, num=100)

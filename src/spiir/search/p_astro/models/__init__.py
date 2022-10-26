@@ -1,1 +1,1 @@
-from .composite_mass_contour import FGMCMassContourModel
+from .composite import FGMCChirpMassAreaModel

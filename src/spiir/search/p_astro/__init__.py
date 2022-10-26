@@ -11,4 +11,4 @@ and `.predict()` methods, so they can be efficiently and interchangeably with ea
 during testing and deployment.
 """
 
-from . import fgmc, mass_contour, models
+from . import fgmc, mchirp_area, models

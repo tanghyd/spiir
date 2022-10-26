@@ -3,18 +3,18 @@
 Code sourced from https://git.ligo.org/lscsoft/p-astro/-/tree/master/ligo.
 """
 
+import itertools
 import logging
 import pickle
-import itertools
 from collections.abc import Sequence
 from copy import deepcopy
-from pathlib import Path
 from os import PathLike
-from typing import Optional, Union, Tuple, List, Dict
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple, Union
 
 import numpy as np
-from scipy.special import la_roots
 from numpy.polynomial.hermite import hermgauss
+from scipy.special import la_roots
 
 logger = logging.getLogger(__name__)
 
@@ -126,7 +126,6 @@ def evaluate_p_astro_from_bayesfac(
     return p_astro_values
 
 
-
 def make_weights_from_hardcuts(
     mass1: float,
     mass2: float,
@@ -189,8 +188,8 @@ def make_weights_from_histograms(
     mass2: float,
     spin1z: float,
     spin2z: float,
-    num_bins: Optional[int]=None,
-    activation_counts: Optional[Dict[str, Dict[str,float]]]=None,
+    num_bins: Optional[int] = None,
+    activation_counts: Optional[Dict[str, Dict[str, float]]] = None,
 ) -> Tuple[float, float, float, int]:
     """
     Construct binary weights from bin number provided by GstLAL, and a weights
@@ -283,9 +282,9 @@ def approximate_toy_bayes_factor(
     far: Union[float, np.ndarray],
     snr: Union[float, np.ndarray],
     far_threshold: float,
-    snr_threshold: float
+    snr_threshold: float,
 ) -> Union[float, np.ndarray]:
-    """Approximates the Bayes factor for a given candidate trigger using an approximate 
+    """Approximates the Bayes factor for a given candidate trigger using an approximate
     ("Toy") model as in the ligo.p_astro_computation.get_f_over_b function.
 
     Source: https://git.ligo.org/lscsoft/p-astro/-/blob/master/ligo/p_astro_computation.py#L244
@@ -314,18 +313,12 @@ def approximate_toy_bayes_factor(
 
 
 class CountPosteriorElements:
-
-    def __init__(
-        self,
-        f_divby_b: Sequence,
-        buff: float=1e-15,
-        verbose: bool=True
-    ):
-        """Class that collects information of the candidate events on which the FGMC 
+    def __init__(self, f_divby_b: Sequence, buff: float = 1e-15, verbose: bool = True):
+        """Class that collects information of the candidate events on which the FGMC
         counts posterior is to be built.
-        
+
         This information is not specific to a source type.
-    
+
         Parameters
         ----------
         f_divby_b : Sequence
@@ -341,11 +334,10 @@ class CountPosteriorElements:
 
 
 class SourceType:
-
     def __init__(self, label: str, w_fgmc: Union[float, np.ndarray]):
         """Class that collects source-type specific information of candidate events.
-        
-        Instances of this class will be passed to the :class:`Posterior` class to 
+
+        Instances of this class will be passed to the :class:`Posterior` class to
         instantiate the latter.
 
         Parameters
@@ -426,7 +418,7 @@ class Posterior(CountPosteriorElements):
         buff=1e-15,
         mcmc=False,
         verbose=True,
-        **astro_sources
+        **astro_sources,
     ):
         """
         Parameters
@@ -824,7 +816,7 @@ class MarginalizedPosterior(Posterior):
         buff=1e-15,
         mcmc=False,
         verbose=True,
-        **astro_sources
+        **astro_sources,
     ):
 
         """
@@ -860,7 +852,7 @@ class MarginalizedPosterior(Posterior):
             buff,
             mcmc,
             verbose,
-            **astro_sources
+            **astro_sources,
         )
         if self.verbose:
             logger.info("MarginalizedPosterior class instantiation complete.")
@@ -901,8 +893,8 @@ class MarginalizedPosterior(Posterior):
         """
 
         assert len(set(self.keys_all) & set(lambdas.keys())) == len(lambdas.keys()), (
-            "Counts label(s) passed to posterior function don't match labels of " \
-                "astro/terr source instances"
+            "Counts label(s) passed to posterior function don't match labels of "
+            "astro/terr source instances"
         )
 
         # keys corresponding to sources to be marginalized over
@@ -1385,9 +1377,9 @@ class MarginalizedPosterior(Posterior):
 class TwoComponentFGMCToyModel:
     def __init__(
         self,
-        far_threshold: float=1e-4,
-        snr_threshold: float=8,
-        prior_type: str="Uniform"
+        far_threshold: float = 1e-4,
+        snr_threshold: float = 8,
+        prior_type: str = "Uniform",
     ):
         # set FAR and SNR thresholds to classify as astro source for bayes factor model
         self.far_threshold = far_threshold
@@ -1401,14 +1393,16 @@ class TwoComponentFGMCToyModel:
 
         # mean posterior counts
         self.mean_counts = None
-    
-    def __repr__(self, precision: int=4):
+
+    def __repr__(self, precision: int = 4):
         """Overrides string representation of cls when printed."""
         if self.mean_counts is not None:
-            mean_counts = ", ".join([
-                f"{key}={self.mean_counts[key]:.{precision}f}"
-                for key in self.mean_counts
-            ])
+            mean_counts = ", ".join(
+                [
+                    f"{key}={self.mean_counts[key]:.{precision}f}"
+                    for key in self.mean_counts
+                ]
+            )
             return f"{type(self).__name__}({mean_counts})"
         else:
             return f"{type(self).__name__}()"
@@ -1431,7 +1425,7 @@ class TwoComponentFGMCToyModel:
             f_divby_b=bayes_factors,
             prior_type=self.prior_type,
             terr_source=terr,
-            **{"Astro": astro}
+            **{"Astro": astro},
         )
 
         # idx = bayes_factors >= min(bayes_factors)
@@ -1445,9 +1439,7 @@ class TwoComponentFGMCToyModel:
         return self
 
     def predict(
-        self,
-        far: Union[float, np.ndarray],
-        snr: Union[float, np.ndarray]
+        self, far: Union[float, np.ndarray], snr: Union[float, np.ndarray]
     ) -> Union[float, np.ndarray]:
         bayes_factors = approximate_toy_bayes_factor(
             far,

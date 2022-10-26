@@ -424,7 +424,7 @@ def plot_mchirp_area_figure(
     mchirp_std: float,
     z: float,
     z_std: float,
-    mass_limits: Tuple[float, float],
+    mass_bounds: Tuple[float, float],
     ns_max: float = 3.0,
     mass_gap_max: Optional[float] = None,
     figsize: Tuple[float, float] = (8, 6),
@@ -440,7 +440,7 @@ def plot_mchirp_area_figure(
         mchirp_std=mchirp_std,
         z=z,
         z_std=z_std,
-        mass_limits=mass_limits,
+        mass_bounds=mass_bounds,
         ns_max=ns_max,
         mass_gap_max=mass_gap_max,
         xlims=xlims,
@@ -456,7 +456,7 @@ def _draw_mchirp_area_axes(
     mchirp_std: float,
     z: float,
     z_std: float,
-    mass_limits: Tuple[float, float],
+    mass_bounds: Tuple[float, float],
     ns_max: float = 3.0,
     mass_gap_max: Optional[float] = None,
     xlims: Optional[Tuple[float, float]] = None,
@@ -474,7 +474,7 @@ def _draw_mchirp_area_axes(
     mis = (2.0**0.2) * mcs
 
     # get mass boundary limits
-    m2_min, m1_max = mass_limits
+    m2_min, m1_max = mass_bounds
 
     lim_m1b = min(m1_max, mcm1_to_m2(mcb, m2_min))
     m1b = np.linspace(mib, lim_m1b, num=100)
@@ -595,7 +595,7 @@ def _draw_mchirp_area_axes(
         )
 
     # plot_details
-    xlims = xlims or mass_limits
+    xlims = xlims or mass_bounds
     ylims = ylims or (1.0, 20.0)
     ax.set(xlim=xlims, ylim=ylims, xlabel=r"$m_1$", ylabel=r"$m_2$")
 

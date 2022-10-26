@@ -36,10 +36,10 @@ _source_colour_map = {
     "BNS": "#A2C8F5",  # light blue
     "NSBH": "#FFB482",  # light orange
     "BBH": "#FE9F9B",  # light red
-    "MassGap": "#8EE5A1",  # light green
-    "GNS": "#98D6CB",  # turquoise
-    "GG": "#79BB87",  # green
-    "BHG": "#C6C29E",  # dark khaki
+    "MG": "#8EE5A1",  # light green
+    "MGNS": "#98D6CB",  # turquoise
+    "MGMG": "#79BB87",  # green
+    "BHMG": "#C6C29E",  # dark khaki
 }
 
 
@@ -54,7 +54,7 @@ def estimate_redshift_from_distance(
     truncate_lower_dist: Optional[float] = None,
     lal_cosmology: bool = True,
 ) -> Tuple[float, float]:
-    """Takes values of distance and its uncertainty and returns a dictionary with 
+    """Takes values of distance and its uncertainty and returns a dictionary with
     estimates of the redshift and its uncertainty.
 
     Constants for lal_cosmology taken from Planck15_lal_cosmology() in
@@ -98,7 +98,7 @@ def estimate_redshift_from_distance(
 def estimate_source_mass(
     mdet: float, mdet_std: float, z: float, z_std: float
 ) -> Tuple[float, float]:
-    """Takes values of redshift, redshift uncertainty, detector mass and its 
+    """Takes values of redshift, redshift uncertainty, detector mass and its
     uncertainty and computes the source mass and its uncertainty.
 
     Parameters
@@ -124,7 +124,7 @@ def estimate_source_mass(
 
 
 def integrate_chirp_mass(mchirp: float, m_min: float, m_max: float) -> float:
-    """Returns the integral of a component mass as a function of the mass of the other 
+    """Returns the integral of a component mass as a function of the mass of the other
     component, taking mchirp as an argument.
 
     Parameters
@@ -221,7 +221,8 @@ def calc_areas(
     z: float,
     z_std: float,
     mass_bounds: Tuple[float, float],
-    mass_gap_bounds: Tuple[float, float],
+    ns_max: float = 3.0,
+    mass_gap_max: Optional[float] = None,
     separate_mass_gap: bool = False,
 ) -> Dict[str, float]:
     """
@@ -240,8 +241,10 @@ def calc_areas(
         The uncertainty (standard deviation) in the estimated redshift.
     mass_bounds: tuple[float, float]
         The bounds on all possible component masses (let m1 = m2).
-    mass_gap_bounds: tuple[float, float]
-        The bounds on the mass gap category (max NS & min BH mass).
+    ns_max: float
+        The boundary that separates a classification between BH and NS.
+    mass_gap_max: float | None
+        If mass_gap_max is set, we assign a Mass Gap (MG) category above ns_max.
     separate_mass_gap: bool
         If True, splits Mass Gap category into BH+Gap, Gap+NS, and Gap+Gap.
 
@@ -252,7 +255,7 @@ def calc_areas(
     """
     # check valid input arguments for mass bounds [lower, upper]
     m_min, m_max = mass_bounds
-    mgap_min, mgap_max = mass_gap_bounds
+    mgap_min, mgap_max = ns_max, mass_gap_max or ns_max
     assert (0 < m_min <= m_max) and (0 < mgap_min <= mgap_max)  # <1 not astrophysical
 
     # compute source frame chirp mass given detector frame mass and redshift
@@ -260,17 +263,20 @@ def calc_areas(
 
     # compute relative area within chirp mass area for each class
     abbh = get_area(mc_src, mc_src_std, "diagonal", mgap_max, mgap_max, m_max)
-    abhg = get_area(mc_src, mc_src_std, mgap_max, mgap_min, mgap_max, m_max)
     ansbh = get_area(mc_src, mc_src_std, mgap_min, m_min, mgap_max, m_max)
-    agg = get_area(mc_src, mc_src_std, "diagonal", mgap_min, mgap_min, mgap_max)
-    agns = get_area(mc_src, mc_src_std, mgap_min, m_min, mgap_min, mgap_max)
     abns = get_area(mc_src, mc_src_std, "diagonal", m_min, m_min, mgap_min)
 
     areas = {"BNS": abns, "NSBH": ansbh, "BBH": abbh}
-    if not separate_mass_gap:
-        areas["MassGap"] = agns + agg + abhg
-    else:
-        areas.update({"GNS": agns, "GG": agg, "BHG": abhg})
+
+    if mgap_max > mgap_min:
+        abhmg = get_area(mc_src, mc_src_std, mgap_max, mgap_min, mgap_max, m_max)
+        amgmg = get_area(mc_src, mc_src_std, "diagonal", mgap_min, mgap_min, mgap_max)
+        amgns = get_area(mc_src, mc_src_std, mgap_min, m_min, mgap_min, mgap_max)
+
+        if not separate_mass_gap:
+            areas["MG"] = amgns + amgmg + abhmg
+        else:
+            areas.update({"MGNS": amgns, "MGMG": amgmg, "BHMG": abhmg})
 
     return areas
 
@@ -301,7 +307,8 @@ def calc_probabilities(
     z: float,
     z_std: float,
     mass_bounds: Tuple[float, float],
-    mass_gap_bounds: Tuple[float, float],
+    ns_max: float = 3.0,
+    mass_gap_max: Optional[float] = None,
     separate_mass_gap: bool = False,
 ) -> Dict[str, float]:
     """Computes the astrophysical source probability of a given candidate event."""
@@ -309,29 +316,41 @@ def calc_probabilities(
     # determine chirp mass bounds in detector frame for classification
     get_redshifted_mchirp = lambda m: (m / (2**0.2)) * (1 + z)  # Mc_det = (1+z)*Mc
     mchirp_min, mchirp_max = (get_redshifted_mchirp(m) for m in mass_bounds)
+    mass_gap_max = mass_gap_max or ns_max
 
     # determine astrophysical source class probabilities given estimated parameters
     if mchirp > mchirp_max:
         # if observed detector frame chirp mass is greater than mchirp bounds => BBH
         probabilities = {"BNS": 0.0, "NSBH": 0.0, "BBH": 1.0}
-        if not separate_mass_gap:
-            probabilities["MassGap"] = 0.0
-        else:
-            probabilities.update({"GNS": 0.0, "GG": 0.0, "BHG": 0.0})
+
+        if mass_gap_max > ns_max:
+            if not separate_mass_gap:
+                probabilities["MG"] = 0.0
+            else:
+                probabilities.update({"MGNS": 0.0, "MGMG": 0.0, "BHMG": 0.0})
 
     elif mchirp < mchirp_min:
         # if observed detector frame chirp mass is less than mchirp bounds => BNS
         probabilities = {"BNS": 1.0, "NSBH": 0.0, "BBH": 0.0}
-        if not separate_mass_gap:
-            probabilities["MassGap"] = 0.0
-        else:
-            probabilities.update({"GNS": 0.0, "GG": 0.0, "BHG": 0.0})
+
+        if mass_gap_max > ns_max:
+            if not separate_mass_gap:
+                probabilities["MG"] = 0.0
+            else:
+                probabilities.update({"MGNS": 0.0, "MGMG": 0.0, "BHMG": 0.0})
 
     else:
         # compute probabilities according to proportional areas in chirp mass area
         mc_std = mchirp * m0  # inherent uncertainty in chirp mass
         areas = calc_areas(
-            mchirp, mc_std, z, z_std, mass_bounds, mass_gap_bounds, separate_mass_gap
+            mchirp,
+            mc_std,
+            z,
+            z_std,
+            mass_bounds,
+            ns_max,
+            mass_gap_max,
+            separate_mass_gap,
         )
         total_area = sum(areas.values())
         probabilities = {key: areas[key] / total_area for key in areas}
@@ -348,7 +367,8 @@ def predict_source_p_astro(
     snr: float,
     eff_distance: float,
     mass_bounds: Tuple[float, float],
-    mass_gap_bounds: Tuple[float, float],
+    ns_max: float = 3.0,
+    mass_gap_max: Optional[float] = None,
     separate_mass_gap: bool = False,
     lal_cosmology: bool = True,
     truncate_lower_dist: Optional[float] = None,
@@ -361,7 +381,7 @@ def predict_source_p_astro(
     chirp mass uncertainty, the luminosity distance (and its uncertainty)
     and the redshift (and its uncertainty). Probability is estimated to be
     directly proportional to the area of the corresponding CBC region.
-    
+
     Parameters
     ----------
     coefficients: float
@@ -371,16 +391,18 @@ def predict_source_p_astro(
     snr: float
         The coincident signal-to-noise ratio (SNR).
     eff_distance: float
-        The estimated effective distance, usually taken as the minimum across all 
+        The estimated effective distance, usually taken as the minimum across all
         coincident detectors.
     mass_bounds: tuple[float, float]
         The upper and lower bounds for both component masses (m1 >= m2).
-    mass_gap_bounds: tuple[float, float]
-        The boundaries that define the mass gap between BH and NS.
+    ns_max: float
+        The boundary that separates a classification between BH and NS.
+    mass_gap_max: float | None
+        If mass_gap_max is set, we assign a Mass Gap (MG) category above ns_max.
     separate_mass_gap: bool
         If True, splits Mass Gap into BH+Gap, Gap+NS, and Gap+Gap.
     lal_cosmology: bool
-        If True, it uses the Planck15 cosmology model as defined in lalsuite, 
+        If True, it uses the Planck15 cosmology model as defined in lalsuite,
         instead of the astropy default.
 
     Returns
@@ -393,7 +415,7 @@ def predict_source_p_astro(
     )
 
     return calc_probabilities(
-        m0, mchirp, z, z_std, mass_bounds, mass_gap_bounds, separate_mass_gap
+        m0, mchirp, z, z_std, mass_bounds, ns_max, mass_gap_max, separate_mass_gap
     )
 
 
@@ -403,7 +425,8 @@ def plot_mchirp_area_figure(
     z: float,
     z_std: float,
     mass_limits: Tuple[float, float],
-    mass_bounds: Tuple[float, float],
+    ns_max: float = 3.0,
+    mass_gap_max: Optional[float] = None,
     figsize: Tuple[float, float] = (8, 6),
     xlims: Optional[Tuple[float, float]] = None,
     ylims: Optional[Tuple[float, float]] = None,
@@ -411,14 +434,15 @@ def plot_mchirp_area_figure(
     """Draws a full matplotlib Figure visualising the probability chirp mass area plane."""
 
     fig, ax = plt.subplots(figsize=figsize)
-    _draw_mchirp_area_axes( 
+    _draw_mchirp_area_axes(
         ax=ax,
         mchirp=mchirp,
         mchirp_std=mchirp_std,
         z=z,
         z_std=z_std,
         mass_limits=mass_limits,
-        mass_bounds=mass_bounds,
+        ns_max=ns_max,
+        mass_gap_max=mass_gap_max,
         xlims=xlims,
         ylims=ylims,
     )
@@ -433,7 +457,8 @@ def _draw_mchirp_area_axes(
     z: float,
     z_std: float,
     mass_limits: Tuple[float, float],
-    mass_bounds: Tuple[float, float],
+    ns_max: float = 3.0,
+    mass_gap_max: Optional[float] = None,
     xlims: Optional[Tuple[float, float]] = None,
     ylims: Optional[Tuple[float, float]] = None,
 ) -> Axes:
@@ -450,7 +475,6 @@ def _draw_mchirp_area_axes(
 
     # get mass boundary limits
     m2_min, m1_max = mass_limits
-    ns_max, gap_max = mass_bounds  # range to define mass gap class
 
     lim_m1b = min(m1_max, mcm1_to_m2(mcb, m2_min))
     m1b = np.linspace(mib, lim_m1b, num=100)
@@ -477,46 +501,49 @@ def _draw_mchirp_area_axes(
     # plot limits
     ax.plot((m2_min, m1_max), (m2_min, m1_max), "k--")
     ax.plot((ns_max, ns_max), (m2_min, ns_max), "k:")
-    ax.plot((gap_max, gap_max), (m2_min, gap_max), "k:")
+    ax.plot((mass_gap_max, mass_gap_max), (m2_min, mass_gap_max), "k:")
     ax.plot((ns_max, m1_max), (ns_max, ns_max), "k:")
-    ax.plot((gap_max, m1_max), (gap_max, gap_max), "k:")
+    ax.plot((mass_gap_max, m1_max), (mass_gap_max, mass_gap_max), "k:")
 
     # colour plot
     ax.fill_between(
         np.arange(0.0, ns_max - 0.01, 0.01),
-        gap_max,
+        mass_gap_max,
         m1_max,
         color=get_source_colour("NSBH"),
         alpha=0.5,
     )
     ax.fill_between(
-        np.arange(gap_max, m1_max, 0.01), 0.0, ns_max, color=get_source_colour("NSBH")
+        np.arange(mass_gap_max, m1_max, 0.01),
+        0.0,
+        ns_max,
+        color=get_source_colour("NSBH"),
     )
     ax.fill_between(
-        np.arange(ns_max, gap_max, 0.01),
-        np.arange(ns_max, gap_max, 0.01),
+        np.arange(ns_max, mass_gap_max, 0.01),
+        np.arange(ns_max, mass_gap_max, 0.01),
         m1_max,
-        color=get_source_colour("MassGap"),
+        color=get_source_colour("MG"),
         alpha=0.5,
     )
     ax.fill_between(
         np.arange(0.0, ns_max, 0.01),
         ns_max,
-        gap_max,
-        color=get_source_colour("MassGap"),
+        mass_gap_max,
+        color=get_source_colour("MG"),
         alpha=0.5,
     )
     ax.fill_between(
-        np.arange(gap_max, m1_max, 0.01),
-        np.arange(gap_max, m1_max, 0.01),
+        np.arange(mass_gap_max, m1_max, 0.01),
+        np.arange(mass_gap_max, m1_max, 0.01),
         m1_max,
         color=get_source_colour("BBH"),
         alpha=0.5,
     )
     ax.fill_between(
-        np.arange(gap_max, m1_max, 0.01),
-        np.arange(gap_max, m1_max, 0.01),
-        gap_max,
+        np.arange(mass_gap_max, m1_max, 0.01),
+        np.arange(mass_gap_max, m1_max, 0.01),
+        mass_gap_max,
         color=get_source_colour("BBH"),
     )
     ax.fill_between(
@@ -533,15 +560,15 @@ def _draw_mchirp_area_axes(
         alpha=0.5,
     )
     ax.fill_between(
-        np.arange(ns_max, gap_max, 0.01),
-        np.arange(ns_max, gap_max, 0.01),
-        color=get_source_colour("MassGap"),
+        np.arange(ns_max, mass_gap_max, 0.01),
+        np.arange(ns_max, mass_gap_max, 0.01),
+        color=get_source_colour("MG"),
     )
     ax.fill_between(
-        np.arange(gap_max, m1_max, 0.01),
+        np.arange(mass_gap_max, m1_max, 0.01),
         ns_max,
-        gap_max,
-        color=get_source_colour("MassGap"),
+        mass_gap_max,
+        color=get_source_colour("MG"),
     )
 
     # colour contour
@@ -600,7 +627,6 @@ def plot_prob_pie_figure(
 
 
 class ChirpMassAreaModel:
-
     def __init__(
         self,
         a0: Optional[float] = None,
@@ -608,17 +634,18 @@ class ChirpMassAreaModel:
         b1: Optional[float] = None,
         m0: Optional[float] = None,
         mass_bounds: Tuple[float, float] = (1.0, 45.0),
-        mass_gap_bounds: Tuple[float, float] = (3.0, 5.0),
+        ns_max: float = 3.0,
+        mass_gap_max: Optional[float] = None,
         separate_mass_gap: bool = False,
         lal_cosmology: bool = True,
     ):
-        """Defines class-based Compact Binary Coalescence source classifier based on 
+        """Defines class-based Compact Binary Coalescence source classifier based on
         the PyCBC Mass Plane Contour method by Villa-Ortega et. al. (2021).
 
         Parameters
         ----------
         a0: float | None
-            Model parameter used as the coefficient to estimate BAYESTAR distance from 
+            Model parameter used as the coefficient to estimate BAYESTAR distance from
             the minimum effective distance of a given single instrument event trigger.
         b0: float | None
             Model parameter used to estimate distance uncertainty?
@@ -628,8 +655,10 @@ class ChirpMassAreaModel:
             Inherent percentage uncertainty in chirp mass, set to 1% (0.01) by default.
         mass_bounds: tuple[float, float]
             The upper and lower bounds for both component masses (m1 >= m2).
-        mass_gap_bounds: tuple[float, float]
-            The boundaries that define the mass gap between BH and NS.
+        ns_max: float
+            The boundary that separates a classification between BH and NS.
+        mass_gap_max: float | None
+            If mass_gap_max is set, we assign a Mass Gap (MG) category above ns_max.
         separate_mass_gap: bool
             If True, splits Mass Gap into BH+Gap, Gap+NS, and Gap+Gap.
         lal_cosmology: bool
@@ -646,93 +675,99 @@ class ChirpMassAreaModel:
         self.b0 = b0
         self.b1 = b1
         self.m0 = m0
+
         self.mass_bounds = mass_bounds  # component mass bounds
-        self.mass_gap_bounds = mass_gap_bounds  # mass gap class bounds
+
+        self.ns_max = ns_max
+        self.mass_gap_max = mass_gap_max or ns_max
+        assert 0 < self.mass_gap_max <= self.ns_max
+
         self.separate_mass_gap = separate_mass_gap
         self.lal_cosmology = lal_cosmology
 
-    def __repr__(self, precision: int=4):
+    def __repr__(self, precision: int = 4):
         """Overrides string representation of cls when printed."""
-        coefficents = ", ".join([
-            f"{key}={self.coefficients[key]!r}"
-            if self.coefficients[key] is None
-            else f"{key}={self.coefficients[key]:.{precision}f}"
-            for key in self.coefficients
-        ])
+        coefficents = ", ".join(
+            [
+                f"{key}={self.coefficients[key]!r}"
+                if self.coefficients[key] is None
+                else f"{key}={self.coefficients[key]:.{precision}f}"
+                for key in self.coefficients
+            ]
+        )
         return f"{type(self).__name__}({coefficents})"
 
     # def __call__(self, mchirp: float, snr: float, eff_dist: float) -> dict[str, float]:
     #     return self.predict(mchirp, snr, eff_dist)
- 
+
     @property
     def coefficients(self):
         return {"a0": self.a0, "b0": self.b0, "b1": self.b1, "m0": self.m0}
 
-#     @property
-#     def mass_bounds(self) -> Tuple[float, float]:
-#         return self._mass_bounds
+    #     @property
+    #     def mass_bounds(self) -> Tuple[float, float]:
+    #         return self._mass_bounds
 
-#     @mass_bounds.setter
-#     def mass_bounds(self, value):
-#         m_min, m_max = self.mass_bounds
-#         if not (0 < m_min <= m_max):
-#             raise ValueError("mass_bounds requires 0 < m_min <= m_max")
-#         try:
-#             self._mass_bounds = (float(m_min), float(m_max))
-#         except TypeError as error:
-#             raise TypeError("mass_bounds must be a tuple of floats") from error
+    #     @mass_bounds.setter
+    #     def mass_bounds(self, value):
+    #         m_min, m_max = self.mass_bounds
+    #         if not (0 < m_min <= m_max):
+    #             raise ValueError("mass_bounds requires 0 < m_min <= m_max")
+    #         try:
+    #             self._mass_bounds = (float(m_min), float(m_max))
+    #         except TypeError as error:
+    #             raise TypeError("mass_bounds must be a tuple of floats") from error
 
-#     @property
-#     def mass_gap_bounds(self) -> Tuple[float, float]:
-#         return self._mass_gap_bounds
+    #     @property
+    #     def mass_gap_bounds(self) -> Tuple[float, float]:
+    #         return self._mass_gap_bounds
 
-#     @mass_gap_bounds.setter
-#     def mass_gap_bounds(self, value: Tuple[float, float]):
-#         mgap_min, mgap_max = self.mass_gap_bounds
-#         if not (0 < mgap_min <= mgap_max):
-#             raise ValueError("mass_gap_bounds requires 0 < m_min <= m_max")
-#         try:
-#             self._mass_bounds = (float(mgap_min), float(mgap_max))
-#         except TypeError as error:
-#             raise TypeError("mass_gap_bounds must be a tuple of floats") from error
+    #     @mass_gap_bounds.setter
+    #     def mass_gap_bounds(self, value: Tuple[float, float]):
+    #         mgap_min, mgap_max = self.mass_gap_bounds
+    #         if not (0 < mgap_min <= mgap_max):
+    #             raise ValueError("mass_gap_bounds requires 0 < m_min <= m_max")
+    #         try:
+    #             self._mass_bounds = (float(mgap_min), float(mgap_max))
+    #         except TypeError as error:
+    #             raise TypeError("mass_gap_bounds must be a tuple of floats") from error
 
-#     @property
-#     def separate_mass_gap(self) -> bool:
-#         return self._separate_mass_gap
+    #     @property
+    #     def separate_mass_gap(self) -> bool:
+    #         return self._separate_mass_gap
 
-#     @separate_mass_gap.setter
-#     def separate_mass_gap(self, value: bool):
-#         if not isinstance(value, bool):
-#             raise TypeError("separate_mass_gap must be a bool")
-#         self._separate_mass_gap = value
+    #     @separate_mass_gap.setter
+    #     def separate_mass_gap(self, value: bool):
+    #         if not isinstance(value, bool):
+    #             raise TypeError("separate_mass_gap must be a bool")
+    #         self._separate_mass_gap = value
 
-#     @property
-#     def lal_cosmology(self) -> bool:
-#         return self._lal_cosmology
+    #     @property
+    #     def lal_cosmology(self) -> bool:
+    #         return self._lal_cosmology
 
-#     @lal_cosmology.setter
-#     def lal_cosmology(self, value: bool):
-#         if not isinstance(value, bool):
-#             raise TypeError("lal_cosmology must be a bool")
-#         self._lal_cosmology = value
+    #     @lal_cosmology.setter
+    #     def lal_cosmology(self, value: bool):
+    #         if not isinstance(value, bool):
+    #             raise TypeError("lal_cosmology must be a bool")
+    #         self._lal_cosmology = value
 
-#     @property
-#     def coefficients(self) -> Dict[str, float]:
-#         return self._coefficients
+    #     @property
+    #     def coefficients(self) -> Dict[str, float]:
+    #         return self._coefficients
 
-#     @coefficients.setter
-#     def coefficients(self, coeffs: Dict[str, float]):
-#         valid_coeffs = ("m0", "a0", "b0", "b1")
-#         for key in coeffs:
-#             if key not in valid_coeffs:
-#                 raise KeyError(f"{key} not in valid coeffs {valid_coeffs}")
-#             if not isinstance(coeffs[key], float):
-#                 raise TypeError(f"{key} type must be float, not {type(coeffs[key])}")
-#         if not (0 < coeffs["m0"] < 1):
-#             raise ValueError(f"m0 coeff should be within 0 and 1; m0 = {coeffs['m0']}")
+    #     @coefficients.setter
+    #     def coefficients(self, coeffs: Dict[str, float]):
+    #         valid_coeffs = ("m0", "a0", "b0", "b1")
+    #         for key in coeffs:
+    #             if key not in valid_coeffs:
+    #                 raise KeyError(f"{key} not in valid coeffs {valid_coeffs}")
+    #             if not isinstance(coeffs[key], float):
+    #                 raise TypeError(f"{key} type must be float, not {type(coeffs[key])}")
+    #         if not (0 < coeffs["m0"] < 1):
+    #             raise ValueError(f"m0 coeff should be within 0 and 1; m0 = {coeffs['m0']}")
 
-#         self._coefficients = coeffs
-
+    #         self._coefficients = coeffs
 
     # define distance estimation functions
     def _estimate_lum_dist(
@@ -744,8 +779,7 @@ class ChirpMassAreaModel:
         TODO: Add mathematics and explanation to docstring.
         """
         assert self.a0 is not None, f"a0 coefficient is not initialised."
-        return eff_distance*self.a0
-
+        return eff_distance * self.a0
 
     def _estimate_lum_dist_std(
         self,
@@ -768,38 +802,37 @@ class ChirpMassAreaModel:
 
         return lum_dist_std
 
-
     def fit(
         self,
         bayestar_distances: np.ndarray,
         bayestar_stds: np.ndarray,
         eff_distances: np.ndarray,
         snrs: np.ndarray,
-        m0: Optional[float]=None,
+        m0: Optional[float] = None,
     ):
-        """Fits a MassContour model with equal length arrays for BAYESTAR luminosity 
-        distances against corresponding SNRs and (minimum) effective distances 
+        """Fits a MassContour model with equal length arrays for BAYESTAR luminosity
+        distances against corresponding SNRs and (minimum) effective distances
         recovered by a gravitational wave search pipeline.
-        
-        The fitted coefficients are saved to the model instance's attributes as a0, b0, 
-        b1, and m0; and they can be accessed conveniently via the self.coefficients 
-        property. If m0 is provided but self.m0 is already initialised, m0 will be 
+
+        The fitted coefficients are saved to the model instance's attributes as a0, b0,
+        b1, and m0; and they can be accessed conveniently via the self.coefficients
+        property. If m0 is provided but self.m0 is already initialised, m0 will be
         overwritten with the new value.
 
-        This function uses numpy's Polynomial function to fit the coefficients for 
-        the chirp mass area model - specifically for estimating luminosity distance 
-        uncertainty (standard deviation) as a function of the estimated BAYESTAR 
+        This function uses numpy's Polynomial function to fit the coefficients for
+        the chirp mass area model - specifically for estimating luminosity distance
+        uncertainty (standard deviation) as a function of the estimated BAYESTAR
         luminosty distance and the recovered trigger Signal to Noise (SNR) ratios.
-        
-        See: https://numpy.org/doc/stable/reference/routines.polynomials.html 
+
+        See: https://numpy.org/doc/stable/reference/routines.polynomials.html
 
         Parameters
         ----------
         bayestar_distances: np.ndarray
-            An array of BAYESTAR approximated luminosity distances as returned by the 
+            An array of BAYESTAR approximated luminosity distances as returned by the
             ligo.skymap BAYESTAR algorithm.
         bayestar_stds: np.ndarray
-            An array of BAYESTAR approximated luminosity distance standard deviations 
+            An array of BAYESTAR approximated luminosity distance standard deviations
             as returned by the ligo.skymap BAYESTAR algorithm.
         eff_distances: np.ndarray
             An array of trigger effective distances recovered from a search pipeline.
@@ -825,7 +858,6 @@ class ChirpMassAreaModel:
         logger.info(f"Fitted coefficients for {self.__repr__}.")
         return self
 
-
     def predict(
         self,
         mchirp: float,
@@ -847,8 +879,8 @@ class ChirpMassAreaModel:
             The estimated effective distance to the event,
             usually taken as the minimum across all coincident detectors.
         truncate_lower_dist: float | None
-            If provided, takes the ceiling of truncate_lower_dist and the estimated 
-            lower uncertainty bound for distance to prevent negative or unrealistic 
+            If provided, takes the ceiling of truncate_lower_dist and the estimated
+            lower uncertainty bound for distance to prevent negative or unrealistic
             distance estimates.
 
         Returns
@@ -862,7 +894,7 @@ class ChirpMassAreaModel:
         assert self.b1 is not None, f"b1 coefficient is not initialised."
 
         # calc_probabilities does not type check mutable self.config nor coefficients
-        probs =  predict_source_p_astro(
+        probs = predict_source_p_astro(
             self.a0,
             self.b0,
             self.b1,
@@ -871,16 +903,17 @@ class ChirpMassAreaModel:
             snr,
             eff_dist,
             self.mass_bounds,  # component mass bounds
-            self.mass_gap_bounds,  # mass gap class bounds
+            self.ns_max,
+            self.mass_gap_max,
             self.separate_mass_gap,
             self.lal_cosmology,
             truncate_lower_dist,
         )
 
-        # remove Mass Gap if bounds are the same
-        # TODO: implement a more elegant solution to remove MassGap
-        if self.mass_gap_bounds[0] == self.mass_gap_bounds[1]:
-            del probs["MassGap"]
+        # # remove Mass Gap if bounds are the same
+        # # TODO: implement a more elegant solution to remove MassGap
+        # if self.mass_gap_bounds[0] == self.mass_gap_bounds[1]:
+        #     del probs["MassGap"]
 
         return probs
 
@@ -896,7 +929,7 @@ class ChirpMassAreaModel:
             if getattr(self, key, None) is None:
                 logger.info(f"{type(self).__name__} coefficient {key} not initialised.")
 
-    def save_json(self, path: Union[str, Path], indent: int=4):
+    def save_json(self, path: Union[str, Path], indent: int = 4):
         with Path(path).open(mode="w") as f:
             json.dump(self.__dict__, f, indent=indent)
 
@@ -905,7 +938,7 @@ class ChirpMassAreaModel:
             state = json.load(f)
         for key in state:
             setattr(self, key, state[key])
-        
+
         for key in ["a0", "b0", "b1", "m0"]:
             if getattr(self, key, None) is None:
                 logger.info(f"{type(self).__name__} coefficient {key} not initialised.")

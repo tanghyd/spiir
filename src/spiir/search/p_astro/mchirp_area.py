@@ -13,20 +13,19 @@ https://github.com/veronica-villa/source_probabilities_estimation_pycbclive
 """
 import json
 import logging
-import pickle
 import math
+import pickle
 from pathlib import Path
-from os import PathLike
-from typing import Optional, Union, Tuple, Dict
+from typing import Dict, Optional, Tuple, Union
 
 import numpy as np
 from astropy.cosmology import FlatLambdaCDM
-from pycbc.conversions import mass2_from_mchirp_mass1 as mcm1_to_m2
-from pycbc.cosmology import _redshift
 from matplotlib import pyplot as plt
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 from numpy.polynomial import Polynomial
+from pycbc.conversions import mass2_from_mchirp_mass1 as mcm1_to_m2
+from pycbc.cosmology import _redshift
 from scipy.integrate import quad
 
 logger = logging.getLogger(__name__)

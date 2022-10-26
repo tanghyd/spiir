@@ -3,18 +3,18 @@
 Code sourced from https://git.ligo.org/lscsoft/p-astro/-/tree/master/ligo.
 """
 
+import itertools
 import logging
 import pickle
-import itertools
 from collections.abc import Sequence
 from copy import deepcopy
-from pathlib import Path
 from os import PathLike
-from typing import Optional, Union, Tuple, List, Dict
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple, Union
 
 import numpy as np
-from scipy.special import la_roots
 from numpy.polynomial.hermite import hermgauss
+from scipy.special import la_roots
 
 logger = logging.getLogger(__name__)
 

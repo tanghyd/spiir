@@ -679,8 +679,8 @@ class ChirpMassAreaModel:
         self.mass_bounds = mass_bounds  # component mass bounds
 
         self.ns_max = ns_max
-        self.mass_gap_max = mass_gap_max or ns_max
-        assert 0 < self.mass_gap_max <= self.ns_max
+        self.mass_gap_max = mass_gap_max
+        assert 0 < ns_max <= (self.mass_gap_max or ns_max)
 
         self.separate_mass_gap = separate_mass_gap
         self.lal_cosmology = lal_cosmology

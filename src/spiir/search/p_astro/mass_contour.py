@@ -54,7 +54,7 @@ def estimate_redshift_from_distance(
     truncate_lower_dist: Optional[float] = None,
     lal_cosmology: bool = True,
 ) -> Tuple[float, float]:
-    """Takes values of distance and its uncertainty and returns a dictionary with 
+    """Takes values of distance and its uncertainty and returns a dictionary with
     estimates of the redshift and its uncertainty.
 
     Constants for lal_cosmology taken from Planck15_lal_cosmology() in
@@ -98,7 +98,7 @@ def estimate_redshift_from_distance(
 def estimate_source_mass(
     mdet: float, mdet_std: float, z: float, z_std: float
 ) -> Tuple[float, float]:
-    """Takes values of redshift, redshift uncertainty, detector mass and its 
+    """Takes values of redshift, redshift uncertainty, detector mass and its
     uncertainty and computes the source mass and its uncertainty.
 
     Parameters
@@ -124,7 +124,7 @@ def estimate_source_mass(
 
 
 def integrate_chirp_mass(mchirp: float, m_min: float, m_max: float) -> float:
-    """Returns the integral of a component mass as a function of the mass of the other 
+    """Returns the integral of a component mass as a function of the mass of the other
     component, taking mchirp as an argument.
 
     Parameters
@@ -220,8 +220,8 @@ def calc_areas(
     mchirp_std: float,
     z: float,
     z_std: float,
-    m_bounds: Tuple[float, float],
-    mgap_bounds: Tuple[float, float],
+    mass_bounds: Tuple[float, float],
+    mass_gap_bounds: Tuple[float, float],
     group_mgap: bool = True,
 ) -> Dict[str, float]:
     """
@@ -238,9 +238,9 @@ def calc_areas(
         The estimated redshift between detector and source frame of the event.
     z_std: float
         The uncertainty (standard deviation) in the estimated redshift.
-    m_bounds: tuple[float, float]
+    mass_bounds: tuple[float, float]
         The bounds on all possible component masses (let m1 = m2).
-    mgap_bounds: tuple[float, float]
+    mass_gap_bounds: tuple[float, float]
         The bounds on the mass gap category (max NS & min BH mass).
     group_mgap: bool
         If True, aggregates Mass Gap from BH+Gap, Gap+NS, and Gap+Gap.
@@ -251,8 +251,8 @@ def calc_areas(
         The area covered by each source class within a contour on the mass plane.
     """
     # check valid input arguments for mass bounds [lower, upper]
-    m_min, m_max = m_bounds
-    mgap_min, mgap_max = mgap_bounds
+    m_min, m_max = mass_bounds
+    mgap_min, mgap_max = mass_gap_bounds
     assert (0 < m_min <= m_max) and (0 < mgap_min <= mgap_max)  # <1 not astrophysical
 
     # compute source frame chirp mass given detector frame mass and redshift
@@ -300,15 +300,15 @@ def calc_probabilities(
     mchirp: float,
     z: float,
     z_std: float,
-    m_bounds: Tuple[float, float],
-    mgap_bounds: Tuple[float, float],
+    mass_bounds: Tuple[float, float],
+    mass_gap_bounds: Tuple[float, float],
     group_mgap: bool = True,
 ) -> Dict[str, float]:
     """Computes the astrophysical source probability of a given candidate event."""
 
     # determine chirp mass bounds in detector frame for classification
     get_redshifted_mchirp = lambda m: (m / (2**0.2)) * (1 + z)  # Mc_det = (1+z)*Mc
-    mchirp_min, mchirp_max = (get_redshifted_mchirp(m) for m in m_bounds)
+    mchirp_min, mchirp_max = (get_redshifted_mchirp(m) for m in mass_bounds)
 
     # determine astrophysical source class probabilities given estimated parameters
     if mchirp > mchirp_max:
@@ -330,7 +330,9 @@ def calc_probabilities(
     else:
         # compute probabilities according to proportional areas in mass contour
         mc_std = mchirp * m0  # inherent uncertainty in chirp mass
-        areas = calc_areas(mchirp, mc_std, z, z_std, m_bounds, mgap_bounds, group_mgap)
+        areas = calc_areas(
+            mchirp, mc_std, z, z_std, mass_bounds, mass_gap_bounds, group_mgap
+        )
         total_area = sum(areas.values())
         probabilities = {key: areas[key] / total_area for key in areas}
 
@@ -345,8 +347,8 @@ def predict_source_p_astro(
     mchirp: float,
     snr: float,
     eff_distance: float,
-    m_bounds: Tuple[float, float],
-    mgap_bounds: Tuple[float, float],
+    mass_bounds: Tuple[float, float],
+    mass_gap_bounds: Tuple[float, float],
     group_mgap: bool = True,
     lal_cosmology: bool = True,
     truncate_lower_dist: Optional[float] = None,
@@ -359,7 +361,7 @@ def predict_source_p_astro(
     chirp mass uncertainty, the luminosity distance (and its uncertainty)
     and the redshift (and its uncertainty). Probability is estimated to be
     directly proportional to the area of the corresponding CBC region.
-    
+
     Parameters
     ----------
     coefficients: float
@@ -369,16 +371,16 @@ def predict_source_p_astro(
     snr: float
         The coincident signal-to-noise ratio (SNR).
     eff_distance: float
-        The estimated effective distance, usually taken as the minimum across all 
+        The estimated effective distance, usually taken as the minimum across all
         coincident detectors.
-    m_bounds: tuple[float, float]
+    mass_bounds: tuple[float, float]
         The upper and lower bounds for both component masses (m1 >= m2).
-    mgap_bounds: tuple[float, float]
+    mass_gap_bounds: tuple[float, float]
         The boundaries that define the mass gap between BH and NS.
     group_mgap: bool
         If True, aggregates Mass Gap from BH+Gap, Gap+NS, and Gap+Gap.
     lal_cosmology: bool
-        If True, it uses the Planck15 cosmology model as defined in lalsuite, 
+        If True, it uses the Planck15 cosmology model as defined in lalsuite,
         instead of the astropy default.
 
     Returns
@@ -391,7 +393,7 @@ def predict_source_p_astro(
     )
 
     return calc_probabilities(
-        m0, mchirp, z, z_std, m_bounds, mgap_bounds, group_mgap
+        m0, mchirp, z, z_std, mass_bounds, mass_gap_bounds, group_mgap
     )
 
 
@@ -409,7 +411,7 @@ def plot_mass_contour_figure(
     """Draws a full matplotlib Figure visualising the probability mass contour plane."""
 
     fig, ax = plt.subplots(figsize=figsize)
-    _draw_mass_contour_axes( 
+    _draw_mass_contour_axes(
         ax=ax,
         mchirp=mchirp,
         mchirp_std=mchirp_std,
@@ -598,25 +600,24 @@ def plot_prob_pie_figure(
 
 
 class MassContourModel:
-
     def __init__(
         self,
         a0: Optional[float] = None,
         b0: Optional[float] = None,
         b1: Optional[float] = None,
         m0: Optional[float] = None,
-        m_bounds: Tuple[float, float] = (1.0, 45.0),
-        mgap_bounds: Tuple[float, float] = (3.0, 5.0),
+        mass_bounds: Tuple[float, float] = (1.0, 45.0),
+        mass_gap_bounds: Tuple[float, float] = (3.0, 5.0),
         group_mgap: bool = True,
         lal_cosmology: bool = True,
     ):
-        """Defines class-based Compact Binary Coalescence source classifier based on 
+        """Defines class-based Compact Binary Coalescence source classifier based on
         the PyCBC Mass Plane Contour method by Villa-Ortega et. al. (2021).
 
         Parameters
         ----------
         a0: float | None
-            Model parameter used as the coefficient to estimate BAYESTAR distance from 
+            Model parameter used as the coefficient to estimate BAYESTAR distance from
             the minimum effective distance of a given single instrument event trigger.
         b0: float | None
             Model parameter used to estimate distance uncertainty?
@@ -624,9 +625,9 @@ class MassContourModel:
             Model parameter used to estimate distance uncertainty?
         m0: float | None
             Inherent percentage uncertainty in chirp mass, set to 1% (0.01) by default.
-        m_bounds: tuple[float, float]
+        mass_bounds: tuple[float, float]
             The upper and lower bounds for both component masses (m1 >= m2).
-        mgap_bounds: tuple[float, float]
+        mass_gap_bounds: tuple[float, float]
             The boundaries that define the mass gap between BH and NS.
         group_mgap: bool
             If True, aggregates Mass Gap from BH+Gap, Gap+NS, and Gap+Gap.
@@ -644,93 +645,94 @@ class MassContourModel:
         self.b0 = b0
         self.b1 = b1
         self.m0 = m0
-        self.m_bounds = m_bounds  # component mass bounds
-        self.mgap_bounds = mgap_bounds  # mass gap class bounds
+        self.mass_bounds = mass_bounds  # component mass bounds
+        self.mass_gap_bounds = mass_gap_bounds  # mass gap class bounds
         self.group_mgap = group_mgap
         self.lal_cosmology = lal_cosmology
 
-    def __repr__(self, precision: int=4):
+    def __repr__(self, precision: int = 4):
         """Overrides string representation of cls when printed."""
-        coefficents = ", ".join([
-            f"{key}={self.coefficients[key]!r}"
-            if self.coefficients[key] is None
-            else f"{key}={self.coefficients[key]:.{precision}f}"
-            for key in self.coefficients
-        ])
+        coefficents = ", ".join(
+            [
+                f"{key}={self.coefficients[key]!r}"
+                if self.coefficients[key] is None
+                else f"{key}={self.coefficients[key]:.{precision}f}"
+                for key in self.coefficients
+            ]
+        )
         return f"{type(self).__name__}({coefficents})"
 
     # def __call__(self, mchirp: float, snr: float, eff_dist: float) -> dict[str, float]:
     #     return self.predict(mchirp, snr, eff_dist)
- 
+
     @property
     def coefficients(self):
         return {"a0": self.a0, "b0": self.b0, "b1": self.b1, "m0": self.m0}
 
-#     @property
-#     def m_bounds(self) -> Tuple[float, float]:
-#         return self._m_bounds
+    #     @property
+    #     def mass_bounds(self) -> Tuple[float, float]:
+    #         return self._mass_bounds
 
-#     @m_bounds.setter
-#     def m_bounds(self, value):
-#         m_min, m_max = self.m_bounds
-#         if not (0 < m_min <= m_max):
-#             raise ValueError("m_bounds requires 0 < m_min <= m_max")
-#         try:
-#             self._m_bounds = (float(m_min), float(m_max))
-#         except TypeError as error:
-#             raise TypeError("m_bounds must be a tuple of floats") from error
+    #     @mass_bounds.setter
+    #     def mass_bounds(self, value):
+    #         m_min, m_max = self.mass_bounds
+    #         if not (0 < m_min <= m_max):
+    #             raise ValueError("mass_bounds requires 0 < m_min <= m_max")
+    #         try:
+    #             self._mass_bounds = (float(m_min), float(m_max))
+    #         except TypeError as error:
+    #             raise TypeError("mass_bounds must be a tuple of floats") from error
 
-#     @property
-#     def mgap_bounds(self) -> Tuple[float, float]:
-#         return self._mgap_bounds
+    #     @property
+    #     def mass_gap_bounds(self) -> Tuple[float, float]:
+    #         return self._mass_gap_bounds
 
-#     @mgap_bounds.setter
-#     def mgap_bounds(self, value: Tuple[float, float]):
-#         mgap_min, mgap_max = self.mgap_bounds
-#         if not (0 < mgap_min <= mgap_max):
-#             raise ValueError("mgap_bounds requires 0 < m_min <= m_max")
-#         try:
-#             self._m_bounds = (float(mgap_min), float(mgap_max))
-#         except TypeError as error:
-#             raise TypeError("mgap_bounds must be a tuple of floats") from error
+    #     @mass_gap_bounds.setter
+    #     def mass_gap_bounds(self, value: Tuple[float, float]):
+    #         mgap_min, mgap_max = self.mass_gap_bounds
+    #         if not (0 < mgap_min <= mgap_max):
+    #             raise ValueError("mass_gap_bounds requires 0 < m_min <= m_max")
+    #         try:
+    #             self._mass_bounds = (float(mgap_min), float(mgap_max))
+    #         except TypeError as error:
+    #             raise TypeError("mass_gap_bounds must be a tuple of floats") from error
 
-#     @property
-#     def group_mgap(self) -> bool:
-#         return self._group_mgap
+    #     @property
+    #     def group_mgap(self) -> bool:
+    #         return self._group_mgap
 
-#     @group_mgap.setter
-#     def group_mgap(self, value: bool):
-#         if not isinstance(value, bool):
-#             raise TypeError("group_mgap must be a bool")
-#         self._group_mgap = value
+    #     @group_mgap.setter
+    #     def group_mgap(self, value: bool):
+    #         if not isinstance(value, bool):
+    #             raise TypeError("group_mgap must be a bool")
+    #         self._group_mgap = value
 
-#     @property
-#     def lal_cosmology(self) -> bool:
-#         return self._lal_cosmology
+    #     @property
+    #     def lal_cosmology(self) -> bool:
+    #         return self._lal_cosmology
 
-#     @lal_cosmology.setter
-#     def lal_cosmology(self, value: bool):
-#         if not isinstance(value, bool):
-#             raise TypeError("lal_cosmology must be a bool")
-#         self._lal_cosmology = value
+    #     @lal_cosmology.setter
+    #     def lal_cosmology(self, value: bool):
+    #         if not isinstance(value, bool):
+    #             raise TypeError("lal_cosmology must be a bool")
+    #         self._lal_cosmology = value
 
-#     @property
-#     def coefficients(self) -> Dict[str, float]:
-#         return self._coefficients
+    #     @property
+    #     def coefficients(self) -> Dict[str, float]:
+    #         return self._coefficients
 
-#     @coefficients.setter
-#     def coefficients(self, coeffs: Dict[str, float]):
-#         valid_coeffs = ("m0", "a0", "b0", "b1")
-#         for key in coeffs:
-#             if key not in valid_coeffs:
-#                 raise KeyError(f"{key} not in valid coeffs {valid_coeffs}")
-#             if not isinstance(coeffs[key], float):
-#                 raise TypeError(f"{key} type must be float, not {type(coeffs[key])}")
-#         if not (0 < coeffs["m0"] < 1):
-#             raise ValueError(f"m0 coeff should be within 0 and 1; m0 = {coeffs['m0']}")
+    #     @coefficients.setter
+    #     def coefficients(self, coeffs: Dict[str, float]):
+    #         valid_coeffs = ("m0", "a0", "b0", "b1")
+    #         for key in coeffs:
+    #             if key not in valid_coeffs:
+    #                 raise KeyError(f"{key} not in valid coeffs {valid_coeffs}")
+    #             if not isinstance(coeffs[key], float):
+    #                 raise TypeError(f"{key} type must be float, not {type(coeffs[key])}")
+    #         if not (0 < coeffs["m0"] < 1):
+    #             raise ValueError(f"m0 coeff should be within 0 and 1; m0 = {coeffs['m0']}")
 
-#         self._coefficients = coeffs
-
+    #         self._coefficients = coeffs
 
     # define distance estimation functions
     def _estimate_lum_dist(
@@ -742,8 +744,7 @@ class MassContourModel:
         TODO: Add mathematics and explanation to docstring.
         """
         assert self.a0 is not None, f"a0 coefficient is not initialised."
-        return eff_distance*self.a0
-
+        return eff_distance * self.a0
 
     def _estimate_lum_dist_std(
         self,
@@ -766,38 +767,37 @@ class MassContourModel:
 
         return lum_dist_std
 
-
     def fit(
         self,
         bayestar_distances: np.ndarray,
         bayestar_stds: np.ndarray,
         eff_distances: np.ndarray,
         snrs: np.ndarray,
-        m0: Optional[float]=None,
+        m0: Optional[float] = None,
     ):
-        """Fits a MassContour model with equal length arrays for BAYESTAR luminosity 
-        distances against corresponding SNRs and (minimum) effective distances 
+        """Fits a MassContour model with equal length arrays for BAYESTAR luminosity
+        distances against corresponding SNRs and (minimum) effective distances
         recovered by a gravitational wave search pipeline.
-        
-        The fitted coefficients are saved to the model instance's attributes as a0, b0, 
-        b1, and m0; and they can be accessed conveniently via the self.coefficients 
-        property. If m0 is provided but self.m0 is already initialised, m0 will be 
+
+        The fitted coefficients are saved to the model instance's attributes as a0, b0,
+        b1, and m0; and they can be accessed conveniently via the self.coefficients
+        property. If m0 is provided but self.m0 is already initialised, m0 will be
         overwritten with the new value.
 
-        This function uses numpy's Polynomial function to fit the coefficients for 
-        the mass contour model - specifically for estimating luminosity distance 
-        uncertainty (standard deviation) as a function of the estimated BAYESTAR 
+        This function uses numpy's Polynomial function to fit the coefficients for
+        the mass contour model - specifically for estimating luminosity distance
+        uncertainty (standard deviation) as a function of the estimated BAYESTAR
         luminosty distance and the recovered trigger Signal to Noise (SNR) ratios.
-        
-        See: https://numpy.org/doc/stable/reference/routines.polynomials.html 
+
+        See: https://numpy.org/doc/stable/reference/routines.polynomials.html
 
         Parameters
         ----------
         bayestar_distances: np.ndarray
-            An array of BAYESTAR approximated luminosity distances as returned by the 
+            An array of BAYESTAR approximated luminosity distances as returned by the
             ligo.skymap BAYESTAR algorithm.
         bayestar_stds: np.ndarray
-            An array of BAYESTAR approximated luminosity distance standard deviations 
+            An array of BAYESTAR approximated luminosity distance standard deviations
             as returned by the ligo.skymap BAYESTAR algorithm.
         eff_distances: np.ndarray
             An array of trigger effective distances recovered from a search pipeline.
@@ -823,7 +823,6 @@ class MassContourModel:
         logger.info(f"Fitted coefficients for {self.__repr__}.")
         return self
 
-
     def predict(
         self,
         mchirp: float,
@@ -845,8 +844,8 @@ class MassContourModel:
             The estimated effective distance to the event,
             usually taken as the minimum across all coincident detectors.
         truncate_lower_dist: float | None
-            If provided, takes the ceiling of truncate_lower_dist and the estimated 
-            lower uncertainty bound for distance to prevent negative or unrealistic 
+            If provided, takes the ceiling of truncate_lower_dist and the estimated
+            lower uncertainty bound for distance to prevent negative or unrealistic
             distance estimates.
 
         Returns
@@ -860,7 +859,7 @@ class MassContourModel:
         assert self.b1 is not None, f"b1 coefficient is not initialised."
 
         # calc_probabilities does not type check mutable self.config nor coefficients
-        probs =  predict_source_p_astro(
+        probs = predict_source_p_astro(
             self.a0,
             self.b0,
             self.b1,
@@ -868,8 +867,8 @@ class MassContourModel:
             mchirp,
             snr,
             eff_dist,
-            self.m_bounds,  # component mass bounds
-            self.mgap_bounds,  # mass gap class bounds
+            self.mass_bounds,  # component mass bounds
+            self.mass_gap_bounds,  # mass gap class bounds
             self.group_mgap,
             self.lal_cosmology,
             truncate_lower_dist,
@@ -877,7 +876,7 @@ class MassContourModel:
 
         # remove Mass Gap if bounds are the same
         # TODO: implement a more elegant solution to remove MassGap
-        if self.mgap_bounds[0] == self.mgap_bounds[1]:
+        if self.mass_gap_bounds[0] == self.mass_gap_bounds[1]:
             del probs["MassGap"]
 
         return probs
@@ -894,7 +893,7 @@ class MassContourModel:
             if getattr(self, key, None) is None:
                 logger.info(f"{type(self).__name__} coefficient {key} not initialised.")
 
-    def save_json(self, path: Union[str, bytes, PathLike], indent: int=4):
+    def save_json(self, path: Union[str, bytes, PathLike], indent: int = 4):
         with Path(path).open(mode="w") as f:
             json.dump(self.__dict__, f, indent=indent)
 
@@ -903,7 +902,7 @@ class MassContourModel:
             state = json.load(f)
         for key in state:
             setattr(self, key, state[key])
-        
+
         for key in ["a0", "b0", "b1", "m0"]:
             if getattr(self, key, None) is None:
                 logger.info(f"{type(self).__name__} coefficient {key} not initialised.")

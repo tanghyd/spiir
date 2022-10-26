@@ -475,6 +475,7 @@ def _draw_mchirp_area_axes(
 
     # get mass boundary limits
     m2_min, m1_max = mass_bounds
+    mass_gap_max = mass_gap_max or ns_max
 
     lim_m1b = min(m1_max, mcm1_to_m2(mcb, m2_min))
     m1b = np.linspace(mib, lim_m1b, num=100)
@@ -520,20 +521,6 @@ def _draw_mchirp_area_axes(
         color=get_source_colour("NSBH"),
     )
     ax.fill_between(
-        np.arange(ns_max, mass_gap_max, 0.01),
-        np.arange(ns_max, mass_gap_max, 0.01),
-        m1_max,
-        color=get_source_colour("MG"),
-        alpha=0.5,
-    )
-    ax.fill_between(
-        np.arange(0.0, ns_max, 0.01),
-        ns_max,
-        mass_gap_max,
-        color=get_source_colour("MG"),
-        alpha=0.5,
-    )
-    ax.fill_between(
         np.arange(mass_gap_max, m1_max, 0.01),
         np.arange(mass_gap_max, m1_max, 0.01),
         m1_max,
@@ -559,17 +546,33 @@ def _draw_mchirp_area_axes(
         color=get_source_colour("BNS"),
         alpha=0.5,
     )
-    ax.fill_between(
-        np.arange(ns_max, mass_gap_max, 0.01),
-        np.arange(ns_max, mass_gap_max, 0.01),
-        color=get_source_colour("MG"),
-    )
-    ax.fill_between(
-        np.arange(mass_gap_max, m1_max, 0.01),
-        ns_max,
-        mass_gap_max,
-        color=get_source_colour("MG"),
-    )
+
+    if mass_gap_max > ns_max:
+        ax.fill_between(
+            np.arange(0.0, ns_max, 0.01),
+            ns_max,
+            mass_gap_max,
+            color=get_source_colour("MG"),
+            alpha=0.5,
+        )
+        ax.fill_between(
+            np.arange(ns_max, mass_gap_max, 0.01),
+            np.arange(ns_max, mass_gap_max, 0.01),
+            m1_max,
+            color=get_source_colour("MG"),
+            alpha=0.5,
+        )
+        ax.fill_between(
+            np.arange(ns_max, mass_gap_max, 0.01),
+            np.arange(ns_max, mass_gap_max, 0.01),
+            color=get_source_colour("MG"),
+        )
+        ax.fill_between(
+            np.arange(mass_gap_max, m1_max, 0.01),
+            ns_max,
+            mass_gap_max,
+            color=get_source_colour("MG"),
+        )
 
     # colour contour
     x1 = np.arange(mis, mib + 0.01, 0.01)

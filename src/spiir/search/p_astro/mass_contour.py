@@ -884,11 +884,11 @@ class MassContourModel:
 
         return probs
 
-    def save_pkl(self, path: Union[str, bytes, PathLike]):
+    def save_pkl(self, path: Union[str, Path]):
         with Path(path).open(mode="wb") as f:
             pickle.dump(self.__dict__, f)
 
-    def load_pkl(self, path: Union[str, bytes, PathLike]):
+    def load_pkl(self, path: Union[str, Path]):
         with Path(path).open(mode="rb") as f:
             self.__dict__ = pickle.load(f)
 
@@ -896,11 +896,11 @@ class MassContourModel:
             if getattr(self, key, None) is None:
                 logger.info(f"{type(self).__name__} coefficient {key} not initialised.")
 
-    def save_json(self, path: Union[str, bytes, PathLike], indent: int=4):
+    def save_json(self, path: Union[str, Path], indent: int=4):
         with Path(path).open(mode="w") as f:
             json.dump(self.__dict__, f, indent=indent)
 
-    def load_json(self, path: Union[str, bytes, PathLike]):
+    def load_json(self, path: Union[str, Path]):
         with Path(path).open(mode="r") as f:
             state = json.load(f)
         for key in state:

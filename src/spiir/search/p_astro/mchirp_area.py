@@ -154,7 +154,7 @@ def get_area(
     lim_v2: float,
 ) -> float:
     """
-    Returns the area of the chirp mass contour in each region of the m1m2 plane
+    Returns the area of the chirp mass area in each region of the m1m2 plane
     taking horizontal and vertical limits of the region as arguments. (m1 > m2).
 
     Parameters
@@ -182,7 +182,7 @@ def get_area(
         assert lim_h1 == "diagonal", "if lim_h1 is a str it must be 'diagonal'."
     assert isinstance(lim_h2, float), "get_area not compatible with lim_h2 as str."
 
-    # get bounds of chirp mass contour given uncertainty
+    # get bounds of chirp mass area given uncertainty
     mchirp_max = msrc + msrc_std
     mchirp_min = msrc - msrc_std
 
@@ -258,7 +258,7 @@ def calc_areas(
     # compute source frame chirp mass given detector frame mass and redshift
     mc_src, mc_src_std = estimate_source_mass(mchirp, mchirp_std, z, z_std)
 
-    # compute relative area within chirp mass contour for each class
+    # compute relative area within chirp mass area for each class
     abbh = get_area(mc_src, mc_src_std, "diagonal", mgap_max, mgap_max, m_max)
     abhg = get_area(mc_src, mc_src_std, mgap_max, mgap_min, mgap_max, m_max)
     ansbh = get_area(mc_src, mc_src_std, mgap_min, m_min, mgap_max, m_max)
@@ -328,7 +328,7 @@ def calc_probabilities(
             probabilities.update({"GNS": 0.0, "GG": 0.0, "BHG": 0.0})
 
     else:
-        # compute probabilities according to proportional areas in mass contour
+        # compute probabilities according to proportional areas in chirp mass area
         mc_std = mchirp * m0  # inherent uncertainty in chirp mass
         areas = calc_areas(
             mchirp, mc_std, z, z_std, mass_bounds, mass_gap_bounds, separate_mass_gap
@@ -397,7 +397,7 @@ def predict_source_p_astro(
     )
 
 
-def plot_mass_contour_figure(
+def plot_mchirp_area_figure(
     mchirp: float,
     mchirp_std: float,
     z: float,
@@ -408,10 +408,10 @@ def plot_mass_contour_figure(
     xlims: Optional[Tuple[float, float]] = None,
     ylims: Optional[Tuple[float, float]] = None,
 ) -> Figure:
-    """Draws a full matplotlib Figure visualising the probability mass contour plane."""
+    """Draws a full matplotlib Figure visualising the probability chirp mass area plane."""
 
     fig, ax = plt.subplots(figsize=figsize)
-    _draw_mass_contour_axes( 
+    _draw_mchirp_area_axes( 
         ax=ax,
         mchirp=mchirp,
         mchirp_std=mchirp_std,
@@ -426,7 +426,7 @@ def plot_mass_contour_figure(
     return fig
 
 
-def _draw_mass_contour_axes(
+def _draw_mchirp_area_axes(
     ax: Axes,
     mchirp: float,
     mchirp_std: float,
@@ -437,7 +437,7 @@ def _draw_mass_contour_axes(
     xlims: Optional[Tuple[float, float]] = None,
     ylims: Optional[Tuple[float, float]] = None,
 ) -> Axes:
-    """Draws one matplotlib.axes.Axes visualising the probability mass contour plane."""
+    """Draws one matplotlib.axes.Axes visualising the probability chirp mass area plane."""
 
     # estimate source frame chirp mass and uncertainty boundary
     mc, mc_std = estimate_source_mass(mchirp, mchirp_std, z, z_std)
@@ -599,7 +599,7 @@ def plot_prob_pie_figure(
     return fig
 
 
-class MassContourModel:
+class ChirpMassAreaModel:
 
     def __init__(
         self,
@@ -787,7 +787,7 @@ class MassContourModel:
         overwritten with the new value.
 
         This function uses numpy's Polynomial function to fit the coefficients for 
-        the mass contour model - specifically for estimating luminosity distance 
+        the chirp mass area model - specifically for estimating luminosity distance 
         uncertainty (standard deviation) as a function of the estimated BAYESTAR 
         luminosty distance and the recovered trigger Signal to Noise (SNR) ratios.
         

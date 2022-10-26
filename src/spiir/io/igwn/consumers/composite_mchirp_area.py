@@ -7,15 +7,15 @@ from typing import TYPE_CHECKING, Optional, Any
 from ..consumer import IGWNAlertConsumer
 
 if TYPE_CHECKING:
-    from ....search.p_astro_models import FGMCMassContourModel
+    from ....search.p_astro.models import FGMCChirpMassAreaModel
     
 
 logger = logging.getLogger(__name__)
 
-class FGMCMassContourConsumer(IGWNAlertConsumer):
+class FGMCChirpMassAreaConsumer(IGWNAlertConsumer):
     def __init__(
         self,
-        model: "FGMCMassContourModel",
+        model: "FGMCChirpMassAreaModel",
         id: Optional[str] = None,
         service_url: str = f"https://gracedb-playground.ligo.org/api/",
         out_dir: str = "p_astro/results",
@@ -92,7 +92,8 @@ class FGMCMassContourConsumer(IGWNAlertConsumer):
             runtime = time.perf_counter()
             event_file = event_dir / "p_astro.json"
             self.save_json(p_astro, event_file)
-            self.gracedb.writeLog(gid, "source probabilities", filename=event_file)
+            if self.gracedb is not None:
+                self.gracedb.writeLog(gid, "source probabilities", filename=event_file)
             runtime = time.perf_counter() - runtime
             logger.debug(f"{gid} p_astro.json uploaded to GraceDB in {runtime:.4f}s.")
 

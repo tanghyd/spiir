@@ -1,8 +1,8 @@
 import functools
 import logging
 import sys
-from pathlib import Path
 from os import PathLike
+from pathlib import Path
 from typing import Optional, Union
 
 

@@ -2,8 +2,6 @@ import logging
 from os import PathLike
 from typing import Optional, Union
 
-from . import postcoh  # edits ligo.lw.lsctables
-
 import ligo.lw.array
 import ligo.lw.ligolw
 import ligo.lw.lsctables
@@ -12,14 +10,14 @@ import ligo.lw.table
 import ligo.lw.types
 import ligo.lw.utils
 
+from . import postcoh  # edits ligo.lw.lsctables
+
 logger = logging.getLogger(__name__)
 
 
 # Look-up table mapping LIGO_LW XML data types to NumPy compatible array types
 _NUMPY_TYPE_MAP = ligo.lw.types.ToNumPyType.copy()
-_NUMPY_TYPE_MAP.update({
-    k: "object" for k in ("char_s", "char_v", "lstring", "string")
-})
+_NUMPY_TYPE_MAP.update({k: "object" for k in ("char_s", "char_v", "lstring", "string")})
 
 
 @ligo.lw.array.use_in
@@ -78,14 +76,13 @@ def load_ligolw_xmldoc(
     return xmldoc
 
 
-
 # based on gwpy.io.ligow.py
 def get_ligolw_element(
     xmldoc: ligo.lw.ligolw.Document,
     index: int = 0,
 ) -> ligo.lw.ligolw.LIGO_LW:
     """Find an existing LIGO_LW element in an LIGO_LW XML Document, selected by index.
-    
+
     This code is sourced from gwpy.io.ligolw.
 
     Parameters
@@ -103,7 +100,7 @@ def get_ligolw_element(
     """
     if isinstance(xmldoc, ligo.lw.ligolw.LIGO_LW):
         return xmldoc
-    
+
     i = 0
     for elem in ligo.lw.ligolw.WalkChildren(xmldoc):
         if isinstance(elem, ligo.lw.ligolw.LIGO_LW):
@@ -112,7 +109,6 @@ def get_ligolw_element(
             else:
                 i += 1
     raise ValueError(f"Cannot find {index+1} LIGO_LW element(s) in the XML Document.")
-
 
 
 # def write_ligolw_xmldoc(
@@ -212,7 +208,11 @@ def strip_ilwdchar(xmldoc: ligo.lw.ligolw.Document) -> ligo.lw.ligolw.Document:
                 if value is not None:
                     # FIXME: this may cause problems for columns with extra ":"
                     #   i.e. "background_feature:H1_lgsnr_lgchisq_rate:array"
-                    new_value = int(value.split(":",)[-1])
+                    new_value = int(
+                        value.split(
+                            ":",
+                        )[-1]
+                    )
                     setattr(elem, "value", new_value)
 
     return xmldoc

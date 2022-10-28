@@ -1,6 +1,6 @@
 import logging
 from functools import partial
-from typing import Optional, Union, Tuple, List, Dict, Any
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 import pandas as pd

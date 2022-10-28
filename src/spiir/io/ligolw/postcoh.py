@@ -3,8 +3,8 @@ from typing import Union
 from xml.sax.xmlreader import AttributesImpl
 
 import glue.ligolw.lsctables
-from ligo.lw import ligolw, lsctables, table, array, param
 from lal import LIGOTimeGPS
+from ligo.lw import array, ligolw, lsctables, param, table
 
 logger = logging.getLogger(__name__)
 
@@ -88,6 +88,7 @@ def include_missing_postcoh_columns(
     ligo.lw.ligolw.Document
         The same LIGO_LW Document object with updated table column names.
     """
+
     def default_value(name: str, dtype: str) -> Union[float, int, str]:
         """Helper function to fill a sensible default value to a given column type."""
         if dtype in ["real_4", "real_8"]:

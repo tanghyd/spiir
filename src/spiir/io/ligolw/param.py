@@ -1,6 +1,6 @@
 import logging
 from os import PathLike
-from typing import Optional, Union, Dict, Sequence
+from typing import Dict, Optional, Sequence, Union
 
 import ligo.lw.ligolw
 import ligo.lw.param
@@ -16,7 +16,7 @@ def get_params_from_xmldoc(
     params: Optional[Union[Sequence[str], str]] = None,
 ) -> dict:
     """Retrieves params values from a LIGO_LW XML Document as a dictionary.
-    
+
     Note that this function automatically ignores LIGO_LW elements that have Name
     attributes, such as the LIGO_LW PSD, SNR, or P_Astro elements.
 
@@ -27,7 +27,7 @@ def get_params_from_xmldoc(
     params: :class:`~Sequence[str]`, optional
         If provided, retrieve the specified parameters by their name.
         Otherwise if params is None, retrieve all parameters from the xmldoc object.
-    
+
     Returns
     -------
     dict
@@ -38,10 +38,7 @@ def get_params_from_xmldoc(
 
     parameters = {}
     for elem in xmldoc.getElements(
-        lambda e: (
-            (e.tagName == "LIGO_LW")
-            and ~(e.hasAttribute("Name"))
-        )
+        lambda e: ((e.tagName == "LIGO_LW") and ~(e.hasAttribute("Name")))
     ):
         for param in elem.getElements(
             lambda e: e.tagName == ligo.lw.param.Param.tagName
@@ -50,6 +47,7 @@ def get_params_from_xmldoc(
                 parameters[param.Name] = param.value
 
     return parameters
+
 
 def load_params_from_xml(
     path: Union[str, bytes, PathLike],
@@ -77,9 +75,10 @@ def load_params_from_xml(
         logger.debug(f"No LIGO_LW params found in {str(path)}.")
     return parameters
 
+
 def get_p_astro_from_xmldoc(xmldoc: ligo.lw.ligolw.Document) -> Dict[str, float]:
     """Retrieves p_astro source probability values from a LIGO_LW XML Document.
-    
+
     Parameters
     ----------
     xmldoc: :class:`~ligo.lw.ligolw.Document`
@@ -111,7 +110,7 @@ def append_p_astro_to_ligolw(
     overwrite: bool = True,
 ) -> ligo.lw.ligolw.Document:
     """Appends p_astro source probability values to a LIGO_LW XML Document.
-    
+
     Parameters
     ----------
     xmldoc: :class:`~ligo.lw.ligolw.Document`
@@ -140,7 +139,7 @@ def append_p_astro_to_ligolw(
         ):
             xmldoc.removeChild(existing_llw_p_astro)
             existing_llw_p_astro.unlink()
-    
+
     for key in sorted(p_astro):
         llw.appendChild(ligo.lw.param.Param.from_pyvalue(key.lower(), p_astro[key]))
 

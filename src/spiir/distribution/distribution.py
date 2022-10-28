@@ -1,7 +1,7 @@
 import logging
 from copy import deepcopy
 from os import PathLike
-from typing import Optional, Union, Tuple, List, Dict, Any
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 import pandas as pd
@@ -247,8 +247,6 @@ class JointDistribution:
             (constraints,) if isinstance(constraints, Constraint) else constraints
         )
 
-    
-
     def draw(self, n: int, redraw: bool = True) -> pd.DataFrame:
         """Draws samples from all stored Distribution objects.
 
@@ -375,6 +373,7 @@ class JointDistribution:
         constraints: Optional[str] = "constraints",
     ):
         import yaml
+
         with open(path) as file:
             config = yaml.safe_load(file)
 

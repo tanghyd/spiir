@@ -2,15 +2,16 @@ import json
 import logging
 import time
 from pathlib import Path
-from typing import TYPE_CHECKING, Optional, Any
+from typing import TYPE_CHECKING, Any, Optional
 
 from ..consumer import IGWNAlertConsumer
 
 if TYPE_CHECKING:
     from ....search.p_astro.models import FGMCChirpMassAreaModel
-    
+
 
 logger = logging.getLogger(__name__)
+
 
 class FGMCChirpMassAreaConsumer(IGWNAlertConsumer):
     def __init__(
@@ -24,10 +25,9 @@ class FGMCChirpMassAreaConsumer(IGWNAlertConsumer):
         super().__init__(id, service_url, out_dir)
         self.model = model  # assumes the model is already initialised
 
-    def save_json(self, data: dict[str, Any], file_path: Path, indent: int=4):
+    def save_json(self, data: dict[str, Any], file_path: Path, indent: int = 4):
         with Path(file_path).open(mode="w") as f:
             f.write(json.dumps(data, indent=indent))
-
 
     # def upload_pastro(self, gracedb_id: str, probs: dict[str, Any]):
     #     try:
@@ -55,7 +55,7 @@ class FGMCChirpMassAreaConsumer(IGWNAlertConsumer):
 
             if payload.get("alert_type", None) != "new":
                 return
-             
+
             try:
                 gid = payload["uid"]
             except KeyError as exc:
@@ -74,7 +74,7 @@ class FGMCChirpMassAreaConsumer(IGWNAlertConsumer):
                 return
 
             far = data["CoincInspiral"]["combined_far"]
-            if far == 0.:
+            if far == 0.0:
                 logger.debug(f"{gid} FAR is equal to 0. - skipping.")
                 return
 

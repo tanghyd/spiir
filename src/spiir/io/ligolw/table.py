@@ -2,24 +2,23 @@ import concurrent.futures
 import logging
 from functools import partial
 from os import PathLike
-from typing import Optional, Union, Callable, Sequence, Dict
-
-import pandas as pd
-import numpy as np
-from tqdm import tqdm
-
-# import after postcoh.py for PostcohInspiralTable compatibility
-from .ligolw import _NUMPY_TYPE_MAP, load_ligolw_xmldoc, get_ligolw_element
-from ..mp import validate_cpu_count
+from typing import Callable, Dict, Optional, Sequence, Union
 
 import ligo.lw.table
+import numpy as np
+import pandas as pd
+from tqdm import tqdm
+
+from ..mp import validate_cpu_count
+# import after postcoh.py for PostcohInspiralTable compatibility
+from .ligolw import _NUMPY_TYPE_MAP, get_ligolw_element, load_ligolw_xmldoc
 
 logger = logging.getLogger(__name__)
 
 
 def build_dataframe_from_table(
     table: ligo.lw.table.Table,
-    columns: Optional[Sequence[str]]=None,
+    columns: Optional[Sequence[str]] = None,
 ) -> pd.DataFrame:
     """Reads a ligo.lw.table.Table object and returns as its corresponding pd.DataFrame.
 
@@ -27,13 +26,14 @@ def build_dataframe_from_table(
     ----------
     table: ligo.lw.table.Table
         A LIGO_LW Table object instance loaded from a LIGO_LW XML Document.
-    
+
     Returns
     -------
     pd.DataFrame
         The Table as a pd.DataFrame with appropriate data, types, and column names.
 
     """
+
     def col_to_array(col: ligo.lw.table.Column) -> np.ndarray:
         try:
             dtype = _NUMPY_TYPE_MAP[col.Type]
@@ -52,11 +52,11 @@ def build_dataframe_from_table(
 def get_table_from_xmldoc(
     xmldoc: ligo.lw.ligolw.Document,
     table: str,
-    columns: Optional[Sequence[str]]=None,
+    columns: Optional[Sequence[str]] = None,
 ) -> pd.DataFrame:
     """Convenience function to get one table from one LIGO_LW xmldoc element.
-    
-    This is a essentially a combined wrapper around the ligo.lw.table.Table.get_table 
+
+    This is a essentially a combined wrapper around the ligo.lw.table.Table.get_table
     class method and our dataframe conversion function for convenience.
 
     Parameters
@@ -68,7 +68,7 @@ def get_table_from_xmldoc(
     columns: Sequence[str] | None
         If provided, retrieve the specified columns by their name.
         Otherwise if columns is None, retrieve all columns from the Table element.
-    
+
     Returns
     -------
     pd.DataFrame
@@ -116,7 +116,7 @@ def load_table_from_xml(
         legacy_postcoh_compat=legacy_postcoh_compat,
         nullable=nullable,
     )
-    
+
     return get_table_from_xmldoc(xmldoc, table, columns)
 
 
@@ -152,7 +152,7 @@ def load_table_from_xmls(
         If True, sets the values for missing postcoh columns to NoneType,
         otherwise it is set to an appropriate default value given the column type.
     concat: bool
-        If True, concatenates DataFrames together ignoring the index, else returns a 
+        If True, concatenates DataFrames together ignoring the index, else returns a
         list of DataFrames for each table in order.
     skip_exceptions: bool
         If True, exceptions raised by a process during mulitprocessing will be ignored.
@@ -186,7 +186,7 @@ def load_table_from_xmls(
             legacy_postcoh_compat=legacy_postcoh_compat,
             nullable=nullable,
         )
-        
+
         desc = f"Loading {table} tables from LIGOLW XML files"
         with tqdm(total=len(paths), desc=desc, disable=not verbose) as pbar:
             with concurrent.futures.ProcessPoolExecutor(max_workers=nproc) as executor:
@@ -202,22 +202,25 @@ def load_table_from_xmls(
                     else:
                         results.append(future.result())
                     pbar.update(1)
-                
+
         if concat:
             return pd.concat(results, ignore_index=True)
         return results
 
+
 def get_tables_from_xmldoc(
     xmldoc: ligo.lw.ligolw.Document,
-    tables: Optional[Union[str, Sequence[str], Dict[str, Optional[Sequence[str]]]]]=None
+    tables: Optional[
+        Union[str, Sequence[str], Dict[str, Optional[Sequence[str]]]]
+    ] = None,
 ) -> Dict[str, pd.DataFrame]:
     """Convenience function to get one or more tables from one LIGO_LW xmldoc element.
-    
-    This function can retrieve multiple tables from a loaded LIGO_LW xmldoc element if 
-    the tables parameter is specified as either a sequence (e.g. list) or dictionary, 
+
+    This function can retrieve multiple tables from a loaded LIGO_LW xmldoc element if
+    the tables parameter is specified as either a sequence (e.g. list) or dictionary,
     where specific columns can be loaded by specifying them in the dictionary values.
 
-    The function return signature is a dictionary of DataFrames, where each key 
+    The function return signature is a dictionary of DataFrames, where each key
     corresponds to the table name(s) specified by the input.
 
     Parameters
@@ -225,14 +228,14 @@ def get_tables_from_xmldoc(
     xmldoc: ligo.lw.ligolw.Document
         A LIGO_LW XML Document element that contains Table element(s).
     tables: str | Sequence[str] | dict[str, Sequence[str] | None] | None
-        The name(s) of the Table element to retrieve. If tables is a str, we retrieve 
-        one table with that given name if it exists in the xmldoc. If tables is a 
-        Sequence[str] (i.e. a list or tuple of strings), then we load each of the 
-        specified tables. If tables is a dict, we retrieve each table name specified in 
-        the dictionary keys where each value corresponds to the list of column names we 
-        wish to load for each table, loading all table if the value is None. If tables 
+        The name(s) of the Table element to retrieve. If tables is a str, we retrieve
+        one table with that given name if it exists in the xmldoc. If tables is a
+        Sequence[str] (i.e. a list or tuple of strings), then we load each of the
+        specified tables. If tables is a dict, we retrieve each table name specified in
+        the dictionary keys where each value corresponds to the list of column names we
+        wish to load for each table, loading all table if the value is None. If tables
         itself is None, then we load all table elements present in the xmldoc.
-    
+
     Returns
     -------
     dict[str, pd.DataFrame]
@@ -241,7 +244,8 @@ def get_tables_from_xmldoc(
     # return all tables in xmldoc
     if tables is None:
         return {
-            tbl.Name: build_dataframe_from_table(tbl) for tbl in xmldoc.getElements(
+            tbl.Name: build_dataframe_from_table(tbl)
+            for tbl in xmldoc.getElements(
                 lambda elem: elem.tagName == ligo.lw.table.Table.tagName
             )
         }
@@ -249,7 +253,7 @@ def get_tables_from_xmldoc(
     # load one table with all columns
     elif isinstance(tables, str):
         return {tables: get_table_from_xmldoc(xmldoc, tables)}
-    
+
     # load one or more tables with user-specified columns, or all columns (None)
     elif isinstance(tables, dict):
         return {tbl: get_table_from_xmldoc(xmldoc, tbl, c) for tbl, c in tables.items()}
@@ -261,18 +265,20 @@ def get_tables_from_xmldoc(
 
 def load_tables_from_xml(
     path: Union[str, bytes, PathLike],
-    tables: Optional[Union[str, Sequence[str], Dict[str, Optional[Sequence[str]]]]]=None,
+    tables: Optional[
+        Union[str, Sequence[str], Dict[str, Optional[Sequence[str]]]]
+    ] = None,
     ilwdchar_compat: bool = True,
     legacy_postcoh_compat: bool = True,
     nullable: bool = False,
 ) -> Dict[str, pd.DataFrame]:
     """Convenience function to get one or more tables from one LIGO_LW xmldoc element.
-    
-    This function can retrieve multiple tables from a loaded LIGO_LW xmldoc element if 
-    the tables parameter is specified as either a sequence (e.g. list) or dictionary, 
+
+    This function can retrieve multiple tables from a loaded LIGO_LW xmldoc element if
+    the tables parameter is specified as either a sequence (e.g. list) or dictionary,
     where specific columns can be loaded by specifying them in the dictionary values.
 
-    The function return signature is a dictionary of DataFrames, where each key 
+    The function return signature is a dictionary of DataFrames, where each key
     corresponds to the table name(s) specified by the input.
 
     Parameters
@@ -280,12 +286,12 @@ def load_tables_from_xml(
     path: str | bytes | PathLike | Sequence[str | bytes | PathLike]
         A path or list of paths to LIGO_LW XML Document(s) each with a postcoh table.
     tables: str | Sequence[str] | dict[str, Sequence[str] | None] | None
-        The name(s) of the Table element to retrieve. If tables is a str, we retrieve 
-        one table with that given name if it exists in the xmldoc. If tables is a 
-        Sequence[str] (i.e. a list or tuple of strings), then we load each of the 
-        specified tables. If tables is a dict, we retrieve each table name specified in 
-        the dictionary keys where each value corresponds to the list of column names we 
-        wish to load for each table, loading all table if the value is None. If tables 
+        The name(s) of the Table element to retrieve. If tables is a str, we retrieve
+        one table with that given name if it exists in the xmldoc. If tables is a
+        Sequence[str] (i.e. a list or tuple of strings), then we load each of the
+        specified tables. If tables is a dict, we retrieve each table name specified in
+        the dictionary keys where each value corresponds to the list of column names we
+        wish to load for each table, loading all table if the value is None. If tables
         itself is None, then we load all table elements present in the xmldoc.
     ilwdchar_compat: bool
         Whether to add ilwdchar conversion compatibility.
@@ -294,7 +300,7 @@ def load_tables_from_xml(
     nullable: bool
         If True, sets the values for missing postcoh columns to NoneType,
         otherwise it is set to an appropriate default value given the column type.
-    
+
     Returns
     -------
     dict[str, pd.DataFrame]
@@ -312,7 +318,9 @@ def load_tables_from_xml(
 
 def load_tables_from_xmls(
     paths: Union[str, bytes, PathLike, Sequence[Union[str, bytes, PathLike]]],
-    tables: Optional[Union[str, Sequence[str], Dict[str, Optional[Sequence[str]]]]]=None,
+    tables: Optional[
+        Union[str, Sequence[str], Dict[str, Optional[Sequence[str]]]]
+    ] = None,
     ilwdchar_compat: bool = True,
     legacy_postcoh_compat: bool = True,
     nullable: bool = False,
@@ -322,12 +330,12 @@ def load_tables_from_xmls(
     verbose: bool = False,
 ) -> Dict[str, pd.DataFrame]:
     """Convenience function to get one or more tables from one LIGO_LW xmldoc element.
-    
-    This function can retrieve multiple tables from a loaded LIGO_LW xmldoc element if 
-    the tables parameter is specified as either a sequence (e.g. list) or dictionary, 
+
+    This function can retrieve multiple tables from a loaded LIGO_LW xmldoc element if
+    the tables parameter is specified as either a sequence (e.g. list) or dictionary,
     where specific columns can be loaded by specifying them in the dictionary values.
 
-    The function return signature is a dictionary of DataFrames, where each key 
+    The function return signature is a dictionary of DataFrames, where each key
     corresponds to the table name(s) specified by the input.
 
     Note that each XML file must have the same set of tables present in each document.
@@ -337,12 +345,12 @@ def load_tables_from_xmls(
     paths: str | bytes | PathLike | Sequence[str | bytes | PathLike]
         A path or list of paths to LIGO_LW XML Document(s) each with a postcoh table.
     tables: str | Sequence[str] | dict[str, Sequence[str] | None] | None
-        The name(s) of the Table element to retrieve. If tables is a str, we retrieve 
-        one table with that given name if it exists in the xmldoc. If tables is a 
-        Sequence[str] (i.e. a list or tuple of strings), then we load each of the 
-        specified tables. If tables is a dict, we retrieve each table name specified in 
-        the dictionary keys where each value corresponds to the list of column names we 
-        wish to load for each table, loading all table if the value is None. If tables 
+        The name(s) of the Table element to retrieve. If tables is a str, we retrieve
+        one table with that given name if it exists in the xmldoc. If tables is a
+        Sequence[str] (i.e. a list or tuple of strings), then we load each of the
+        specified tables. If tables is a dict, we retrieve each table name specified in
+        the dictionary keys where each value corresponds to the list of column names we
+        wish to load for each table, loading all table if the value is None. If tables
         itself is None, then we load all table elements present in the xmldoc.
     ilwdchar_compat: bool
         Whether to add ilwdchar conversion compatibility.
@@ -352,7 +360,7 @@ def load_tables_from_xmls(
         If True, sets the values for missing postcoh columns to NoneType,
         otherwise it is set to an appropriate default value given the column type.
     concat: bool
-        If True, concatenates DataFrames together ignoring the index, else returns a 
+        If True, concatenates DataFrames together ignoring the index, else returns a
         list of DataFrames for each table in order.
     skip_exceptions: bool
         If True, exceptions raised by a process during mulitprocessing will be ignored.
@@ -360,7 +368,7 @@ def load_tables_from_xmls(
         Number of CPU processes to use for multiprocessing. Default: 1, recommended: 4.
     verbose: bool
         If True, displays a loading progress bar.
-    
+
     Returns
     -------
     dict[str, pd.DataFrame]
@@ -390,7 +398,7 @@ def load_tables_from_xmls(
         with tqdm(total=len(paths), desc=desc, disable=not verbose) as pbar:
             with concurrent.futures.ProcessPoolExecutor(max_workers=nproc) as executor:
                 futures = [executor.submit(_load_tables_from_xml, p) for p in paths]
-            
+
                 results = []
                 for future in concurrent.futures.as_completed(futures):
                     if future.exception() is not None:
@@ -401,7 +409,7 @@ def load_tables_from_xmls(
                     else:
                         results.append(future.result())
                     pbar.update(1)
-                
+
                 # every dict in results should have the same keys so this should work
                 if concat:
                     return {
@@ -472,7 +480,7 @@ def load_ligolw_tables(
     verbose: bool = False,
 ) -> pd.DataFrame:
     logger.warning(
-        "spiir.io.ligolw.table deprecation warning: load_ligolw_tables will be " \
+        "spiir.io.ligolw.table deprecation warning: load_ligolw_tables will be "
         "deprecated in a future release. Please use load_table_from_xmls instead."
     )
     load_table_from_xmls(
@@ -485,4 +493,3 @@ def load_ligolw_tables(
         nproc=nproc,
         verbose=verbose,
     )
-

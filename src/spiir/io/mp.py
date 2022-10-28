@@ -14,11 +14,11 @@ import logging
 import multiprocessing as mp
 from collections.abc import Callable, Sequence
 from functools import partial
-from tqdm import tqdm
-from typing import Optional, Union, Any
+from typing import Any, Optional, Union
 
 import numpy as np
 import pandas as pd
+from tqdm import tqdm
 
 from spiir.io.array import chunk_iterable
 
@@ -51,32 +51,32 @@ def validate_cpu_count(nproc: int) -> int:
 def parallel_apply(
     func: Callable,
     data: Union[Sequence, np.ndarray, pd.DataFrame],
-    nproc: int=4,
-    chunk_size: Optional[int]=None,
-    concat: bool=True,
-    desc: Optional[str]=None,
-    verbose: bool=False,
+    nproc: int = 4,
+    chunk_size: Optional[int] = None,
+    concat: bool = True,
+    desc: Optional[str] = None,
+    verbose: bool = False,
     *args,
     **kwargs,
 ) -> Any:
     """Simple multiprocessing for arbitrary functions or class methods on large arrays.
-    
-    This function will break up input data into chunks of size `chunk_size`, and passes 
-    each chunk to the pool of `nproc` processes that each runs the `func` callable 
-    using concurrent.futures.ProcessPoolExecutor. The input data is iterated over its 
-    length (i.e. **first dimension**), and will return an output of equal length 
-    according to the output signature of the specified function if `concat` is True. If 
-    `concat` is False, the values of chunked array processing will be returned as 
+
+    This function will break up input data into chunks of size `chunk_size`, and passes
+    each chunk to the pool of `nproc` processes that each runs the `func` callable
+    using concurrent.futures.ProcessPoolExecutor. The input data is iterated over its
+    length (i.e. **first dimension**), and will return an output of equal length
+    according to the output signature of the specified function if `concat` is True. If
+    `concat` is False, the values of chunked array processing will be returned as
     separated elements within the returned list.
 
     Parameters
     ----------
     func: Callable
-        An instantiated class method or function that processes arrays when called. 
+        An instantiated class method or function that processes arrays when called.
         Any args or kwargs passed to this function will be passed through to `func`.
     data: Sequence | np.ndarray | pd.DataFrame
-        An iterable n-dimensional sequence, np.ndarray, pd.DataFrame that is a valid 
-        input argument to `func` - i.e. if the function requires 2-dimensional data, 
+        An iterable n-dimensional sequence, np.ndarray, pd.DataFrame that is a valid
+        input argument to `func` - i.e. if the function requires 2-dimensional data,
         then we would require data to have shape (n, 2), where n is its iterable length.
     nproc: int = 4
         The number of CPU processes to use for multiprocessing.
@@ -98,29 +98,29 @@ def parallel_apply(
 
     Notes
     -----
-    If any parameters need to be passed to the `func` function beforehand, they can be 
-    passed as args and kwargs inputs respectively, which uses functools.partial to 
-    partially instantiate a version of their function with their appropriate arguments 
+    If any parameters need to be passed to the `func` function beforehand, they can be
+    passed as args and kwargs inputs respectively, which uses functools.partial to
+    partially instantiate a version of their function with their appropriate arguments
     and keyword arguments before being passed to each multiprocessing worker.
 
     For more complex cases (e.g. having different function parameters for each element
-    of the input data, or where multiple multiprocessing steps are required per 
-    element), we recommend that the user writes their own multiprocessing 
+    of the input data, or where multiple multiprocessing steps are required per
+    element), we recommend that the user writes their own multiprocessing
     implementation using the code in this function as a skeleton.
 
     Examples
     --------
-    For example, consider a Kernel Density Estimator model. The computational cost for 
-    scoring samples from a fitted KDE greatly increases with respect to the number of 
-    samples. Additionally, KDEs fitted with a large number of samples also take much 
-    longer to estimate scores than KDEs fitted with a smaller number of samples. 
-    For these reasons, we may wish to improve the speed of computing the score_samples 
-    method of KDE models via multiprocessing with this function. 
-    
-    For a thorough summary of the computational efficiency and trade-offs for KDE see: 
+    For example, consider a Kernel Density Estimator model. The computational cost for
+    scoring samples from a fitted KDE greatly increases with respect to the number of
+    samples. Additionally, KDEs fitted with a large number of samples also take much
+    longer to estimate scores than KDEs fitted with a smaller number of samples.
+    For these reasons, we may wish to improve the speed of computing the score_samples
+    method of KDE models via multiprocessing with this function.
+
+    For a thorough summary of the computational efficiency and trade-offs for KDE see:
     https://jakevdp.github.io/blog/2013/12/01/kernel-density-estimation/.
-    
-    >>> import numpy as np    
+
+    >>> import numpy as np
     >>> from sklearn.neighbors import KernelDensity
     ...
     >>> # assume we have some 2-dimensional np.ndarray data we want to fit a KDE to

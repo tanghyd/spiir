@@ -1,9 +1,9 @@
 import concurrent.futures
 import logging
+import sndhdr
 from functools import partial
 from os import PathLike
-import sndhdr
-from typing import Union, Optional, Sequence, Dict
+from typing import Dict, Optional, Sequence, Union
 
 import lal
 import lal.series
@@ -11,13 +11,13 @@ import ligo.lw.array
 import ligo.lw.ligolw
 import ligo.lw.param
 import ligo.lw.table
-import pandas as pd
 import numpy as np
+import pandas as pd
 from tqdm import tqdm
 
-from .ligolw import load_ligolw_xmldoc, get_ligolw_element
 from ..array import get_unique_index_diff
 from ..mp import validate_cpu_count
+from .ligolw import get_ligolw_element, load_ligolw_xmldoc
 
 logger = logging.getLogger(__name__)
 
@@ -28,7 +28,7 @@ def get_array_from_xmldoc(
 ) -> np.ndarray:
     """Retrieves a numpy array from a provided LIGO_LW Document element in memory.
 
-    This is a wrapper function around the ligo.lw.array.Array.get_array class method, 
+    This is a wrapper function around the ligo.lw.array.Array.get_array class method,
     made primarily for convenience.
 
     Parameters
@@ -93,7 +93,8 @@ def get_arrays_from_xmldoc(
     if arrays is None:  # return all arrays in xmldoc
         # FIXME: Arrays with shared names will silently overwrite eachother (snr, psd)
         return {
-            array.Name: array.array for array in xmldoc.getElements(
+            array.Name: array.array
+            for array in xmldoc.getElements(
                 lambda elem: elem.tagName == ligo.lw.array.Array.tagName
             )
         }
@@ -138,7 +139,7 @@ def load_arrays_from_xmls(
     nproc: int = 1,
     verbose: bool = False,
 ) -> Dict[str, np.ndarray]:
-    """Loads one or more arrays from one LIGO_LW XML file path and returns a dictionary 
+    """Loads one or more arrays from one LIGO_LW XML file path and returns a dictionary
     of numpy arrays that have been stacked together.
 
     Note that each XML file must have the same set of arrays present in each document.
@@ -178,7 +179,7 @@ def load_arrays_from_xmls(
         with tqdm(total=len(paths), desc=desc, disable=not verbose) as pbar:
             with concurrent.futures.ProcessPoolExecutor(max_workers=nproc) as executor:
                 futures = [executor.submit(_load_arrays_from_xml, p) for p in paths]
-            
+
                 results = []
                 for future in concurrent.futures.as_completed(futures):
                     if future.exception() is not None:
@@ -199,7 +200,7 @@ def load_arrays_from_xmls(
 def build_array_element(
     array: np.ndarray,
     name: str,
-    dim_names: Optional[Union[str, Sequence[str]]]=None,
+    dim_names: Optional[Union[str, Sequence[str]]] = None,
 ) -> ligo.lw.array.Array:
     """Convenience function to build a LIGO_LW Array element."""
     return ligo.lw.array.Array.build(name, array, dim_names)
@@ -221,7 +222,7 @@ def append_array_to_xmldoc(
     array : `list` of :class:`~ligo.lw.table.Table`
         the set of arrays to write
     overwrite : `bool`, optional, default: `True`
-        if `True`, delete an all existing instances matching the provided array name, 
+        if `True`, delete an all existing instances matching the provided array name,
         else append the array to the document as is.
     """
     try:
@@ -242,7 +243,7 @@ def append_array_to_xmldoc(
 def build_psd_series_from_xmldoc(
     xmldoc: ligo.lw.ligolw.Document,
 ) -> Dict[str, pd.Series]:
-    """Reads a valid LIGO_LW XML Document from memory and returns a dictionary of 
+    """Reads a valid LIGO_LW XML Document from memory and returns a dictionary of
     pd.Series containing a REAL8FrequencySeries array for each frequency series present.
 
     The LIGO_LW Document should contain exactly one LIGO_LW REAL8FrequencySeries
@@ -303,7 +304,7 @@ def load_psd_series_from_xml(
     path: Union[str, bytes, PathLike],
     ilwdchar_compat: bool = True,
 ) -> Dict[str, pd.Series]:
-    """Reads a valid LIGO_LW XML Document from a file path and returns a dictionary of 
+    """Reads a valid LIGO_LW XML Document from a file path and returns a dictionary of
     pd.Series containing a REAL8FrequencySeries array for each frequency series present.
 
     The LIGO_LW Document should contain exactly one LIGO_LW REAL8FrequencySeries
@@ -347,15 +348,15 @@ def load_psd_series_from_xml(
 def append_psd_series_to_ligolw(
     xmldoc: ligo.lw.ligolw.Document,
     psds: Dict[str, Union[pd.Series, np.ndarray]],
-    f0: float=0.,
-    delta_f: Optional[float]=None,
-    epoch_time: Union[lal.LIGOTimeGPS, float]=0.,
+    f0: float = 0.0,
+    delta_f: Optional[float] = None,
+    epoch_time: Union[lal.LIGOTimeGPS, float] = 0.0,
 ) -> ligo.lw.ligolw.Document:
     """Assembles and append a LIGO_LW REAL8FreqencySeries array to a LIGO_LW XML.
-    
-    The LIGO_LW REAL8FrequencySeries Array is assembled from a dictionary where keys 
+
+    The LIGO_LW REAL8FrequencySeries Array is assembled from a dictionary where keys
     are ifo strings and values are the PSD as aa np.ndarray or pd.Series for each ifo.
-    The PSD LIGO_LW element will be appended to the xmldoc containing both a 
+    The PSD LIGO_LW element will be appended to the xmldoc containing both a
     REAL8FrequencySeries Array object and a Param object that specifies the ifo string.
 
     Parameters
@@ -392,7 +393,7 @@ def append_psd_series_to_ligolw(
             f0=f0,
             deltaF=delta_f or index_diff,
             sampleUnits=lal.Unit("s strain^2"),
-            length=len(psd)
+            length=len(psd),
         )
         psd_freq_series.data.data = psd.values if isinstance(psd, pd.Series) else psd
         ligo_lw_psd = lal.series.build_REAL8FrequencySeries(psd_freq_series)
@@ -413,7 +414,7 @@ def build_snr_series_from_xmldoc(
     The LIGO_LW Document must contain exactly one ligo.lw.lsctables.SnglInspiralTable
     and at least one LIGO_LW COMPLEX8TimeSeries element containing the timeseries as an
     Array named snr:array. Each row in the SnglInspiralTable should be matched to a
-    corresponding COMPLEX8TimeSeries by an event_id:param, but we discard this event_id 
+    corresponding COMPLEX8TimeSeries by an event_id:param, but we discard this event_id
     in the returned Series and replace it with the interferometer name as a string.
 
     The returned Series has columns describing each interferometer name, an
@@ -467,7 +468,7 @@ def build_snr_series_from_xmldoc(
         sngl_inspiral = list(
             filter(lambda row: row.event_id == event_id, sngl_inspiral_table)
         )
-        assert (len(sngl_inspiral) == 1), "Expected only one sngl_inspiral in xmldoc."
+        assert len(sngl_inspiral) == 1, "Expected only one sngl_inspiral in xmldoc."
         ifo = sngl_inspiral[0].ifo
 
         # build SNR time series array
@@ -498,7 +499,7 @@ def load_snr_series_from_xml(
     The LIGO_LW Document must contain exactly one ligo.lw.lsctables.SnglInspiralTable
     and at least one LIGO_LW COMPLEX8TimeSeries element containing the timeseries as an
     Array named snr:array. Each row in the SnglInspiralTable should be matched to a
-    corresponding COMPLEX8TimeSeries by an event_id:param, but we discard this event_id 
+    corresponding COMPLEX8TimeSeries by an event_id:param, but we discard this event_id
     in the returned Series and replace it with the interferometer name as a string.
 
     The returned Series has columns describing each interferometer name, an index
@@ -534,23 +535,24 @@ def load_snr_series_from_xml(
         logger.debug(f"No SNR series found in {str(path)}.")
     return snr_series
 
+
 def append_snr_series_to_ligolw(
     xmldoc: ligo.lw.ligolw.Document,
     snr: Union[np.ndarray, pd.Series],
     ifo: str,
-    f0: float=0.,
-    delta_t: Optional[float]=None,
-    event_id: Optional[int]=None,
-    epoch_time: Optional[Union[lal.LIGOTimeGPS, float]]=None,
+    f0: float = 0.0,
+    delta_t: Optional[float] = None,
+    event_id: Optional[int] = None,
+    epoch_time: Optional[Union[lal.LIGOTimeGPS, float]] = None,
 ) -> ligo.lw.ligolw.Document:
     """Assembles and append a LIGO_LW COMPLEX8TimeSeries array to a LIGO_LW XML.
-    
-    The LIGO_LW COMPLEX8TimeSeries Array is assembled from a np.ndarray or pd.Series 
+
+    The LIGO_LW COMPLEX8TimeSeries Array is assembled from a np.ndarray or pd.Series
     that defines the SNR series and an ifo string that specifies the interfereometer.
-    The SNR LIGO_LW element will be appended to the xmldoc containing both a 
-    COMPLEX8TimeSeries Array object and a Param object that specifies an event_id that 
+    The SNR LIGO_LW element will be appended to the xmldoc containing both a
+    COMPLEX8TimeSeries Array object and a Param object that specifies an event_id that
     maps to a corresponding sngl_inspiral table row in an LIGO_LW Table element.
-    
+
     Parameters
     ----------
     xmldoc: :class:`~ligo.lw.ligolw.Document`
@@ -581,9 +583,9 @@ def append_snr_series_to_ligolw(
             event_id = sngl_inspiral[0].event_id
         except IndexError as exc:
             raise IndexError(
-                f"No event found in sngl_inspiral table to match with the provided " \
-                    f"ifo {ifo} - unable to build a valid snr series element"
-                ) from exc
+                f"No event found in sngl_inspiral table to match with the provided "
+                f"ifo {ifo} - unable to build a valid snr series element"
+            ) from exc
 
     if isinstance(snr, pd.Series) and delta_t is None:
         index_diff = float(get_unique_index_diff(snr.index, precision=12))
@@ -606,7 +608,7 @@ def append_snr_series_to_ligolw(
         f0=f0,
         deltaT=delta_t or index_diff,
         sampleUnits="s^-1",
-        length=len(snr)
+        length=len(snr),
     )
 
     snr_time_series = snr.values if isinstance(snr, pd.Series) else snr

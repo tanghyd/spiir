@@ -1,6 +1,6 @@
 import logging
 from functools import partial
-from typing import Optional, Union, Tuple, List, Dict, Any
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 import pandas as pd
@@ -14,6 +14,7 @@ logger = logging.getLogger(__name__)
 #   - PyCBC defines constraint variable in class
 #   - NumPY gets constraint variable at run-time
 #   - We should reconsider this mis-match in approach and how _load_constraint works
+
 
 class Constraint:
     """Abstract Base Class for Constraint classes"""
@@ -145,7 +146,6 @@ class SPIIRConstraint(Constraint):
         raise NotImplementedError
 
 
-
 def load_constraints_from_config(
     config: Dict[str, Any], key: Optional[str] = "constraints"
 ) -> Optional[List[Constraint]]:
@@ -154,4 +154,3 @@ def load_constraints_from_config(
     else:
         logger.info(f"No constraints found in config[{key}].")
         return None
-

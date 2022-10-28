@@ -1,1 +1,1 @@
-from . import ligolw, array, mp, cli, logging
+from . import array, cli, ligolw, logging, mp

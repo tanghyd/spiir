@@ -10,7 +10,7 @@ are created with a section header followed by an underline of equal length.
 """
 
 from itertools import chain, islice
-from typing import Optional, Iterable
+from typing import Iterable, Optional
 
 import pandas as pd
 
@@ -51,7 +51,7 @@ def chunk_iterable(iterable: Iterable, size: int = 1000) -> Iterable:
         yield chain([first], islice(iterator, size - 1))
 
 
-def get_unique_index_diff(index: pd.Index, precision: Optional[int]=None):
+def get_unique_index_diff(index: pd.Index, precision: Optional[int] = None):
     """Convenience function to retrieve a unique index diff value from a pd.Index."""
     diff = index.to_series().diff().dropna()
     if precision is not None:
@@ -61,6 +61,6 @@ def get_unique_index_diff(index: pd.Index, precision: Optional[int]=None):
         return diff[0]
     else:
         raise RuntimeError(
-            "Cannot automatically determine unique index diff from index, " \
-                "maybe due to varied delta values, NA values, or precision errors."
+            "Cannot automatically determine unique index diff from index, "
+            "maybe due to varied delta values, NA values, or precision errors."
         )

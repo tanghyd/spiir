@@ -2,18 +2,17 @@
 
 import logging
 from os import PathLike
-from typing import Optional, Union, Dict
+from typing import Dict, Optional, Union
 
 import ligo.lw.ligolw
 import pandas as pd
 
-from .array import (
-    append_snr_series_to_ligolw, append_psd_series_to_ligolw,
-    build_snr_series_from_xmldoc, build_psd_series_from_xmldoc
-)
-from .table import build_table_element, append_table_to_ligolw, get_tables_from_xmldoc
-from .param import get_p_astro_from_xmldoc, append_p_astro_to_ligolw
-from .ligolw import load_ligolw_xmldoc, get_ligolw_element
+from .array import (append_psd_series_to_ligolw, append_snr_series_to_ligolw,
+                    build_psd_series_from_xmldoc, build_snr_series_from_xmldoc)
+from .ligolw import get_ligolw_element, load_ligolw_xmldoc
+from .param import append_p_astro_to_ligolw, get_p_astro_from_xmldoc
+from .table import (append_table_to_ligolw, build_table_element,
+                    get_tables_from_xmldoc)
 
 logger = logging.getLogger(__name__)
 
@@ -21,17 +20,17 @@ logger = logging.getLogger(__name__)
 def save_coinc_xml(
     path: Union[str, bytes, PathLike],
     tables: Dict[str, pd.DataFrame],
-    psds: Optional[Dict[str, pd.Series]]=None,
-    snrs: Optional[Dict[str, pd.Series]]=None,
-    p_astro: Optional[Dict[str, float]]=None,
+    psds: Optional[Dict[str, pd.Series]] = None,
+    snrs: Optional[Dict[str, pd.Series]] = None,
+    p_astro: Optional[Dict[str, float]] = None,
 ):
     """Loads the data from a standard coinc.xml LIGO_LW XML file.
 
-    This function returns the standard tables, arrays, and parameters that are 
-    expected in the coinc.xml and returns them as either a pd.DataFrame (tables), a 
-    pd.Series (LIGO_LW Series arrays, such as PSDs and SNRs), or a dictionary (p_astro 
+    This function returns the standard tables, arrays, and parameters that are
+    expected in the coinc.xml and returns them as either a pd.DataFrame (tables), a
+    pd.Series (LIGO_LW Series arrays, such as PSDs and SNRs), or a dictionary (p_astro
     probabilites), if they exist in the file.
-    
+
     Parameters
     ----------
     path: str | bytes | os.PathLike
@@ -74,11 +73,11 @@ def load_coinc_xml(
 ) -> Dict[str, Union[pd.DataFrame, pd.Series, Dict[str, float]]]:
     """Loads the data from a standard coinc.xml LIGO_LW XML file.
 
-    This function returns the standard tables, arrays, and parameters that are 
-    expected in the coinc.xml and returns them as either a pd.DataFrame (tables), a 
-    pd.Series (LIGO_LW Series arrays, such as PSDs and SNRs), or a dictionary (p_astro 
+    This function returns the standard tables, arrays, and parameters that are
+    expected in the coinc.xml and returns them as either a pd.DataFrame (tables), a
+    pd.Series (LIGO_LW Series arrays, such as PSDs and SNRs), or a dictionary (p_astro
     probabilites), if they exist in the file.
-    
+
     Parameters
     ----------
     path: str | bytes | os.PathLike

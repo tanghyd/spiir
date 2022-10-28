@@ -1,4 +1,2 @@
-from .transform import (
-    Transform, NumPyTransform, SPIIRTransform,
-    load_transforms_from_config
-)
+from .transform import (NumPyTransform, SPIIRTransform, Transform,
+                        load_transforms_from_config)

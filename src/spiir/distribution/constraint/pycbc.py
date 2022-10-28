@@ -2,7 +2,7 @@ import copy
 import json
 import logging
 import os
-from typing import Optional, Union, Tuple
+from typing import Optional, Tuple, Union
 
 import numpy as np
 import pandas as pd
@@ -24,7 +24,7 @@ class PyCBCConstraint(Constraint):
         **kwargs,
     ):
         """Some description.
-        
+
         Parameters
         ----------
         constraint: str
@@ -35,7 +35,7 @@ class PyCBCConstraint(Constraint):
             A name
         package: str
             A package - should be "pycbc".
-        
+
         Methods
         -------
         _load_constraint:

@@ -1,7 +1,3 @@
-from .distribution import (
-    Distribution,
-    NumPyDistribution,
-    PyCBCDistribution,
-    JointDistribution,
-)
-from . import config, distribution, constraint, transform
+from . import config, constraint, distribution, transform
+from .distribution import (Distribution, JointDistribution, NumPyDistribution,
+                           PyCBCDistribution)

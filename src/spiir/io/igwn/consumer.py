@@ -7,7 +7,6 @@ import toml
 from igwn_alert import client
 from ligo.gracedb.rest import GraceDb
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -36,7 +35,7 @@ class IGWNAlertConsumer:
             logger.info(f"{self.id} initialised connection to {self.service_url}")
         except Exception as e:
             logger.warning(e)
-      
+
     def process_alert(
         self,
         topic: list[str] | None = None,
@@ -84,7 +83,7 @@ def run_igwn_alert_consumer(
 
     # Initialize the client sesion
     logger.debug(
-        ' '.join([f"{k}: {v}" for k, v in client_args.items() if k != "password"]) + "."
+        " ".join([f"{k}: {v}" for k, v in client_args.items() if k != "password"]) + "."
     )
 
     alert_client = client(**client_args)

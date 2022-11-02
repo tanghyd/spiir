@@ -1460,3 +1460,7 @@ class TwoComponentFGMCToyModel:
     def load_pkl(self, path: Union[str, bytes, PathLike]):
         with Path(path).open(mode="rb") as f:
             self.__dict__ = pickle.load(f)
+
+    def load(self, path: Union[str, bytes, PathLike]):
+        if Path(path).suffix != ".pkl":
+            raise RuntimeError("FGMC Model only compatible with loading .pkl files")

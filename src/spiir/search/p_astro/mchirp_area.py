@@ -944,3 +944,12 @@ class ChirpMassAreaModel:
         for key in ["a0", "b0", "b1", "m0"]:
             if getattr(self, key, None) is None:
                 logger.info(f"{type(self).__name__} coefficient {key} not initialised.")
+
+    def load(self, path: Union[str, Path]):
+        config_path = Path(path)
+        if config_path.suffix == ".pkl":
+            self.load_pkl(config_path)
+        elif config_path.suffix == ".json":
+            self.load_json(config_path)
+        else:
+            raise RuntimeError(f"{path} file type must be .pkl or .json")

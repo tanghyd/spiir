@@ -1464,3 +1464,4 @@ class TwoComponentFGMCToyModel:
     def load(self, path: Union[str, bytes, PathLike]):
         if Path(path).suffix != ".pkl":
             raise RuntimeError("FGMC Model only compatible with loading .pkl files")
+        self.load_pkl(path)

@@ -10,6 +10,7 @@ import pandas as pd
 from tqdm import tqdm
 
 from ..mp import validate_cpu_count
+
 # import after postcoh.py for PostcohInspiralTable compatibility
 from .ligolw import _NUMPY_TYPE_MAP, get_ligolw_element, load_ligolw_xmldoc
 
@@ -131,6 +132,7 @@ def load_table_from_xmls(
     skip_exceptions: bool = False,
     nproc: int = 1,
     verbose: bool = False,
+    desc: Optional[str] = None,
 ) -> pd.DataFrame:
     """Loads a table from one or multiple LIGO_LW XML and returns a pandas DataFrame.
 
@@ -160,6 +162,9 @@ def load_table_from_xmls(
         Number of CPU processes to use for multiprocessing. Default: 1, recommended: 4.
     verbose: bool
         If True, displays a loading progress bar.
+    desc: str | None
+        A string description for the progress bar.
+
     Returns
     -------
     pd.DataFrame
@@ -187,7 +192,7 @@ def load_table_from_xmls(
             nullable=nullable,
         )
 
-        desc = f"Loading {table} tables from LIGOLW XML files"
+        desc = desc or f"Loading {table} tables from LIGOLW XML files"
         with tqdm(total=len(paths), desc=desc, disable=not verbose) as pbar:
             with concurrent.futures.ProcessPoolExecutor(max_workers=nproc) as executor:
                 futures = [executor.submit(_load_table_from_xml, p) for p in paths]
@@ -328,6 +333,7 @@ def load_tables_from_xmls(
     skip_exceptions: bool = False,
     nproc: int = 1,
     verbose: bool = False,
+    desc: Optional[str] = None,
 ) -> Dict[str, pd.DataFrame]:
     """Convenience function to get one or more tables from one LIGO_LW xmldoc element.
 
@@ -368,6 +374,8 @@ def load_tables_from_xmls(
         Number of CPU processes to use for multiprocessing. Default: 1, recommended: 4.
     verbose: bool
         If True, displays a loading progress bar.
+    desc: str | None
+        A string description for the progress bar.
 
     Returns
     -------
@@ -394,7 +402,7 @@ def load_tables_from_xmls(
             nullable=nullable,
         )
 
-        desc = f"Loading {tables} tables from LIGOLW XML files"
+        desc = desc or f"Loading {tables} tables from LIGOLW XML files"
         with tqdm(total=len(paths), desc=desc, disable=not verbose) as pbar:
             with concurrent.futures.ProcessPoolExecutor(max_workers=nproc) as executor:
                 futures = [executor.submit(_load_tables_from_xml, p) for p in paths]

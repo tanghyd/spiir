@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 def get_unique_index_diff(index: pd.Index, precision: Optional[int] = None):
     """Convenience function to retrieve a unique index diff value from a pd.Index."""
-    if not instance(index, pd.Series):
+    if not isinstance(index, pd.Series):
         index = index.to_series()
     diff = index.diff().dropna()
     if precision is not None:

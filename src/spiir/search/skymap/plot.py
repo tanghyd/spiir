@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 def plot_skymap(
-    skymap: np.ndarray,
+    probs: np.ndarray,
     nested: bool = True,
     event_id: Optional[str] = None,
     contours: Optional[Union[float, Sequence[float]]] = None,
@@ -39,8 +39,8 @@ def plot_skymap(
 
     Parameters
     ----------
-    path: str | bytes | os.PathLike
-        A path to a valid FITS file, typically generated from ligo.skymap.io.fits.
+    probs: np.ndarray
+        The probability per pixel over the full skymap.
     nested: bool, default = True
         The order of HEALPix pixels - either 'nested' (True) or 'ring' (False).
     event_id: str, optional
@@ -73,9 +73,9 @@ def plot_skymap(
 
     """
     # get array of log probabilities per pixel on the sky
-    nside = ah.npix_to_nside(len(skymap))
+    nside = ah.npix_to_nside(len(probs))
     deg2perpix = ah.nside_to_pixel_area(nside).to_value(astropy.units.deg**2)
-    probperdeg2 = skymap / deg2perpix
+    probperdeg2 = probs / deg2perpix
 
     # get sky position of max point of probability once, if required later
     healpix = ah.HEALPix(nside=nside, order="nested" if nested else "ring")
@@ -116,7 +116,7 @@ def plot_skymap(
 
     if contours:
         contours = [contours] if isinstance(contours, float) else contours
-        credible_levels = 100 * find_greedy_credible_levels(skymap)
+        credible_levels = 100 * find_greedy_credible_levels(probs)
         contour = ax.contour_hpx(
             (credible_levels, "ICRS"),
             nested=nested,
@@ -281,10 +281,10 @@ def plot_skymap_from_fits(
         The probability skymap as a matplotlib Figure object.
 
     """
-    skymap, metadata = ligo.skymap.io.fits.read_sky_map(path, nest=None)
+    probs, metadata = ligo.skymap.io.fits.read_sky_map(path, nest=None)
 
     return plot_skymap(
-        skymap,
+        probs,
         nested=metadata["nested"],
         event_id=metadata.get("objid", None),
         contours=contours,

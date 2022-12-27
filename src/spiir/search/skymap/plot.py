@@ -10,11 +10,9 @@ import ligo.skymap.io
 import ligo.skymap.plot
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 from astropy.coordinates import SkyCoord
 from ligo.skymap.postprocess import find_greedy_credible_levels
 from matplotlib.figure import Figure
-from scipy.stats import halfnorm, poisson
 
 logger = logging.getLogger(__name__)
 
@@ -136,10 +134,10 @@ def plot_skymap_from_fits(
 
         for i, inset_arg in enumerate(inset_args):
             if not isinstance(inset_arg, dict):
-                raise TypeError(f"inset_args must be a dict or sequence of dicts.")
+                raise TypeError("inset_args must be a dict or sequence of dicts.")
 
             if "center" not in inset_arg:
-                raise KeyError(f"inset_arg must contain a valid 'center' SkyCoord.")
+                raise KeyError("inset_arg must contain a valid 'center' SkyCoord.")
 
             # define inset axis size
             inset_width = inset_arg.get("width", 0.3)
@@ -166,7 +164,8 @@ def plot_skymap_from_fits(
                     try:
                         inset_center = SkyCoord(**inset_center)
                     except Exception as exc:
-                        raise ValueError(f"inset_arg['center'] is an invalid SkyCoord.")
+                        error_msg = "inset_arg['center'] is an invalid SkyCoord."
+                        raise ValueError(error_msg) from exc
 
             ax_inset = plt.axes(
                 [inset_left, inset_bottom, inset_width, inset_height],

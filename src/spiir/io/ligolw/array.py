@@ -1,6 +1,5 @@
 import concurrent.futures
 import logging
-import sndhdr
 from functools import partial
 from os import PathLike
 from typing import Dict, Optional, Sequence, Union
@@ -15,8 +14,7 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 
-from ..array import get_unique_index_diff
-from ..mp import validate_cpu_count
+from ..processing import get_unique_index_diff, validate_cpu_count
 from .ligolw import get_ligolw_element, load_ligolw_xmldoc
 
 logger = logging.getLogger(__name__)
@@ -175,7 +173,7 @@ def load_arrays_from_xmls(
             ilwdchar_compat=ilwdchar_compat,
         )
 
-        desc = f"Loading arrays from LIGOLW XML files"
+        desc = "Loading arrays from LIGOLW XML files"
         with tqdm(total=len(paths), desc=desc, disable=not verbose) as pbar:
             with concurrent.futures.ProcessPoolExecutor(max_workers=nproc) as executor:
                 futures = [executor.submit(_load_arrays_from_xml, p) for p in paths]

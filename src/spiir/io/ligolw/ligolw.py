@@ -14,7 +14,6 @@ from . import postcoh  # edits ligo.lw.lsctables
 
 logger = logging.getLogger(__name__)
 
-
 # Look-up table mapping LIGO_LW XML data types to NumPy compatible array types
 _NUMPY_TYPE_MAP = ligo.lw.types.ToNumPyType.copy()
 _NUMPY_TYPE_MAP.update({k: "object" for k in ("char_s", "char_v", "lstring", "string")})
@@ -35,8 +34,8 @@ def load_ligolw_xmldoc(
     nullable: bool = True,
     contenthandler: Optional[ligo.lw.ligolw.LIGOLWContentHandler] = None,
 ) -> ligo.lw.ligolw.Document:
-    """Reads a valid LIGO_LW XML Document from a file path and returns a dictionary containing
-    the complex SNR timeseries arrays associated with each interferometer ('ifo').
+    """Reads a valid LIGO_LW XML Document from a file path and returns a dictionary
+    containing the complex SNR timeseries arrays associated with each interferometer.
 
     Parameters
     ----------

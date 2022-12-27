@@ -7,12 +7,15 @@ from typing import Dict, Optional, Union
 import ligo.lw.ligolw
 import pandas as pd
 
-from .array import (append_psd_series_to_ligolw, append_snr_series_to_ligolw,
-                    build_psd_series_from_xmldoc, build_snr_series_from_xmldoc)
+from .array import (
+    append_psd_series_to_ligolw,
+    append_snr_series_to_ligolw,
+    build_psd_series_from_xmldoc,
+    build_snr_series_from_xmldoc,
+)
 from .ligolw import get_ligolw_element, load_ligolw_xmldoc
 from .param import append_p_astro_to_ligolw, get_p_astro_from_xmldoc
-from .table import (append_table_to_ligolw, build_table_element,
-                    get_tables_from_xmldoc)
+from .table import append_table_to_ligolw, build_table_element, get_tables_from_xmldoc
 
 logger = logging.getLogger(__name__)
 

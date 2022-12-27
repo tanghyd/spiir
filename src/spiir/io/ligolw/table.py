@@ -9,9 +9,7 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 
-from ..mp import validate_cpu_count
-
-# import after postcoh.py for PostcohInspiralTable compatibility
+from ..processing import validate_cpu_count
 from .ligolw import _NUMPY_TYPE_MAP, get_ligolw_element, load_ligolw_xmldoc
 
 logger = logging.getLogger(__name__)

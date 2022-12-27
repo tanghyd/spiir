@@ -126,7 +126,7 @@ def append_p_astro_to_ligolw(
         A LIGO_LW Document object that contains a LIGO_LW p_astro element.
     """
     if not np.allclose(sum(p_astro.values()), 1.0):
-        logger.warning(f"p_astro values do not sum to 1.0.")
+        logger.warning("p_astro values do not sum to 1.0.")
 
     llw = ligo.lw.ligolw.LIGO_LW(attrs={"Name": "p_astro"})
     if overwrite:

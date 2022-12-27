@@ -14,10 +14,31 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 
-from ..processing import get_unique_index_diff, validate_cpu_count
+from ..processing.mp import validate_cpu_count
 from .ligolw import get_ligolw_element, load_ligolw_xmldoc
 
+
 logger = logging.getLogger(__name__)
+
+
+def get_unique_index_diff(
+    index: Union[pd.Series, pd.Index],
+    precision: Optional[int] = None
+) -> pd.Series:
+    """Convenience function to retrieve a unique index diff value from a pd.Index."""
+    if not isinstance(index, pd.Series):
+        index = index.to_series()
+    diff = index.diff().dropna()
+    if precision is not None:
+        diff = diff.round(precision)
+    diff = diff.unique()
+    if len(diff) == 1:
+        return diff[0]
+    else:
+        raise RuntimeError(
+            "Cannot automatically determine unique index diff from index, "
+            "maybe due to varied delta values, NA values, or precision errors."
+        )
 
 
 def get_array_from_xmldoc(

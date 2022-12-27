@@ -120,7 +120,7 @@ class NumPyDistribution(Distribution):
         samples = pd.DataFrame(samples, columns=self.variables)
 
         if self.pipe is not None:
-            variables = ', '.join(self.variables)
+            variables = ", ".join(self.variables)
             desc = desc or f"Running data pipeline on {variables}"
             for pipe in tqdm(self.pipe, disable=not verbose, desc=desc):
                 samples = samples.pipe(pipe)
@@ -160,7 +160,7 @@ class SciPyDistribution(Distribution):
         samples = pd.DataFrame(samples, columns=self.variables)
 
         if self.pipe is not None:
-            variables = ', '.join(self.variables)
+            variables = ", ".join(self.variables)
             desc = desc or f"Running data pipeline on {variables}"
             for pipe in tqdm(self.pipe, disable=not verbose, desc=desc):
                 samples = samples.pipe(pipe)
@@ -208,7 +208,7 @@ class PyCBCDistribution(Distribution):
         samples = pd.DataFrame(samples, columns=self.variables)
 
         if self.pipe is not None:
-            variables = ', '.join(self.variables)
+            variables = ", ".join(self.variables)
             desc = desc or f"Running data pipeline on {variables}"
             for pipe in tqdm(self.pipe, disable=not verbose, desc=desc):
                 samples = samples.pipe(pipe)

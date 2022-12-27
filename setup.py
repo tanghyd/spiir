@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 p_astro_requirements = [
     "scikit-learn>=1.0",
     "pycbc @ git+https://github.com/gwastro/pycbc.git@master#egg=pycbc",
-    "p_astro @ git+https://git.ligo.org/spiir-group/p-astro.git@feature/enable_pickle_compat#egg=p_astro"
+    "p_astro @ git+https://git.ligo.org/spiir-group/p-astro.git@feature/enable_pickle_compat#egg=p_astro",
 ]
 
 setup(

@@ -14,7 +14,7 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 
-from ..processing.mp import validate_cpu_count
+from ...processing.mp import validate_cpu_count
 from .ligolw import get_ligolw_element, load_ligolw_xmldoc
 
 logger = logging.getLogger(__name__)

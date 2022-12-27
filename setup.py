@@ -1,5 +1,12 @@
 from setuptools import setup, find_packages
 
+
+p_astro_requirements = [
+    "scikit-learn>=1.0",
+    "pycbc @ git+https://github.com/gwastro/pycbc.git@master#egg=pycbc",
+    "p_astro @ git+https://git.ligo.org/spiir-group/p-astro.git@feature/enable_pickle_compat#egg=p_astro"
+]
+
 setup(
     name="spiir",
     version="0.0.1",
@@ -23,9 +30,7 @@ setup(
         "click",
     ],
     extras_require={
-        "tensorflow": ["tensorflow>=2.8", "tensorflow-probability", "scikit-learn"],
-        "torch": ["torch", "torchaudio", "scikit-learn"],
-        "pycbc": ["pycbc"],
+        "p-astro": p_astro_requirements,
     },
     description="A Python library for the SPIIR gravitational wave science pipeline.",
     author="Daniel Tang",

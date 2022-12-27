@@ -1,4 +1,4 @@
-"""A work-in-progress subpackage providing common tools for SPIIR R&D workflows.
+"""A subpackage containing common post-processing code for SPIIR analysis workflows.
 
 This subpackage intends to define a collect of convenience functions and classes for 
 the analysis and visualisation of research results produced by the SPIIR gravitational 
@@ -18,4 +18,4 @@ We recommend users use the code in this subpackage at their own risk as things m
 change without warning.
 """
 
-from . import analysis, visualisation
+from . import zerolags

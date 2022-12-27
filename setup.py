@@ -1,5 +1,4 @@
-from setuptools import setup, find_packages
-
+from setuptools import find_packages, setup
 
 p_astro_requirements = [
     "scikit-learn>=1.0",

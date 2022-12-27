@@ -368,10 +368,10 @@ def match_coincident_zerolags(
 def plot_zerolag_background(
     data: Dict[str, pd.DataFrame],
     title: str = "Background Zerolag Analysis for Coherent SNR vs Combined ChiSq",
-    figsize: Tuple[float, float] = (12, 8)
+    figsize: Tuple[float, float] = (12, 8),
 ):
     # TODO: revise and document required input data format(s)
-    col: str = "cmbchisq",
+    col: str = ("cmbchisq",)
 
     # this function produces two comparison plots across two runs
     # i.e. a inj and noninj run for two different runs, comparing cohsnr/cmbchisq
@@ -397,7 +397,7 @@ def plot_zerolag_background(
         )
 
     fig.suptitle(title, fontsize=14)
-    
+
     return fig
 
 
@@ -409,7 +409,9 @@ def plot_zerolag_foreground(
     fig, ax = plt.subplots(figsize=(12, 8), layout="tight")
     for i in range(2):
         key = list(data.keys())[i + 2]
-        data[key]["cmbchisq"].hist(bins=100, histtype="step", lw=2 - i, label=key, ax=ax)
+        data[key]["cmbchisq"].hist(
+            bins=100, histtype="step", lw=2 - i, label=key, ax=ax
+        )
     ax.set_xlim(right=10)
     ax.set(title=title, xlabel=r"Combined $\chi^{2}$")
     ax.legend(loc="upper right")
@@ -420,7 +422,7 @@ def plot_zerolag_foreground(
 def plot_expected_far(
     data: Dict[str, pd.DataFrame],
     title: str = "Cumulative Counts of Zerolag Triggers vs. iFAR",
-    figsize = Tuple[float, float] = (16, 8)
+    figsize: Tuple[float, float] = (16, 8),
 ) -> Figure:
     # TODO: revise and document required input data format(s)
     nrows, ncols = 1, 2
@@ -476,5 +478,5 @@ def plot_expected_far(
             )
 
     fig.suptitle(title, fontsize=14)
-    
+
     return fig

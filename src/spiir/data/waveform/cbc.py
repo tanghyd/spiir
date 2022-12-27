@@ -1,5 +1,5 @@
 import logging
-from typing import Union, Tuple
+from typing import Tuple, Union
 
 import lal
 import lalsimulation as lalsim

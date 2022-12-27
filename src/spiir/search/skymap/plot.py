@@ -13,20 +13,24 @@ import numpy as np
 from astropy.coordinates import SkyCoord
 from ligo.skymap.postprocess import find_greedy_credible_levels
 from matplotlib.figure import Figure
+from matplotlib.ticker import PercentFormatter
 
 logger = logging.getLogger(__name__)
 
 
-def plot_skymap_from_fits(
-    path: Union[str, bytes, PathLike],
+def plot_skymap(
+    skymap: np.ndarray,
+    nested: bool = True,
+    event_id: Optional[str] = None,
     contours: Optional[Union[float, Sequence[float]]] = None,
     inset_args: Optional[Union[Dict[str, Any], Sequence[Dict[str, Any]]]] = None,
-    ground_truth: Optional[SkyCoord] = None,
+    ground_truth: Optional[Union[tuple[float, float], SkyCoord]] = None,
     annotate: bool = True,
-    figsize: Tuple[float, float] = (16, 7),
+    colorbar: bool = False,
+    figsize: Tuple[float, float] = (14, 7),
     title: Optional[str] = None,
 ) -> Figure:
-    """Plots a detailed probability skymap from a FITS file.
+    """Plots a detailed probability skymap.
 
     TODO:
         - Implement automatic inset axis sizing and ordering based on ra / dec.
@@ -37,6 +41,10 @@ def plot_skymap_from_fits(
     ----------
     path: str | bytes | os.PathLike
         A path to a valid FITS file, typically generated from ligo.skymap.io.fits.
+    nested: bool, default = True
+        The order of HEALPix pixels - either 'nested' (True) or 'ring' (False).
+    event_id: str, optional
+        An optional event_id string to uniquely label the skymap.
     contours: float | Sequence[float] | None
         A sequence of probability contour levels (credible intervals) used to draw on
         the skymap. For example, (0.5, 0.9) would correspond to the 50% and 90% levels.
@@ -47,9 +55,11 @@ def plot_skymap_from_fits(
         astropy.coordinates.SkyCoord to center the inset axis on the skymap canvas.
     ground_truth: astropy.coordinates.Skycoord | None
         An astropy SkyCoord input for a "ground truth" marker for the true location.
-    annotate: bool
+    annotate: bool, default = True
         Whether to annotate the plot with information about additional metadata such as
         the LIGOLW event id and the probability per square degree.
+    colobar: bool, default = False
+        Whether to add a colorbar corresponding to the probability per square degree.
     figsize: tuple[float, float] | None
         An optional tuple specifying the figure size. Default is (16, 7).
     title: str | None
@@ -62,15 +72,16 @@ def plot_skymap_from_fits(
         The probability skymap as a matplotlib Figure object.
 
     """
-    skymap, metadata = ligo.skymap.io.fits.read_sky_map(path, nest=None)
+    # get array of log probabilities per pixel on the sky
     nside = ah.npix_to_nside(len(skymap))
     deg2perpix = ah.nside_to_pixel_area(nside).to_value(astropy.units.deg**2)
     probperdeg2 = skymap / deg2perpix
 
     # get sky position of max point of probability once, if required later
-    healpix = ah.HEALPix(nside=nside, order="nested")
+    healpix = ah.HEALPix(nside=nside, order="nested" if nested else "ring")
     max_longitude, max_latitude = healpix.healpix_to_lonlat(probperdeg2.argmax())
 
+    # create skymap figure
     fig = plt.figure(figsize=figsize, facecolor="white")
     ax = plt.axes(projection="astro mollweide")
     ax.grid()
@@ -80,20 +91,24 @@ def plot_skymap_from_fits(
             raise TypeError("title argument must be a str.")
         ax.set_title(title, fontsize=16, pad=15)
 
-    ax.imshow_hpx(
+    vmin, vmax = probperdeg2.min(), probperdeg2.max()
+    img = ax.imshow_hpx(
         (probperdeg2, "ICRS"),
-        nested=metadata["nest"],
-        vmin=0.0,
-        vmax=probperdeg2.max(),
+        nested=nested,
+        vmin=vmin,
+        vmax=vmax,
         cmap="cylon",
     )
 
     if ground_truth:
+        if not isinstance(ground_truth, SkyCoord):
+            logging.debug("ground_truth not defined as a SkyCoord, assuming unit='rad'")
+            ground_truth = SkyCoord(*ground_truth, unit="rad")
         marker = "X"
         ax.plot_coord(
             ground_truth,
             marker,
-            markerfacecolor="white",
+            markerfacecolor="green",
             markeredgecolor="black",
             markersize=8,
             linewidth=1,
@@ -104,7 +119,7 @@ def plot_skymap_from_fits(
         credible_levels = 100 * find_greedy_credible_levels(skymap)
         contour = ax.contour_hpx(
             (credible_levels, "ICRS"),
-            nested=metadata["nest"],
+            nested=nested,
             colors="k",
             linewidths=0.5,
             levels=contours,
@@ -112,14 +127,22 @@ def plot_skymap_from_fits(
         # fmt = r'%g\%%' if mpl.rcParams['text.usetex'] else '%g%%'
         contour.clabel(fmt=r"%g\%%", fontsize=6, inline=True)
 
+    if colorbar:
+        # cb_ticks = np.linspace(vmin, vmax, 2, endpoint=True)
+        cb = fig.colorbar(
+            img,
+            orientation='horizontal',
+            location="bottom",
+            fraction=0.045,
+            pad=0.05,
+            format=PercentFormatter(1),
+        )
+        cb.set_label(r'Probability per deg$^2$', fontsize=11)
+
     if annotate:
         text = []
-        try:
-            objid = metadata["objid"]
-        except KeyError:
-            pass
-        else:
-            text.append("event ID: {}".format(objid))
+        if event_id is not None:
+            text.append(f"event ID: {str(event_id)}")
         if contours:
             pp = np.round(contours).astype(int)
             ii = np.searchsorted(np.sort(credible_levels), contours) * deg2perpix
@@ -189,7 +212,7 @@ def plot_skymap_from_fits(
 
             ax_inset.imshow_hpx(
                 (probperdeg2, "ICRS"),
-                nested=metadata["nest"],
+                nested=nested,
                 vmin=0.0,
                 vmax=probperdeg2.max(),
                 cmap="cylon",
@@ -208,7 +231,7 @@ def plot_skymap_from_fits(
             if contours:
                 contour_inset = ax_inset.contour_hpx(
                     (credible_levels, "ICRS"),
-                    nested=metadata["nest"],
+                    nested=nested,
                     colors="k",
                     linewidths=0.5,
                     levels=contours,
@@ -217,3 +240,57 @@ def plot_skymap_from_fits(
                 contour_inset.clabel(fmt=r"%g\%%", fontsize=8, inline=True)
 
     return fig
+
+
+def plot_skymap_from_fits(
+    path: Union[str, bytes, PathLike],
+    contours: Optional[Union[float, Sequence[float]]] = None,
+    inset_args: Optional[Union[Dict[str, Any], Sequence[Dict[str, Any]]]] = None,
+    ground_truth: Optional[SkyCoord] = None,
+    annotate: bool = True,
+    figsize: Tuple[float, float] = (16, 7),
+    title: Optional[str] = None,
+) -> Figure:
+    """Plots a detailed probability skymap from a FITS file.
+
+    Parameters
+    ----------
+    path: str | bytes | os.PathLike
+        A path to a valid FITS file, typically generated from ligo.skymap.io.fits.
+    contours: float | Sequence[float] | None
+        A sequence of probability contour levels (credible intervals) used to draw on
+        the skymap. For example, (0.5, 0.9) would correspond to the 50% and 90% levels.
+    inset_kwargs: dict | Sequence[dict] | None
+        A set of keyword arguments passed used to define one or more inset skymap axes.
+        If a sequence of argument dicts are provided, one inset axis is made for each
+        element of the list. At a minimum, each must have a 'center' key with a valid
+        astropy.coordinates.SkyCoord to center the inset axis on the skymap canvas.
+    ground_truth: astropy.coordinates.Skycoord | None
+        An astropy SkyCoord input for a "ground truth" marker for the true location.
+    annotate: bool
+        Whether to annotate the plot with information about additional metadata such as
+        the LIGOLW event id and the probability per square degree.
+    figsize: tuple[float, float] | None
+        An optional tuple specifying the figure size. Default is (16, 7).
+    title: str | None
+        An optional string specifying the figure title.
+
+    Returns
+    -------
+    matplotlib.figure.Figure
+        The probability skymap as a matplotlib Figure object.
+
+    """
+    skymap, metadata = ligo.skymap.io.fits.read_sky_map(path, nest=None)
+
+    return plot_skymap(
+        skymap,
+        nested=metadata["nested"],
+        event_id=metadata.get("objid", None),
+        contours=contours,
+        inset_kwargs=inset_kwargs,
+        ground_truth=ground_truth,
+        annotate=annotate,
+        figsize=figsize,
+        title=title,
+    )

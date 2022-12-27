@@ -97,5 +97,5 @@ def run_igwn_alert_consumer(
         logger.info(f"Disconnecting from: {server}")
         try:
             alert_client.disconnect()
-        except:
+        except Exception:
             logger.info("Disconnected")

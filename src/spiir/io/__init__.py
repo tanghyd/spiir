@@ -1,3 +1,3 @@
-"""Subpackage providing Disk and Network I/O operations, formats, and convenience functions."""
+"""Subpackage providing disk or network I/O handlers, data formats, and functions."""
 
-from . import array, cli, ligolw, logging, mp
+from . import ligolw

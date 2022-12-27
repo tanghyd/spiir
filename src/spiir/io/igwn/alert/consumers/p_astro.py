@@ -7,16 +7,16 @@ from typing import TYPE_CHECKING, Any, Optional
 from ..consumer import IGWNAlertConsumer
 
 if TYPE_CHECKING:
-    from ....search.p_astro.models import FGMCChirpMassAreaModel
+    from ....search.p_astro.models import CompositeModel
 
 
 logger = logging.getLogger(__name__)
 
 
-class FGMCChirpMassAreaConsumer(IGWNAlertConsumer):
+class PAstroCompositeModelConsumer(IGWNAlertConsumer):
     def __init__(
         self,
-        model: "FGMCChirpMassAreaModel",
+        model: "CompositeModel",
         id: Optional[str] = None,
         service_url: str = f"https://gracedb-playground.ligo.org/api/",
         out_dir: str = "p_astro/results",

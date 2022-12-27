@@ -1,1 +1,0 @@
-from .composite_mass_contour import FGMCMassContourConsumer

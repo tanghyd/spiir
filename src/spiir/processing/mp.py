@@ -5,12 +5,13 @@ import logging
 import multiprocessing as mp
 from collections.abc import Callable, Sequence
 from functools import partial
-from itertools import chain, islice
-from typing import Any, Iterable, Optional, Union
+from typing import Any, Optional, Union
 
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
+
+from .array import chunk_iterable
 
 logger = logging.getLogger(__name__)
 

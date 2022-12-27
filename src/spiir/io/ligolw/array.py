@@ -17,13 +17,11 @@ from tqdm import tqdm
 from ..processing.mp import validate_cpu_count
 from .ligolw import get_ligolw_element, load_ligolw_xmldoc
 
-
 logger = logging.getLogger(__name__)
 
 
 def get_unique_index_diff(
-    index: Union[pd.Series, pd.Index],
-    precision: Optional[int] = None
+    index: Union[pd.Series, pd.Index], precision: Optional[int] = None
 ) -> pd.Series:
     """Convenience function to retrieve a unique index diff value from a pd.Index."""
     if not isinstance(index, pd.Series):

@@ -20,9 +20,7 @@ setup(
         "astropy",
         "python-ligo-lw>=1.8.1",
         "ligo.skymap",
-        "igwn-alert",
         "ligo-gracedb",
-        "toml",
         "numpy",
         "scipy",
         "pandas",
@@ -31,6 +29,7 @@ setup(
     ],
     extras_require={
         "p-astro": p_astro_requirements,
+        "igwn": ["igwn-alert", "toml"],
     },
     description="A Python library for the SPIIR gravitational wave science pipeline.",
     author="Daniel Tang",

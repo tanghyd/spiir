@@ -1,5 +1,5 @@
 repos:
-  -exclude: ^share/
+  - exclude: ^share/
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.3.0
     hooks:

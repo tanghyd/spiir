@@ -1,5 +1,4 @@
 repos:
-  - exclude: ^share/
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.3.0
     hooks:
@@ -8,21 +7,26 @@ repos:
       - id: check-yaml
       - id: check-json
       - id: end-of-file-fixer
+        exclude: ^share/
       - id: trailing-whitespace
+        exclude: ^share/
   - repo: https://github.com/psf/black
     rev: 22.10.0
     hooks:
       - id: black
+        exclude: ^share/
         language_version: python3
   - repo: https://github.com/PyCQA/isort
     rev: 5.10.1
     hooks:
       - id: isort
+        exclude: ^share/
         name: isort (python)
         args: ["--profile", "black", "--filter-files"]
   - repo: https://github.com/executablebooks/mdformat
     rev: 0.7.16
     hooks:
       - id: mdformat
+        exclude: ^share/
         additional_dependencies:
           - mdformat-black

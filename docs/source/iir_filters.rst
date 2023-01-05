@@ -5,7 +5,7 @@ IIR Filters
 Version |version|
 
 .. note::
-   
+
    This documentation is a work in progress! Please wait..
 
 

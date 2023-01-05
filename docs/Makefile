@@ -20,7 +20,7 @@ help:
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 # build docs for github pages in docs/ from /docsrc
-# 1. (optional) remove stale spiir.rst files from previous builds 
+# 1. (optional) remove stale spiir.rst files from previous builds
 # 2. clear docs/ directory
 # 3. generate .rst files from spiir package structure
 # 4. build html files from .rst
@@ -36,7 +36,7 @@ help:
 
 # https://www.sphinx-doc.org/en/master/tutorial/deploying.html
 # build docs for github pages from main branch docs/ and push to gh-pages
-# 1. (optional) remove stale spiir.rst files from previous apidoc builds 
+# 1. (optional) remove stale spiir.rst files from previous apidoc builds
 # 2. generate .rst files from spiir package structure
 # 3. create html from .rst
 #    a .nojeykll file is created via actions-gh-pages with enable_jekyll: False

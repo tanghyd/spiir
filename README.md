@@ -56,22 +56,20 @@ pip install .[igwn-alert]  # utilities for consuming IGWNAlert payloads
 pip install .[all]  # all optional dependencies
 ```
 
-Note that when running on zsh, we have observed that quotation marks might be required for these tags, for example:
+Note that when running on zsh, we have observed that quotation marks might be required for these tags.
+The solution to this error may look something like the following:
 
 ```
-pip install .["all"]
-...
-
-#### Jupyter Notebook
-
-If the user would like to use this virtual environment in a Jupyter notebook kernel, we can execute the following:
-
+pip install '.[all]'
 ```
 
-# add virtual environment to jupyter notebook kernels (can change --name)
+### Jupyter Notebook
+
+If the user would like to use this virtual environment as a Jupyter notebook kernel called "spiir-py3x", then we can execute the following:
+
+```
+# add virtual environment to jupyter notebook kernels (you can rename "spiir-py3x" to anything)
 
 pip install ipykernel
-python -m ipykernel install --user --name=spiir
-
-```
+python -m ipykernel install --user --name=spiir-py3x
 ```

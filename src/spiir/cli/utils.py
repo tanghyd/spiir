@@ -6,7 +6,7 @@ import click
 
 def click_logger_options(f):
     """A decorator function to include click options for logging arguments."""
-    f = click.option(f"--log-level", "log_level", type=int, default=logging.WARNING)(f)
+    f = click.option("--log-level", "log_level", type=int, default=logging.WARNING)(f)
     f = click.option("--verbose", "log_level", type=int, flag_value=logging.INFO)(f)
     f = click.option("--debug", "log_level", type=int, flag_value=logging.DEBUG)(f)
     f = click.option("--log-file", type=click.Path(writable=True), default=None)(f)

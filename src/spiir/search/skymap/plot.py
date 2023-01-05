@@ -23,7 +23,7 @@ def plot_skymap(
     nested: bool = True,
     event_id: Optional[str] = None,
     contours: Optional[Union[float, Sequence[float]]] = None,
-    inset_args: Optional[Union[Dict[str, Any], Sequence[Dict[str, Any]]]] = None,
+    inset_kwargs: Optional[Union[Dict[str, Any], Sequence[Dict[str, Any]]]] = None,
     ground_truth: Optional[Union[tuple[float, float], SkyCoord]] = None,
     annotate: bool = True,
     colorbar: bool = False,
@@ -151,24 +151,24 @@ def plot_skymap(
                 text.append(r"{:d}% area: {:,d} deg$^2$".format(p, i))
         ax.text(0.05, 0.95, "\n".join(text), transform=ax.transAxes, ha="right")
 
-    if inset_args is not None:
-        if isinstance(inset_args, dict):
-            inset_args = [inset_args]
+    if inset_kwargs is not None:
+        if isinstance(inset_kwargs, dict):
+            inset_kwargs = [inset_kwargs]
 
-        for i, inset_arg in enumerate(inset_args):
-            if not isinstance(inset_arg, dict):
-                raise TypeError("inset_args must be a dict or sequence of dicts.")
+        for i, inset_kwarg in enumerate(inset_kwargs):
+            if not isinstance(inset_kwarg, dict):
+                raise TypeError("inset_kwargs must be a dict or sequence of dicts.")
 
-            if "center" not in inset_arg:
-                raise KeyError("inset_arg must contain a valid 'center' SkyCoord.")
+            if "center" not in inset_kwarg:
+                raise KeyError("inset_kwarg must contain a valid 'center' SkyCoord.")
 
             # define inset axis size
-            inset_width = inset_arg.get("width", 0.3)
-            inset_height = inset_arg.get("height", 0.3)
-            inset_left = inset_arg.get("left", 0.8)
-            inset_bottom = inset_arg.get("bottom", None)
+            inset_width = inset_kwarg.get("width", 0.3)
+            inset_height = inset_kwarg.get("height", 0.3)
+            inset_left = inset_kwarg.get("left", 0.8)
+            inset_bottom = inset_kwarg.get("bottom", None)
             if inset_bottom is None:
-                if len(inset_args) == 1:
+                if len(inset_kwargs) == 1:
                     inset_bottom = 0.5 - inset_height / 2
                 else:
                     # FIXME: Handle more than 2 inset axes
@@ -176,7 +176,7 @@ def plot_skymap(
 
             # center point as astropy.coordinates.SkyCord
             # FIXME: implement more robust input argument logic and exception handling
-            inset_center = inset_arg.get("center", "max")
+            inset_center = inset_kwarg.get("center", "max")
             if isinstance(inset_center, str) and inset_center.lower() == "max":
                 inset_center = SkyCoord(max_longitude, max_latitude)
             if not isinstance(inset_center, SkyCoord):
@@ -187,14 +187,14 @@ def plot_skymap(
                     try:
                         inset_center = SkyCoord(**inset_center)
                     except Exception as exc:
-                        error_msg = "inset_arg['center'] is an invalid SkyCoord."
+                        error_msg = "inset_kwarg['center'] is an invalid SkyCoord."
                         raise ValueError(error_msg) from exc
 
             ax_inset = plt.axes(
                 [inset_left, inset_bottom, inset_width, inset_height],
                 projection="astro zoom",
                 center=inset_center,
-                radius=(inset_arg.get("radius", None) or 10) * astropy.units.deg,
+                radius=(inset_kwarg.get("radius", None) or 10) * astropy.units.deg,
             )
 
             for coords in ax_inset.coords:
@@ -206,9 +206,9 @@ def plot_skymap(
             ax.connect_inset_axes(ax_inset, "lower left")
             ax_inset.scalebar((0.1, 0.1), 5 * astropy.units.deg).label()
             ax_inset.compass(0.9, 0.1, 0.2)
-            ax_inset.set_xlabel(inset_arg.get("xlabel", " "))  # empty string required
-            ax_inset.set_ylabel(inset_arg.get("ylabel", " "))  # None breaks x/y labels
-            ax_inset.set_title(inset_arg.get("title", None))
+            ax_inset.set_xlabel(inset_kwarg.get("xlabel", " "))  # empty string required
+            ax_inset.set_ylabel(inset_kwarg.get("ylabel", " "))  # None breaks x/ylabels
+            ax_inset.set_title(inset_kwarg.get("title", None))
 
             ax_inset.imshow_hpx(
                 (probperdeg2, "ICRS"),
@@ -245,7 +245,7 @@ def plot_skymap(
 def plot_skymap_from_fits(
     path: Union[str, bytes, PathLike],
     contours: Optional[Union[float, Sequence[float]]] = None,
-    inset_args: Optional[Union[Dict[str, Any], Sequence[Dict[str, Any]]]] = None,
+    inset_kwargs: Optional[Union[Dict[str, Any], Sequence[Dict[str, Any]]]] = None,
     ground_truth: Optional[SkyCoord] = None,
     annotate: bool = True,
     figsize: Tuple[float, float] = (16, 7),

@@ -1,0 +1,7 @@
+pre-commit
+mdformat
+mdformat-black
+black
+black[jupyter]
+isort
+flake8

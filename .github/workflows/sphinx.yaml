@@ -14,7 +14,7 @@ jobs:
         pre-build-command: "apt-get update -y \
           && apt-get install -y gcc \
           && pip install --upgrade pip \
-          && pip install -e .[pycbc]"
+          && pip install -e .[all]"
         build-command: make docs
     - name: Upload artifacts
       uses: actions/upload-artifact@v3

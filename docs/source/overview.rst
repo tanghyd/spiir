@@ -10,7 +10,7 @@ Introduction
 Welcome to the SPIIR gravitational wave search pipeline documentation!
 
 .. note::
-   
+
    This documentation is a work in progress! Please wait...
 
 
@@ -55,7 +55,7 @@ Basic
 * Quick start including `sphinx-quickstart` command:
   https://www.sphinx-doc.org/en/master/usage/quickstart.html
 * HTML themes: https://www.sphinx-doc.org/en/master/usage/theming.html
-  
+
 Advanced
 ^^^^^^^^
 
@@ -69,7 +69,7 @@ Advanced
 * Example Sphinx extension project repositories:
 
   * ``sphinx-copybutton`` (button to copy code in code examples):
-    https://github.com/executablebooks/sphinx-copybutton 
+    https://github.com/executablebooks/sphinx-copybutton
   * ``sphinx-toggleprompt`` (button to hide prompts and outputs in
     console-like code examples):
     https://github.com/jurasofish/sphinx-toggleprompt

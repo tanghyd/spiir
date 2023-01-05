@@ -154,7 +154,7 @@ def convert_inference_to_simulation_spins(theta_jn, theta_1, theta_2, a_1, a_2):
     #     iota = theta_jn
     # else:
     #     pass
-        # transform_source_to_radiation_frame()
+    # transform_source_to_radiation_frame()
 
 
 # transform_from_source_frame_to_radiation?

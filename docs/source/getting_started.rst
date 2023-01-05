@@ -5,7 +5,7 @@ Getting Started
 Version |version|
 
 .. note::
-   
+
    This documentation is a work in progress! Please wait..
 
 
@@ -17,7 +17,7 @@ This section will discuss installation of the package.
 Virtual Environments
 ^^^^^^^^^^^^^^^^^^^^
 
-This section might provide some tips for package installation when using either 
+This section might provide some tips for package installation when using either
 virtualenv or conda virtual environments.
 
 

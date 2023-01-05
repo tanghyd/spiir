@@ -51,8 +51,8 @@ Sometimes optional dependencies may be required by the user, such as certain cod
 To install these, we can instead add an extra tag to our install as follows:
 
 ```
-pip install .[p_astro]  # algorithms for p_astro classification
-pip install .[igwn_alert]  # utilities for consuming IGWNAlert payloads
+pip install .[p-astro]  # algorithms for p_astro classification
+pip install .[igwn-alert]  # utilities for consuming IGWNAlert payloads
 pip install .[all]  # all optional dependencies
 ```
 

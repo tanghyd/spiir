@@ -23,7 +23,7 @@ def plot_skymap(
     nested: bool = True,
     event_id: Optional[str] = None,
     contours: Optional[Union[float, Sequence[float]]] = None,
-    inset_args: Optional[Union[Dict[str, Any], Sequence[Dict[str, Any]]]] = None,
+    inset_kwargs: Optional[Union[Dict[str, Any], Sequence[Dict[str, Any]]]] = None,
     ground_truth: Optional[Union[Tuple[float, float], SkyCoord]] = None,
     annotate: bool = True,
     colorbar: bool = False,

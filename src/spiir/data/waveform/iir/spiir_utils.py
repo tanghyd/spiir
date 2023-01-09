@@ -540,9 +540,11 @@ def matched_filt(template, strain, sampleRate=4096.0):
     indmax = np.argmax(SNR)
     try:
         timemax = time[indmax]
-    except:
-        raise ValueError(
-            "max SNR is outside the data, need to collect more data for a more correct SNR estimation"
-        )
+    except IndexError as exc:
+        raise IndexError(
+            "max SNR is outside the data, "
+            "need to collect more data for a more correct SNR estimation"
+        ) from exc
+
     f_ticks = np.linspace(1, working_length + 1, working_length) * df
     return snr_time, sigma, indmax, timemax, f_ticks, data_fft, template_fft

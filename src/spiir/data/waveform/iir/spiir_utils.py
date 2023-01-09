@@ -30,11 +30,12 @@ def get_bankid_from_bankname(bankname):
     search_result = re.search(r'\d{1,4}', tmp_name)
     try:
         bankid = search_result.group()
-    except:
+    except Exception as exc:
+        # NOTE: Review accuracy of 'ValueError' as the raised exception
         raise ValueError(
-            "bankid should be the first 3/4 digits of the given name, could not find the digits from %s"
-            % tmp_name
-        )
+            "bankid should be the first 3/4 digits of the given name, "
+            f"could not find the digits from {tmp_name}"
+        ) from exc
 
     bankid_strip = bankid.lstrip('0')
     if bankid_strip == '':
@@ -448,6 +449,7 @@ def gen_whitened_spiir_template_and_reconstructed_waveform(
         )
 
         if nround == 1:
+            # NOTE: This code path does not execute saved variables
             original_match = spiir_match
             original_filters = len(a1)
 

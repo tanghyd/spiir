@@ -6,10 +6,11 @@ import lal
 import lalsimulation
 import numpy as np
 import scipy
-from gstlal import cbc_template_fir
+from gstlal import cbc_template_fir, chirptime
 from ligo.lw import array, ligolw, lsctables, param, types, utils
 
 from . import cbc_template_iir
+
 
 logger = logging.getLogger(__name__)
 
@@ -245,7 +246,8 @@ def gen_whitened_fir_template(
 
     if psd is not None:
         lal.WhitenCOMPLEX16FrequencySeries(fseries, psd)
-    fseries = add_quadrature_phase(fseries, working_length)
+
+    fseries = cbc_template_iir.add_quadrature_phase(fseries, working_length)
 
     #
     # compute time-domain autocorrelation function
@@ -258,7 +260,7 @@ def gen_whitened_fir_template(
             )
     autocorrelation_bank_full = np.zeros(autocorrelation_length, dtype="cdouble")
 
-    autocorrelation = normalized_autocorrelation(fseries, revplan).data.data
+    autocorrelation = cbc_template_iir.normalized_autocorrelation(fseries, revplan).data.data
     autocorrelation_bank_full[::-1] = np.concatenate(
         (
             autocorrelation[-(autocorrelation_length // 2) :],
@@ -284,8 +286,8 @@ def gen_whitened_fir_template(
     #
 
     # Use our own condition_IMR_templates to ajust the end time to be the merger time
-    if approximant in gstlal_IMR_approximants:
-        data_full, target_index = condition_imr_template(
+    if approximant in cbc_template_iir.gstlal_IMR_approximants:
+        data_full, target_index = cbc_template_iir.condition_imr_template(
             approximant, data_full, epoch_time, sample_rate_max, max_ringtime
         )
         # record the new end times for the waveforms (since we performed the shifts)
@@ -314,7 +316,7 @@ def gen_whitened_fir_template(
     # data *= cmath.sqrt(2 / norm)
     logger.debug("template length %d" % len(data))
 
-    autocorrelation_bank = normalized_crosscorr(data_full, data, autocorrelation_length)
+    autocorrelation_bank = cbc_template_iir.normalized_crosscorr(data_full, data, autocorrelation_length)
     return data, data_full, autocorrelation_bank, autocorrelation_bank_full
 
 
@@ -386,7 +388,7 @@ def gen_whitened_spiir_template_and_reconstructed_waveform(
     # cut at the end for negative latency template
     # data_full = original uncut template
     # fhigh is the estimated end frequency of data
-    amp, phase, data, data_full, epoch_index, fhigh = gen_whitened_amp_phase(
+    amp, phase, data, data_full, epoch_index, fhigh = cbc_template_iir.gen_whitened_amp_phase(
         psd,
         approximant,
         waveform_domain,
@@ -403,7 +405,7 @@ def gen_whitened_spiir_template_and_reconstructed_waveform(
     # get the padded length, so SPIIR approximated waveform u_rev_pad
     # the original cut template h_pad, and the original one will be
     # padded to the same length
-    pad_length = ceil_pow_2(len(data_full) + autocorrelation_length)
+    pad_length = cbc_template_iir.ceil_pow_2(len(data_full) + autocorrelation_length)
 
     # This is to normalize whitened template so it = h_{whitened at 1MPC}(t)
     # NOTE: because

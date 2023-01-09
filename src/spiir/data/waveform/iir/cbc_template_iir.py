@@ -45,12 +45,12 @@ class XMLContentHandler(ligolw.LIGOLWContentHandler):
 ValidApproximantsFD = {"SpinTaylorT4", "SEOBNRv4_ROM"}
 
 # copied from gstlal-inspiral/ templates.py
-# gstlal_IMR_approximants = {
-#     "EOBNRv2",
-#     "IMRPhenomC",
-#     "SEOBNRv4_ROM",
-#     "SEOBNRv2_ROM_DoubleSpin",
-# }
+gstlal_IMR_approximants = {
+    "EOBNRv2",
+    "IMRPhenomC",
+    "SEOBNRv4_ROM",
+    "SEOBNRv2_ROM_DoubleSpin",
+}
 
 
 def condition_imr_template(

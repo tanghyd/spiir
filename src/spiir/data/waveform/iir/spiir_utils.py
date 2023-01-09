@@ -11,7 +11,6 @@ from ligo.lw import array, ligolw, lsctables, param, types, utils
 
 from . import cbc_template_iir
 
-
 logger = logging.getLogger(__name__)
 
 # FIXME:  require calling code to provide the content handler
@@ -261,7 +260,9 @@ def gen_whitened_fir_template(
             )
     autocorrelation_bank_full = np.zeros(autocorrelation_length, dtype="cdouble")
 
-    autocorrelation = cbc_template_iir.normalized_autocorrelation(fseries, revplan).data.data
+    autocorrelation = cbc_template_iir.normalized_autocorrelation(
+        fseries, revplan
+    ).data.data
     autocorrelation_bank_full[::-1] = np.concatenate(
         (
             autocorrelation[-(autocorrelation_length // 2) :],
@@ -317,7 +318,9 @@ def gen_whitened_fir_template(
     # data *= cmath.sqrt(2 / norm)
     logger.debug("template length %d" % len(data))
 
-    autocorrelation_bank = cbc_template_iir.normalized_crosscorr(data_full, data, autocorrelation_length)
+    autocorrelation_bank = cbc_template_iir.normalized_crosscorr(
+        data_full, data, autocorrelation_length
+    )
     return data, data_full, autocorrelation_bank, autocorrelation_bank_full
 
 
@@ -389,7 +392,14 @@ def gen_whitened_spiir_template_and_reconstructed_waveform(
     # cut at the end for negative latency template
     # data_full = original uncut template
     # fhigh is the estimated end frequency of data
-    amp, phase, data, data_full, epoch_index, fhigh = cbc_template_iir.gen_whitened_amp_phase(
+    (
+        amp,
+        phase,
+        data,
+        data_full,
+        epoch_index,
+        fhigh,
+    ) = cbc_template_iir.gen_whitened_amp_phase(
         psd,
         approximant,
         waveform_domain,

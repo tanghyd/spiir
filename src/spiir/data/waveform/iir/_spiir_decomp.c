@@ -106,7 +106,7 @@ static PyObject *PyIIRResponse(PyObject *self, PyObject *args)
 	resp_length[0] = resp->length;
 	resp_pyob = PyArray_SimpleNew(1, resp_length, NPY_CDOUBLE);
 	memcpy(PyArray_DATA(resp_pyob), resp->data, resp->length * sizeof(*resp->data));
-		
+
 	XLALDestroyCOMPLEX16Vector(resp);
 	Py_DECREF(a1_array);
 	Py_DECREF(b0_array);
@@ -204,4 +204,3 @@ PyMODINIT_FUNC PyInit__spiir_decomp(void)
 /* the functin prototypes have been vastly simplified (use of native c types */
 /* and double precision)                                                     */
 /*****************************************************************************/
-

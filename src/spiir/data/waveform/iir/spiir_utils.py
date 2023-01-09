@@ -433,9 +433,7 @@ def gen_whitened_spiir_template_and_reconstructed_waveform(
         norm_data_full = abs(np.dot(data_full, np.conj(data_full)))
 
         # overlap of spiir reconstructed waveform with template (spiir_template)
-        spiir_match = abs(
-            np.dot(u_rev_pad, np.conj(h_pad)) / np.sqrt(norm_u * norm_h)
-        )
+        spiir_match = abs(np.dot(u_rev_pad, np.conj(h_pad)) / np.sqrt(norm_u * norm_h))
         # FIXME:normalize so that the SNR would match the expected SNR,
         # using norm_h instead of norm_data_full ?
         b0 *= np.sqrt(norm_data_full / norm_u) * spiir_match

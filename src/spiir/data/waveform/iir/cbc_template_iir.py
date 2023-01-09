@@ -12,7 +12,6 @@ import numpy as np
 import scipy
 from ligo.lw import array, ligolw, lsctables, param, types, utils
 
-
 # TO DO: Implement better environment variable handling for this import error:
 # You must set the environment variable GSTLAL_FIR_WHITEN to either 0 or 1.
 # 1 enables causal whitening. 0 is the traditional acausal whitening filter
@@ -31,6 +30,7 @@ Attributes = ligolw.sax.xmlreader.AttributesImpl
 # FIXME:  require calling code to provide the content handler
 class DefaultContentHandler(ligolw.LIGOLWContentHandler):
     pass
+
 
 array.use_in(DefaultContentHandler)
 param.use_in(DefaultContentHandler)

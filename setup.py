@@ -5,17 +5,12 @@ from Cython.Build import cythonize
 from setuptools import Extension, find_packages, setup
 
 # configure C extensions
-
-INCLUDE_DIR = (Path(__file__).parent / "include").resolve()
-LIB_DIR = (Path(__file__).parent / "lib").resolve()
-
 extensions = [
     "src/spiir/data/waveform/iir/_optimizer.pyx",
     Extension(
         "spiir.data.waveform.iir._spiir_decomp",
         sources=["src/spiir/data/waveform/iir/_spiir_decomp.c"],
-        include_dirs=[np.get_include(), str(INCLUDE_DIR), "/usr/local/include"],
-        library_dirs=[str(LIB_DIR), "/usr/local/lib"],
+        include_dirs=[np.get_include()],
         libraries=["lal", "gsl", "lalinspiral"],
         extra_compile_args=['-Wall'],
     ),

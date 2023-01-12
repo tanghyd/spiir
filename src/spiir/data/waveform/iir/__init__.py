@@ -1,5 +1,7 @@
-"""Placeholder subpackage for SPIIR's Infinite Impulse Response filter approximations
+"""Sub-package for SPIIR's Infinite Impulse Response filter approximations
 for gravitational wave signal templates.
 
-This code should be ported from the gstlal-spiir/python/spiirbank/ subpackage.
+Code ported from the gstlal-spiir/python/spiirbank/ subpackage by Qi Chu.
 """
+
+from . import cbc_template_iir, optimizer, spiir_decomp, spiir_utils

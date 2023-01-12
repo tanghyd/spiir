@@ -1,4 +1,20 @@
-from setuptools import find_packages, setup
+from pathlib import Path
+
+import numpy as np
+from Cython.Build import cythonize
+from setuptools import Extension, find_packages, setup
+
+# configure C extensions
+extensions = [
+    "src/spiir/data/waveform/iir/_optimizer.pyx",
+    Extension(
+        "spiir.data.waveform.iir._spiir_decomp",
+        sources=["src/spiir/data/waveform/iir/_spiir_decomp.c"],
+        include_dirs=[np.get_include()],
+        libraries=["lal", "gsl", "lalinspiral"],
+        extra_compile_args=['-Wall'],
+    ),
+]
 
 # specify optional dependencies
 igwn_alert_requires = ["igwn-alert", "toml"]
@@ -15,6 +31,7 @@ extras_require = {
 
 extras_require["all"] = [pkg for pkgs in extras_require.values() for pkg in pkgs]
 
+# install package
 setup(
     name="spiir",
     version="0.0.2",
@@ -36,6 +53,8 @@ setup(
         "click",
     ],
     extras_require=extras_require,
+    ext_modules=cythonize(extensions, language_level="3"),
+    include_package_data=True,
     description="A Python library for the SPIIR gravitational wave science pipeline.",
     author="Daniel Tang",
     author_email="daniel.tang@uwa.edu.au",

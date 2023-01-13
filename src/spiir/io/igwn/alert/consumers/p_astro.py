@@ -29,15 +29,6 @@ class PAstroCompositeModelConsumer(IGWNAlertConsumer):
         with Path(file_path).open(mode="w") as f:
             f.write(json.dumps(data, indent=indent))
 
-    # def upload_pastro(self, gracedb_id: str, probs: dict[str, Any]):
-    #     try:
-    #         runtime = time.perf_counter()
-    #         self.gracedb.createVOEvent(gracedb_id, voevent_type="preliminary", **probs)
-    #         runtime = time.perf_counter() - runtime
-    #         logger.debug(f"{gracedb_id} p_astro uploaded to GraceDB in {runtime:.4f}s.")
-    #     except Exception as exc:
-    #         logger.warning(f"{gracedb_id} p_astro upload failed: {exc}.")
-
     def process_alert(
         self,
         topic: list[str] | None = None,

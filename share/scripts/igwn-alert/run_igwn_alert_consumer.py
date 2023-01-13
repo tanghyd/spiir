@@ -1,14 +1,12 @@
-#!/home/daniel.tang/.conda/envs/spiir/bin/python
 """"An application to listen to igwn-alert using the hop-client based API."""
 
 import argparse
 import logging
 from pathlib import Path
-from typing import Optional, Union
 
 import spiir.io.igwn
-from spiir.search import p_astro
 from spiir.logging import configure_logger
+from spiir.search import p_astro
 
 VALID_GRACEDB_GROUPS = ["gracedb-playground"]
 
@@ -75,15 +73,10 @@ def parse_args() -> argparse.Namespace:
         help="Output directory to store results.",
     )
     parser.add_argument(
-        "--logging-config",
-        type=Path,
-        help="Optional path to logging file."
+        "--logging-config", type=Path, help="Optional path to logging file."
     )
     parser.add_argument(
-        "--log-dir",
-        default="./logs",
-        type=Path,
-        help="Optional path to logging file."
+        "--log-dir", default="./logs", type=Path, help="Optional path to logging file."
     )
     parser.add_argument(
         "-d",
@@ -103,8 +96,8 @@ def parse_args() -> argparse.Namespace:
         help="Set logging level to INFO and display progress and information",
     )
     return parser.parse_args()
-    
-    
+
+
 if __name__ == "__main__":
     args = parse_args()
 

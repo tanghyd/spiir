@@ -1,7 +1,6 @@
 import argparse
 import logging
 import time
-from typing import Union
 from pathlib import Path
 
 from ligo.gracedb.rest import GraceDb
@@ -11,7 +10,9 @@ from spiir.logging import configure_logger
 logger = logging.getLogger(Path(__file__).stem)
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Test the SPIIR p(astro) IGWNAlert Listener.")
+    parser = argparse.ArgumentParser(
+        description="Test the SPIIR p(astro) IGWNAlert Listener."
+    )
     parser.add_argument(
         "--dir",
         type=str,
@@ -99,10 +100,7 @@ if __name__ == "__main__":
             if fp.is_file():
                 try:
                     response = client.createEvent(
-                        args.group,
-                        args.pipeline,
-                        str(fp),
-                        search=args.search
+                        args.group, args.pipeline, str(fp), search=args.search
                     )
                     logger.debug(f"Sent {fp} with response {response.status_code}")
                 except Exception as exc:

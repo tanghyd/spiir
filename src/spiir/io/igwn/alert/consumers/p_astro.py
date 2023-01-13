@@ -65,7 +65,7 @@ class PAstroCompositeModelConsumer(IGWNAlertConsumer):
                 return
 
             far = data["CoincInspiral"]["combined_far"]
-            if far == 0.0:
+            if far <= 0.0:
                 logger.debug(f"{gid} FAR is equal to 0. - skipping.")
                 return
 

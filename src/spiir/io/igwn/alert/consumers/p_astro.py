@@ -66,7 +66,7 @@ class PAstroCompositeModelConsumer(IGWNAlertConsumer):
 
             far = data["CoincInspiral"]["combined_far"]
             if far <= 0.0:
-                logger.debug(f"{gid} FAR is equal to 0. - skipping.")
+                logger.debug(f"{gid} FAR is equal to 0. - skipping")
                 return
 
             snr = data["CoincInspiral"]["snr"]
@@ -91,7 +91,7 @@ class PAstroCompositeModelConsumer(IGWNAlertConsumer):
             duration = time.perf_counter() - duration
             logger.debug(f"{gid} total processing time was {duration:.4f}s.")
         else:
-            logger.warn(f"Alert received but payload = None; topic = {topic}")
+            logger.warning(f"Alert received but payload = None; topic = {topic}")
 
     def __exit__(self):
         self.gracedb.close()

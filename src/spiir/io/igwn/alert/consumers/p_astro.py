@@ -2,7 +2,7 @@ import json
 import logging
 import time
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 from ..consumer import IGWNAlertConsumer
 
@@ -25,23 +25,14 @@ class PAstroCompositeModelConsumer(IGWNAlertConsumer):
         super().__init__(id, service_url, out_dir)
         self.model = model  # assumes the model is already initialised
 
-    def save_json(self, data: dict[str, Any], file_path: Path, indent: int = 4):
+    def save_json(self, data: Dict[str, Any], file_path: Path, indent: int = 4):
         with Path(file_path).open(mode="w") as f:
             f.write(json.dumps(data, indent=indent))
 
-    # def upload_pastro(self, gracedb_id: str, probs: dict[str, Any]):
-    #     try:
-    #         runtime = time.perf_counter()
-    #         self.gracedb.createVOEvent(gracedb_id, voevent_type="preliminary", **probs)
-    #         runtime = time.perf_counter() - runtime
-    #         logger.debug(f"{gracedb_id} p_astro uploaded to GraceDB in {runtime:.4f}s.")
-    #     except Exception as exc:
-    #         logger.warning(f"{gracedb_id} p_astro upload failed: {exc}.")
-
     def process_alert(
         self,
-        topic: list[str] | None = None,
-        payload: dict[str, Any] | None = None,
+        topic: Optional[List[str]] = None,
+        payload: Optional[Dict[str, Any]] = None,
     ):
         # to do: check optional input parameters in igwn_alert repo
         if payload is not None:
@@ -74,8 +65,8 @@ class PAstroCompositeModelConsumer(IGWNAlertConsumer):
                 return
 
             far = data["CoincInspiral"]["combined_far"]
-            if far == 0.0:
-                logger.debug(f"{gid} FAR is equal to 0. - skipping.")
+            if far <= 0.0:
+                logger.debug(f"{gid} FAR is equal to 0. - skipping")
                 return
 
             snr = data["CoincInspiral"]["snr"]
@@ -100,7 +91,7 @@ class PAstroCompositeModelConsumer(IGWNAlertConsumer):
             duration = time.perf_counter() - duration
             logger.debug(f"{gid} total processing time was {duration:.4f}s.")
         else:
-            logger.warn(f"Alert received but payload = None; topic = {topic}")
+            logger.warning(f"Alert received but payload = None; topic = {topic}")
 
     def __exit__(self):
         self.gracedb.close()

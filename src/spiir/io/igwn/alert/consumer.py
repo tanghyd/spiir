@@ -1,7 +1,7 @@
 """Contains basic functionality to consume data from the IGWN Alert Kafka service."""
 import logging
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Dict, List, Optional
 
 import toml
 from igwn_alert import client
@@ -19,7 +19,7 @@ class IGWNAlertConsumer:
     ):
         self.id = id or type(self).__name__  # replace with process/node id?
         self.gracedb = None
-        self.service_url: str | None = None
+        self.service_url: Optional[str] = None
         if service_url is not None:
             self._setup_client(service_url)
 
@@ -38,8 +38,8 @@ class IGWNAlertConsumer:
 
     def process_alert(
         self,
-        topic: list[str] | None = None,
-        payload: dict[str, Any] | None = None,
+        topic: Optional[List[str]] = None,
+        payload: Optional[Dict[str, Any]] = None,
     ):
         logger.debug(f"{self.id} doing nothing with payload from {topic}: {payload}.")
         pass
@@ -51,7 +51,7 @@ def run_igwn_alert_consumer(
     consumer: IGWNAlertConsumer,
     server: str = "kafka://kafka.scima.org/",
     group: str = "gracedb-playground",
-    topics: list[str] = ["test_spiir"],
+    topics: List[str] = ["test_spiir"],
     username: Optional[str] = None,
     credentials: Optional[str] = None,
 ):

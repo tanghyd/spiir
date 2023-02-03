@@ -25,7 +25,7 @@ class PAstroCompositeModelConsumer(IGWNAlertConsumer):
         super().__init__(id, service_url, out_dir)
         self.model = model  # assumes the model is already initialised
 
-    def save_json(self, data: dict[str, Any], file_path: Path, indent: int = 4):
+    def save_json(self, data: Dict[str, Any], file_path: Path, indent: int = 4):
         with Path(file_path).open(mode="w") as f:
             f.write(json.dumps(data, indent=indent))
 

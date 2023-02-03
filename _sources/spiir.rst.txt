@@ -1,0 +1,32 @@
+spiir package
+=============
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   spiir.analysis
+   spiir.cli
+   spiir.data
+   spiir.io
+   spiir.processing
+   spiir.search
+
+Submodules
+----------
+
+
+.. automodule:: spiir.logging
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: spiir
+   :members:
+   :undoc-members:
+   :show-inheritance:

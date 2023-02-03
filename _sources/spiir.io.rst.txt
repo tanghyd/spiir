@@ -1,0 +1,19 @@
+spiir.io package
+================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   spiir.io.igwn
+   spiir.io.ligolw
+
+Module contents
+---------------
+
+.. automodule:: spiir.io
+   :members:
+   :undoc-members:
+   :show-inheritance:

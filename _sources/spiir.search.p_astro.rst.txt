@@ -1,0 +1,31 @@
+spiir.search.p\_astro package
+=============================
+
+Submodules
+----------
+
+
+.. automodule:: spiir.search.p_astro.bayes_factor
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+.. automodule:: spiir.search.p_astro.mchirp_area
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+.. automodule:: spiir.search.p_astro.models
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: spiir.search.p_astro
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,49 @@
+spiir.io.ligolw package
+=======================
+
+Submodules
+----------
+
+
+.. automodule:: spiir.io.ligolw.array
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+.. automodule:: spiir.io.ligolw.coinc
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+.. automodule:: spiir.io.ligolw.ligolw
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+.. automodule:: spiir.io.ligolw.param
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+.. automodule:: spiir.io.ligolw.postcoh
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+.. automodule:: spiir.io.ligolw.table
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: spiir.io.ligolw
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,18 @@
+spiir.io.igwn package
+=====================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   spiir.io.igwn.alert
+
+Module contents
+---------------
+
+.. automodule:: spiir.io.igwn
+   :members:
+   :undoc-members:
+   :show-inheritance:

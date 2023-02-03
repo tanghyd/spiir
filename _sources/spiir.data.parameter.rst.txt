@@ -1,0 +1,19 @@
+spiir.data.parameter package
+============================
+
+Submodules
+----------
+
+
+.. automodule:: spiir.data.parameter.distribution
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: spiir.data.parameter
+   :members:
+   :undoc-members:
+   :show-inheritance:

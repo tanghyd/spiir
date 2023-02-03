@@ -1,0 +1,34 @@
+spiir.search package
+====================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   spiir.search.p_astro
+   spiir.search.skymap
+
+Submodules
+----------
+
+
+.. automodule:: spiir.search.far
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+.. automodule:: spiir.search.filter
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: spiir.search
+   :members:
+   :undoc-members:
+   :show-inheritance:

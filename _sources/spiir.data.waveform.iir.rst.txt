@@ -1,0 +1,10 @@
+spiir.data.waveform.iir package
+===============================
+
+Module contents
+---------------
+
+.. automodule:: spiir.data.waveform.iir
+   :members:
+   :undoc-members:
+   :show-inheritance:

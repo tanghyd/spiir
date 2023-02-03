@@ -1,0 +1,25 @@
+spiir.search.skymap package
+===========================
+
+Submodules
+----------
+
+
+.. automodule:: spiir.search.skymap.plot
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+.. automodule:: spiir.search.skymap.sealgw
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: spiir.search.skymap
+   :members:
+   :undoc-members:
+   :show-inheritance:

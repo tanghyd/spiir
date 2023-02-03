@@ -1,0 +1,19 @@
+spiir.io.igwn.alert.consumers package
+=====================================
+
+Submodules
+----------
+
+
+.. automodule:: spiir.io.igwn.alert.consumers.p_astro
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: spiir.io.igwn.alert.consumers
+   :members:
+   :undoc-members:
+   :show-inheritance:

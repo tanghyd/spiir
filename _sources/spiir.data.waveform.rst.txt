@@ -1,0 +1,27 @@
+spiir.data.waveform package
+===========================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   spiir.data.waveform.iir
+
+Submodules
+----------
+
+
+.. automodule:: spiir.data.waveform.cbc
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: spiir.data.waveform
+   :members:
+   :undoc-members:
+   :show-inheritance:

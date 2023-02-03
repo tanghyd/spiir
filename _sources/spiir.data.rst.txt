@@ -1,0 +1,19 @@
+spiir.data package
+==================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   spiir.data.parameter
+   spiir.data.waveform
+
+Module contents
+---------------
+
+.. automodule:: spiir.data
+   :members:
+   :undoc-members:
+   :show-inheritance:

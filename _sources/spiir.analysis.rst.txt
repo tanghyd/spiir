@@ -1,0 +1,19 @@
+spiir.analysis package
+======================
+
+Submodules
+----------
+
+
+.. automodule:: spiir.analysis.zerolags
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: spiir.analysis
+   :members:
+   :undoc-members:
+   :show-inheritance:

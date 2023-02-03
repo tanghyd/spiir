@@ -1,0 +1,19 @@
+spiir.cli package
+=================
+
+Submodules
+----------
+
+
+.. automodule:: spiir.cli.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: spiir.cli
+   :members:
+   :undoc-members:
+   :show-inheritance:

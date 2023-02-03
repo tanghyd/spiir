@@ -1,0 +1,25 @@
+spiir.processing package
+========================
+
+Submodules
+----------
+
+
+.. automodule:: spiir.processing.array
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+.. automodule:: spiir.processing.mp
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: spiir.processing
+   :members:
+   :undoc-members:
+   :show-inheritance:

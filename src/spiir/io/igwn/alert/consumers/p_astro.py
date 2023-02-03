@@ -31,8 +31,8 @@ class PAstroCompositeModelConsumer(IGWNAlertConsumer):
 
     def process_alert(
         self,
-        topic: list[str] | None = None,
-        payload: dict[str, Any] | None = None,
+        topic: Optional[list[str]] = None,
+        payload: Optional[dict[str, Any]] = None,
     ):
         # to do: check optional input parameters in igwn_alert repo
         if payload is not None:

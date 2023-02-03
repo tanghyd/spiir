@@ -19,7 +19,7 @@ class IGWNAlertConsumer:
     ):
         self.id = id or type(self).__name__  # replace with process/node id?
         self.gracedb = None
-        self.service_url: str | None = None
+        self.service_url: Optional[str] = None
         if service_url is not None:
             self._setup_client(service_url)
 
@@ -38,8 +38,8 @@ class IGWNAlertConsumer:
 
     def process_alert(
         self,
-        topic: list[str] | None = None,
-        payload: dict[str, Any] | None = None,
+        topic: Optional[list[str]] = None,
+        payload: Optional[dict[str, Any]] = None,
     ):
         logger.debug(f"{self.id} doing nothing with payload from {topic}: {payload}.")
         pass

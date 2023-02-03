@@ -2,7 +2,7 @@ import json
 import logging
 import time
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 from ..consumer import IGWNAlertConsumer
 
@@ -31,8 +31,8 @@ class PAstroCompositeModelConsumer(IGWNAlertConsumer):
 
     def process_alert(
         self,
-        topic: Optional[list[str]] = None,
-        payload: Optional[dict[str, Any]] = None,
+        topic: Optional[List[str]] = None,
+        payload: Optional[Dict[str, Any]] = None,
     ):
         # to do: check optional input parameters in igwn_alert repo
         if payload is not None:

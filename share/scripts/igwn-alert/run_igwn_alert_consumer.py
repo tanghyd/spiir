@@ -4,7 +4,7 @@ import argparse
 import logging
 from pathlib import Path
 
-import spiir.io.igwn
+import spiir.io.igwn.alert
 from spiir.logging import configure_logger
 from spiir.search import p_astro
 
@@ -131,17 +131,17 @@ if __name__ == "__main__":
     if not args.mchirp_area.is_file():
         raise FileNotFoundError(f"ChirpMassArea model {args.mchirp_area} not found.")
     mchirp_area_model = p_astro.mchirp_area.ChirpMassAreaModel()
-    mchirp_area_model.loadl(args.mchirp_area)
-    logger.info(f"Loaded {mchirp_area_model} from {args.mchirp_area_model}.")
+    mchirp_area_model.load(args.mchirp_area)
+    logger.info(f"Loaded {mchirp_area_model} from {args.mchirp_area}.")
 
     # instantiate IGWN Alert consumer with the trained p_astro model to process alerts
-    consumer = spiir.io.igwn.consumers.PAstroCompositeModelConsumer(
+    consumer = spiir.io.igwn.alert.consumers.PAstroCompositeModelConsumer(
         model=p_astro.models.CompositeModel(fgmc_model, mchirp_area_model),
         service_url=f"https://{args.group}.ligo.org/api/",
         out_dir=args.out_dir,
     )
 
-    spiir.io.igwn.run_igwn_alert_consumer(
+    spiir.io.igwn.alert.run_igwn_alert_consumer(
         consumer=consumer,
         server=args.server,
         group=args.group,

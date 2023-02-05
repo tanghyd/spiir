@@ -1,0 +1,20 @@
+site_name: SPIIR Documentation
+site_description: 'A guide for the SPIIR low latency gravitational wave search pipeline repository.'
+site_url: https://pages.gitlab.io/spiir
+site_dir: public
+
+theme:
+    name: readthedocs
+
+nav:
+  - Home: 'index.md'
+  - 'User Guide':
+    - 'Getting Started': user-guide/getting-started.md
+    - Workflows: user-guide/workflows.md
+  - Data:
+    - Templates: data/templates.md
+    - "IIR Filters": data/iir.md
+    - "LIGO Light Weight": data/ligolw.md
+  - About:
+    - Contributing: about/contributing.md
+    - License: about/license.md

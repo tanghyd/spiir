@@ -25,7 +25,17 @@ from ..processing.array import chunk_iterable
 logger = logging.getLogger(__name__)
 
 
-def match_coincident_zerolags(
+def match_coincident_zerolags(*args, **kwargs) -> pd.DataFrame:
+    import warnings
+
+    warnings.warn(
+        "match_coincident_zerolags is deprecated and will be removed in the future. "
+        "Please use match_coincident_injections instead."
+    )
+    return match_coincident_injections(*args, **kwargs)
+
+
+def match_coincident_injections(
     zerolags: pd.DataFrame,
     injections: pd.DataFrame,
     max_far: float = 1e-4,
@@ -35,6 +45,8 @@ def match_coincident_zerolags(
     chunk_size: Optional[int] = None,
     verbose: bool = False,
     tie_break: Optional[str] = None,
+    zerolag_end_times: tuple[str, str] = ("end_time_sngl_H1", "end_time_ns_sngl_H1"),
+    injection_end_times: tuple[str, str] = ("h_end_time", "h_end_time_ns"),
 ) -> pd.DataFrame:
     """Matches zerolags found by the pipeline that are coincident with an injection set.
 
@@ -79,6 +91,14 @@ def match_coincident_zerolags(
         If tie_break is not None, then for duplicate matching zerolags, this function
         will match on the *max* values as specified by the provided column string.
         Otherwise if tie_break is None, all potentially matching zerolags are returned.
+    zerolag_end_times: tuple[str, str]
+        A length 2 tuple that specifies the columns to use for the end time in seconds
+        (first element) and nanoseconds (second element) from the zerolag DataFrame.
+        They are used to match coincident times between zerolags and injections.
+    injection_end_times: tuple[str, str]
+        A length 2 tuple that specifies the columns to use for the end time in seconds
+        (first element) and nanoseconds (second element) from the injection DataFrame.
+        They are used to match coincident times between zerolags and injections.
 
     Returns
     -------
@@ -104,14 +124,14 @@ def match_coincident_zerolags(
 
     """
     # validate columns for injection dataframes
-    required_injection_cols = ["mchirp", "geocent_end_time", "geocent_end_time_ns"]
+    required_injection_cols = ["mchirp"] + list(injection_end_times)
     for col in required_injection_cols:
         if col not in injections.columns:
             raise AttributeError(f"injections do not contain required column {col}.")
 
     # validate columns for zerolag dataframes
     required_zerolag_cols = ["far", "cmbchisq", "mchirp"]
-    required_zerolag_cols += ["end_time", "end_time_ns"]
+    required_zerolag_cols += list(zerolag_end_times)
 
     # handle tie_break column specifications
     if tie_break is not None:
@@ -153,25 +173,19 @@ def match_coincident_zerolags(
                 candidate_mchirp[:, None] <= upper_mchirp
             )
 
-            # # FIXME: checking only one ifo for the time condition can be improved
-            # mid_time = (
-            #     (injections["h_end_time"]
-            #     + injections["h_end_time_ns"]*1e-9)
-            # ).to_numpy()
+            # TODO: Enable matching coincidences for more than one IFO (list of tuples?)
             mid_time = (
-                (
-                    injections["geocent_end_time"]
-                    + injections["geocent_end_time_ns"] * 1e-9
-                )
-            ).to_numpy()
+                injections[injection_end_times[0]]
+                + injections[injection_end_times[1]] * 1e-9
+            )
+            mid_time = mid_time.to_numpy()
             lower_time, upper_time = mid_time - time_interval, mid_time + time_interval
-            # candidate_time = (
-            #     candidates["end_time_sngl_H1"]
-            #     + candidates["end_time_ns_sngl_H1"]*1e-9
-            # ).to_numpy()
             candidate_time = (
-                candidates["end_time"] + candidates["end_time_ns"] * 1e-9
-            ).to_numpy()
+                candidates[zerolag_end_times[0]]
+                + candidates[zerolag_end_times[1]] * 1e-9
+            )
+            candidate_time = candidate_time.to_numpy()
+
             is_valid_time = (candidate_time[:, None] >= lower_time) & (
                 candidate_time[:, None] <= upper_time
             )

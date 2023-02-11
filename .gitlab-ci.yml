@@ -1,16 +1,37 @@
-# The Docker image that will be used to build your app
 image: python:3.10.2-slim-bullseye
-# Functions that should be executed before the build script is run
-before_script:
-  - pip install mkdocs
-pages:
+
+pre-commit:
+  before_script:
+    - apt update && apt install -y --no-install-recommends git
+    - /usr/local/bin/python -m pip install --upgrade pip
+    - pip install pre-commit
+  script:
+    - pre-commit run --all-files
+  rules:
+    - if:  $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if:  ($CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_BRANCH == "dev")
+
+mkdocs-test:
+  stage: test
+  before_script:
+    - pip install mkdocs
+  script:
+    - mkdocs build --strict --verbose --site-dir test
+  artifacts:
+    paths:
+    - test
+  rules:
+    - if:  $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if:  ($CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_BRANCH == "dev")
+
+mkdocs-deploy:
+  stage: deploy
+  before_script:
+    - pip install mkdocs
   script:
     - mkdocs build --strict --verbose
   artifacts:
     paths:
-      # The folder that contains the files to be exposed at the Page URL
-      - public
+    - public
   rules:
-    # This ensures that only pushes to the default branch will trigger
-    # a pages deploy
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH

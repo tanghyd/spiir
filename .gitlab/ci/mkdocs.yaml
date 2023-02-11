@@ -1,19 +1,24 @@
-include:
-  - project: computing/gitlab-ci-templates
-    file: python.yml
-
 mkdocs:
   stage: build
-  extends:
-    - .python:mkdocs
-  variables:
-    REQUIREMENTS: "-r docs/requirements.txt"
+  before_script:
+    - pip install -r docs/requirements.txt
+  script:
+    - mkdocs build --strict --verbose --site-dir test
+  artifacts:
+    paths:
+    - test
+  rules:
+    - if:  $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if:  ($CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_BRANCH == "dev")
 
 pages:
   stage: deploy
-  needs: [mkdocs]
+  before_script:
+    - pip install -r docs/requirements.txt
   script:
-    - mv -v site public
+    - mkdocs build --strict --verbose
   artifacts:
     paths:
       - public
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH

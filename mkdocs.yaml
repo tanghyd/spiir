@@ -1,6 +1,6 @@
 site_name: SPIIR Documentation
 site_description: 'A guide for the SPIIR low latency gravitational wave search pipeline repository.'
-site_url: https://pages.git.ligo.org/spiir
+site_url: https://spiir-group.docs.ligo.org/spiir
 site_dir: public
 
 theme:

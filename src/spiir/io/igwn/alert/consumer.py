@@ -55,7 +55,6 @@ def run_igwn_alert_consumer(
     username: Optional[str] = None,
     credentials: Optional[str] = None,
 ):
-
     # specify default auth.toml credentials path
     credentials = credentials or "~/.config/hop/auth.toml"
     auth_fp = Path(credentials).expanduser()

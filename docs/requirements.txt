@@ -1,0 +1,14 @@
+# base
+mkdocs >=1.3.0
+
+# theme
+mkdocs-material-igwn
+
+# plugins
+markdown-include
+mkdocs-minify-plugin
+mkdocs-redirects >=1.0.0
+pymdown-extensions
+
+# scripts
+python-gitlab

@@ -1,0 +1,19 @@
+include:
+  - project: computing/gitlab-ci-templates
+    file: python.yml
+
+mkdocs:
+  stage: build
+  extends:
+    - .python:mkdocs
+  variables:
+    REQUIREMENTS: "-r docs/requirements.txt"
+
+pages:
+  stage: deploy
+  needs: [mkdocs]
+  script:
+    - mv -v site public
+  artifacts:
+    paths:
+      - public

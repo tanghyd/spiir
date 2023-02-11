@@ -1,37 +1,13 @@
 image: python:3.10.2-slim-bullseye
 
-pre-commit:
-  before_script:
-    - apt update && apt install -y --no-install-recommends git
-    - /usr/local/bin/python -m pip install --upgrade pip
-    - pip install pre-commit
-  script:
-    - pre-commit run --all-files
-  rules:
-    - if:  $CI_PIPELINE_SOURCE == "merge_request_event"
-    - if:  ($CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_BRANCH == "dev")
+stages:
+  - lint
+  - build
+  - deploy
 
-mkdocs-test:
-  stage: test
-  before_script:
-    - pip install mkdocs
-  script:
-    - mkdocs build --strict --verbose --site-dir test
-  artifacts:
-    paths:
-    - test
-  rules:
-    - if:  $CI_PIPELINE_SOURCE == "merge_request_event"
-    - if:  ($CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_BRANCH == "dev")
+include:
+  - local: '/.gitlab/ci/pre-commit.yaml'
+  - local: '/.gitlab/ci/mkdocs.yaml'
 
-mkdocs-deploy:
-  stage: deploy
-  before_script:
-    - pip install mkdocs
-  script:
-    - mkdocs build --strict --verbose
-  artifacts:
-    paths:
-    - public
-  rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+  # TODO: add "check markdown quality"
+  # - local: '/.gitlab/ci/lint.yaml'

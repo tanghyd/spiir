@@ -1,10 +1,17 @@
-site_name: SPIIR Documentation
-site_description: 'A guide for the SPIIR low latency gravitational wave search pipeline repository.'
+site_name: SPIIR
+site_description: 'A guide for the SPIIR low latency gravitational wave search Python library.'
+site_author: 'Daniel Tang'
 site_url: https://spiir-group.docs.ligo.org/spiir
+repo_url: 'https://git.ligo.org/spiir-group/spiir'
+repo_name: 'GitLab'
 site_dir: public
 
 theme:
-    name: readthedocs
+  name: 'material_igwn'
+  features:
+    - navigation.expand
+    - navigation.sections
+    - navigation.tabs
 
 nav:
   - Home: 'index.md'

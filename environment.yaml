@@ -1,0 +1,50 @@
+name: spiir-py38
+channels:
+  - conda-forge
+dependencies:
+  - python=3.8.15
+  - pip
+  - wheel
+  - setuptools
+
+  # format and lint
+  - black
+  - black[jupyter]
+  - mdformat
+  - isort
+  - flake8
+
+  # utilities
+  - click
+  - tqdm
+  - toml
+
+  # notebooks
+  - ipykernel
+  - jupyter
+
+  # data
+  - matplotlib
+  - pandas
+  - numpy>=1.23
+  - scipy
+  - scikit-learn>=1.0
+  - pyarrow
+
+  # gstlal-spiir pipeline
+  - gstreamer
+  - lalsuite
+  - fftw
+
+  # LIGO: astronomy and gravitational wave science
+  - astropy
+  - astropy-healpix
+  - ligo.skymap
+  - ligo-gracedb
+  - igwn-alert
+  - python-ligo-lw>=1.8.1
+  - bilby
+
+  - pip:
+    - pre-commit  # NOTE: had some conda-forge issues here - likely solveable
+    - -r docs/requirements.txt  # documentation

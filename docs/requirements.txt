@@ -12,3 +12,10 @@ pymdown-extensions
 
 # scripts
 python-gitlab
+
+# extras
+mkdocstrings
+mkdocstrings-python
+mkdocs-gen-files
+mkdocs-section-index
+mkdocs-literate-nav

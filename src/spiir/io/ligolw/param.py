@@ -25,8 +25,8 @@ def get_params_from_xmldoc(
     xmldoc: :class:`~ligo.lw.ligolw.Document`
         A valid LIGO_LW XML Document element that contains Param element(s).
     params: :class:`~Sequence[str]`, optional
-        If provided, retrieve the specified parameters by their name.
-        Otherwise if params is None, retrieve all parameters from the xmldoc object.
+        If provided, retrieve the specified parameters by their name. Otherwise if
+        params is None, retrieve all parameters from the xmldoc object.
 
     Returns
     -------
@@ -58,9 +58,9 @@ def load_params_from_xml(
 
     Parameters
     ----------
-    path: str | bytes | :class:`~os.PathLike`
+    path: str | bytes | os.PathLike
         A path-like to an XML file containing a valid LIGO_LW XML Document.
-    params: :class:`~Sequence[str]`, optional
+    params: list[str], optional
         If provided, retrieve the specified parameters by their name.
         Otherwise if params is None, retrieve all parameters from the xmldoc object.
 
@@ -81,7 +81,7 @@ def get_p_astro_from_xmldoc(xmldoc: ligo.lw.ligolw.Document) -> Dict[str, float]
 
     Parameters
     ----------
-    xmldoc: :class:`~ligo.lw.ligolw.Document`
+    xmldoc: ligo.lw.ligolw.Document
         A LIGO_LW Document object that contains a p_astro LIGO_LW element.
 
     Returns
@@ -113,7 +113,7 @@ def append_p_astro_to_ligolw(
 
     Parameters
     ----------
-    xmldoc: :class:`~ligo.lw.ligolw.Document`
+    xmldoc: ligo.lw.ligolw.Document
         A LIGO_LW Document object.
     p_astro: dict[str, float]
         Astrophysical source probabilities.
@@ -122,7 +122,7 @@ def append_p_astro_to_ligolw(
 
     Returns
     -------
-    :class:`~ligo.lw.ligolw.Document`
+    :class: ligo.lw.ligolw.Document
         A LIGO_LW Document object that contains a LIGO_LW p_astro element.
     """
     if not np.allclose(sum(p_astro.values()), 1.0):

@@ -22,6 +22,26 @@ nav:
     - Templates: data/templates.md
     - "IIR Filters": data/iir.md
     - "LIGO Light Weight": data/ligolw.md
+  - Code Reference: reference/  # SUMMARY.md (literate-nav) from docs/generate_pages.py
   - About:
     - Contributing: about/contributing.md
     - License: about/license.md
+
+plugins:
+  - search
+  - gen-files:
+      scripts:
+        - docs/generate_pages.py
+  - literate-nav:
+      nav_file: SUMMARY.md
+  - section-index
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]  # search packages in the src folder
+          options:
+            docstring_style: numpy
+            docstring_options:
+              ignore_init_summary: yes
+              merge_init_into_class: yes
+              show_submodules: no

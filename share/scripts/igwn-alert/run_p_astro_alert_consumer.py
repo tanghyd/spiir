@@ -10,17 +10,17 @@ from spiir.search.p_astro.models import CompositeModel
 from spiir.cli import click_logger_options
 from spiir.logging import setup_logger
 
-@click.option("signal-config", type=click.Path)
-@click.option("source-config", type=click.Path)
-@click.option("out", type=click.Path(file_okay=False))
-@click.option("topics")
-@click.option("group", type=str, default="gracedb-playground")
-@click.option("server", type=str, default="kafka://kafka.scima.org/")
-@click.option("id", type=str)
-@click.option("username", type=str)
-@click.option("credentials", type=str)
-@click.option("upload", type=bool, default=False)
-@click.option("save-payload", type=bool, default=False)
+@click.option("--signal-config", type=click.Path(exists=True))
+@click.option("--source-config", type=click.Path(exists=True))
+@click.option("--out", type=click.Path(file_okay=False))
+@click.option("--topics", "-t", multiple=True)
+@click.option("--group", "-g", type=str, default="gracedb-playground")
+@click.option("--server", "-s", type=str, default="kafka://kafka.scima.org/")
+@click.option("--id", type=str)
+@click.option("--username", "-u", type=str)
+@click.option("--credentials", type=str)
+@click.option("--upload", type=bool, default=False)
+@click.option("--save-payload", type=bool, default=False)
 @click_logger_options
 def main(
     signal_config: str,

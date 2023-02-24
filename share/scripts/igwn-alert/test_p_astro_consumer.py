@@ -1,65 +1,63 @@
-import argparse
+#!/usr/bin/env python
 import logging
-import time
 from pathlib import Path
+from typing import List, Optional, Union
 
-from ligo.gracedb.rest import GraceDb
+import click
 
+from spiir.io.igwn.alert.consumers import PAstroAlertConsumer
+from spiir.search.p_astro.models import CompositeModel
+from spiir.cli import click_logger_options
 from spiir.logging import setup_logger
 
-
-@click.option("--files", "-f", nargs=-1, type=click.Path())
-@click.option("--pipeline", "-p", type=str, default="spiir")
-@click.option("--group", "-g", type=str, default="Test")
-@click.option("--search", "-s", type=str)
-@click.option("--service_url", type=str, default="https://gracedb-playground.ligo.org/api/")
-@click.option("--wait", type=float, default=0.5)
+@click.option("--signal-config", type=click.Path(exists=True))
+@click.option("--source-config", type=click.Path(exists=True))
+@click.option("--out", type=click.Path(file_okay=False))
+@click.option("--topics", "-t", multiple=True)
+@click.option("--group", "-g", type=str, default="gracedb-playground")
+@click.option("--server", "-s", type=str, default="kafka://kafka.scima.org/")
+@click.option("--id", type=str)
+@click.option("--username", "-u", type=str)
+@click.option("--credentials", type=str)
+@click.option("--upload", type=bool, default=False)
+@click.option("--save-payload", type=bool, default=False)
 @click_logger_options
 def main(
-    files: List[str],
-    pipeline: str = "spiir",
-    group: str = "Test",
-    search: Optional[str] = None,
-    service_url: str = "https://gracedb-playground.ligo.org/api/",
-    wait: float = 0.5,
+    signal_config: str,
+    source_config: str,
+    out: str = "./out/",
+    topics: List[str] = ["test_spiir"],
+    group: str = "gracedb-playground",
+    server: str = "kafka://kafka.scima.org/",
+    id: Optional[str] = None,
+    username: Optional[str] = None,
+    credentials: Optional[str] = None,
+    upload: bool = False,
+    save_payload: bool = False,
     log_level: int = logging.WARNING,
     log_file: Optional[Union[str, Path]] = None,
 ):
-    logger = setup_logger(Path(__file__).stem, log_level, log_file)
+    # configure logging
+    setup_logger("spiir", log_level, log_file)
 
-    if wait < 0:
-        raise ValueError("wait arg must be greater than or equal to 0.")
+    # load p_astro composite model from .pkl files
+    model = CompositeModel()
+    model.load(signal_config, source_config)
 
-    if files is not None:
-        file_paths = [Path(f) for f in files]
-    else:
-        share_dir = Path(__file__).parent.parent.parent
-        file_paths = list((share_dir / "data" / "pipeline" / "coinc").glob("*.xml"))
+    # instantiate and run P Astro consumer
+    with PAstroAlertConsumer(
+        model=model,
+        out=out,
+        topics=topics,
+        group=group,
+        server=server,
+        id=id,
+        username=username,
+        credentials=credentials,
+        upload=upload,
+        save_payload=save_payload,
+    ) as consumer:
+        consumer.run()
 
-    with GraceDb(service_url=service_url, reload_certificate=True) as client:
-
-        if search is not None:
-            assert search in client.searches
-
-        for fp in file_paths:
-            if fp.is_file():
-                try:
-                    response = client.create_event(
-                        group, pipeline, str(fp), search=search
-                    )
-                    logger.debug(f"Sent {fp} with response {response.status_code}")
-                except Exception as exc:
-                    try:
-                        # if response content is accessible
-                        logger.debug(f"Sent {fp} with response {response.content}")
-                    except Exception:
-                        pass
-                    logger.warning(exc)  # log original exception
-
-                time.sleep(wait)
-
-            else:
-                logger.info(f"{fp} does not exist. Skipping...")
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

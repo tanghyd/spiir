@@ -26,8 +26,7 @@ class IGWNAlertConsumer:
         self.server = server
         self.credentials = credentials or "~/.config/hop/auth.toml"
         self.username = username
-
-        self.client = self._setup_igwn_alert_client()
+        self.client = self._setup_igwn_alert_client(self.username, self.credentials)
 
     def __enter__(self):
         """Enables use within a with context block."""
@@ -42,11 +41,14 @@ class IGWNAlertConsumer:
         if self.client is not None:
             self.client.disconnect()
 
-    def _setup_igwn_alert_client(self) -> client:
+    def _setup_igwn_alert_client(self, username: str, credentials: str) -> client:
         """Instantiate IGWNAlert client connection."""
         # specify default SCiMMA auth.toml credentials path
         auth_fp = Path(credentials).expanduser()
         assert Path(auth_fp).is_file(), f"{auth_fp} is not a file."
+
+        # prepare igwn alert client
+        kwargs = {"server": self.server, "group": self.group, "authfile": str(auth_fp)}
 
         # load SCIMMA hop auth credentials from auth.toml file
         if username is not None:
@@ -60,16 +62,14 @@ class IGWNAlertConsumer:
                 raise RuntimeError(f"No credentials found for {username} in {auth_fp}")
             else:
                 logger.debug(f"Loading {username} credentials from {auth_fp}")
-                client_args["username"] = auth[0]["username"]
-                client_args["password"] = auth[0]["password"]
+                kwargs["username"] = auth[0]["username"]
+                kwargs["password"] = auth[0]["password"]
         else:
             logger.debug(f"Loading default credentials from {auth_fp}")
 
-        # prepare igwn alert client
-        kwargs = {"server": self.server, "group": self.group, "authfile": str(auth_fp)}
         return client(**kwargs)
 
-    def process_alert(self, topic, payload):
+    def process_alert(self, topic: Optional[List[str]], payload: Optional[List[str]]):
         logger.debug(f"[{self.id} {topic}: Received payload: {payload}.")
         pass
 

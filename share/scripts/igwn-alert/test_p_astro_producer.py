@@ -31,18 +31,12 @@ def main(
     if wait < 0:
         raise ValueError("wait arg must be greater than or equal to 0.")
 
-    if files is not None:
-        file_paths = [Path(f) for f in files]
-    else:
-        share_dir = Path(__file__).parent.parent.parent
-        file_paths = list((share_dir / "data" / "pipeline" / "coinc").glob("*.xml"))
-
     with GraceDb(service_url=service_url, reload_certificate=True) as client:
 
         if search is not None:
             assert search in client.searches
 
-        for fp in file_paths:
+        for fp in files:
             if fp.is_file():
                 try:
                     response = client.create_event(

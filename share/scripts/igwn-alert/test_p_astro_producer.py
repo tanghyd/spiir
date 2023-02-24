@@ -2,18 +2,20 @@ import argparse
 import logging
 import time
 from pathlib import Path
+from typing import Optional, List, Union
 
 import click
 from ligo.gracedb.rest import GraceDb
 
+from spiir.cli import click_logger_options
 from spiir.logging import setup_logger
 
-
+@click.command()
 @click.argument("files", nargs=-1, type=click.Path())
 @click.option("--pipeline", "-p", type=str, default="spiir")
 @click.option("--group", "-g", type=str, default="Test")
 @click.option("--search", "-s", type=str)
-@click.option("--service_url", type=str, default="https://gracedb-playground.ligo.org/api/")
+@click.option("--service-url", type=str, default="https://gracedb-playground.ligo.org/api/")
 @click.option("--wait", type=float, default=0.5)
 @click_logger_options
 def main(
@@ -37,11 +39,9 @@ def main(
             assert search in client.searches
 
         for fp in files:
-            if fp.is_file():
+            if Path(fp).is_file():
                 try:
-                    response = client.create_event(
-                        group, pipeline, str(fp), search=search
-                    )
+                    response = client.create_event(group, pipeline, fp, search=search)
                     logger.debug(f"Sent {fp} with response {response.status_code}")
                 except Exception as exc:
                     try:
@@ -55,6 +55,7 @@ def main(
 
             else:
                 logger.info(f"{fp} does not exist. Skipping...")
+
 
 if __name__ == "__main__":
     main()

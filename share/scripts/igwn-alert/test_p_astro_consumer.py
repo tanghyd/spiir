@@ -5,11 +5,15 @@ from typing import List, Optional, Union
 
 import click
 
-from spiir.io.igwn.alert.consumers import PAstroAlertConsumer
+import spiir.io.igwn.alert
 from spiir.search.p_astro.models import CompositeModel
 from spiir.cli import click_logger_options
-from spiir.logging import setup_logger
+from spiir.logging import setup_logger, configure_logger
 
+logger = logging.getLogger(Path(__file__).stem)
+
+
+@click.command()
 @click.argument("signal-config", type=click.Path(exists=True))
 @click.argument("source-config", type=click.Path(exists=True))
 @click.option("--out", type=click.Path(file_okay=False))
@@ -18,7 +22,7 @@ from spiir.logging import setup_logger
 @click.option("--server", "-s", type=str, default="kafka://kafka.scima.org/")
 @click.option("--id", type=str)
 @click.option("--username", "-u", type=str)
-@click.option("--credentials", type=str)
+@click.option("--credentials", type=str, default=None)
 @click.option("--upload", type=bool, is_flag=True)
 @click.option("--save-payload", type=bool, is_flag=True)
 @click_logger_options
@@ -39,25 +43,47 @@ def main(
 ):
     # configure logging
     setup_logger("spiir", log_level, log_file)
+    configure_logger(logger, log_level, log_file)
 
     # load p_astro composite model from .pkl files
-    model = CompositeModel()
-    model.load(signal_config, source_config)
+    # model = CompositeModel()
+    # model.load(signal_config, source_config)
 
     # instantiate and run P Astro consumer
-    with PAstroAlertConsumer(
-        model=model,
-        out=out,
+    # consumer = spiir.io.igwn.alert.PAstroAlertConsumer(
+    #     model=model,
+    #     out=out,
+    #     topics=topics,
+    #     group=group,
+    #     server=server,
+    #     id=id,
+    #     username=username,
+    #     credentials=credentials,
+    #     upload=upload,
+    #     save_payload=save_payload,
+    # )
+
+    consumer = spiir.io.igwn.alert.IGWNAlertConsumer(
         topics=topics,
         group=group,
         server=server,
         id=id,
         username=username,
         credentials=credentials,
-        upload=upload,
-        save_payload=save_payload,
-    ) as consumer:
-        consumer.run()
+    )
+
+    logger.info(f"Listening to {group} topics: {', '.join(topics)}.")
+    try:
+        consumer.client.listen(consumer.process_alert, topics)
+
+    except (KeyboardInterrupt, SystemExit):
+        # Kill the client upon exiting the loop:
+        logger.info(f"Disconnecting from: {server}")
+        try:
+            consumer.close()
+        except Exception:
+            logger.info("Disconnected")
+
 
 if __name__ == '__main__':
     main()

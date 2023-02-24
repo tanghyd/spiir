@@ -19,8 +19,8 @@ from spiir.logging import setup_logger
 @click.option("--id", type=str)
 @click.option("--username", "-u", type=str)
 @click.option("--credentials", type=str)
-@click.option("--upload", type=bool, default=False)
-@click.option("--save-payload", type=bool, default=False)
+@click.option("--upload", type=bool, is_flag=True)
+@click.option("--save-payload", type=bool, is_flag=True)
 @click_logger_options
 def main(
     signal_config: str,

@@ -18,27 +18,40 @@ class PAstroAlertConsumer(IGWNAlertConsumer):
     def __init__(
         self,
         model,
-        gracedb: Optional[str] = None,
-        results_dir: str = "./results",
+        out: str = "./out/",
         topics: List[str] = ["test_spiir"],
         group: str = "gracedb-playground",
         server: str = "kafka://kafka.scima.org/",
         id: Optional[str] = None,
         username: Optional[str] = None,
         credentials: Optional[str] = None,
-        save_payload: bool = True,
+        upload: bool = False,
+        save_payload: bool = False,
     ):
         super().__init__(topics, group, server, id, username, credentials)
-
-        # create p_astro model and specify output directory
         self.model = model  # assumes p-astro model already loaded
-        self.out_dir = Path(out_dir)  # location to save results from process_alert
-        self.gracedb = self._setup_gracedb(gracedb)  # connect to GraceDb client
+        self.out_dir = Path(out)  # location to save results from process_alert
+        self.gracedb = self._setup_gracedb_client(group)
+        self.upload = upload
 
     def __exit__(self):
         """Close connections associated with Consumer object."""
         if self.gracedb is not None:
             self.gracedb.close()
+
+    def __enter__(self):
+        """Enables use within a with context block."""
+        return self
+
+    def __exit__(self):
+        """Enables use within a with context block."""
+        self.close()
+
+    def close(self):
+        """Closes all client connections."""
+        if self.gracedb is not None:
+            self.gracedb.close()
+        super().close()
 
     @staticmethod
     def _write_json(data: Dict[str, Any], path: Path):
@@ -47,12 +60,12 @@ class PAstroAlertConsumer(IGWNAlertConsumer):
         with path.open(mode="w") as f:
             f.write(json.dumps(data, indent=4))
 
-    def _setup_gracedb(self, gracedb: Optional[str] = None):
+    def _setup_gracedb_client(self, group: Optional[str] = None):
         """Instantiate connection to GraceDb via GraceDb client."""
-        services = {"gracedb", "gracedb-test", "gracedb-playground"}
-        if gracedb is not None and gracedb not in services:
-            raise ValueError(f"gracedb must be one of {services}, not '{gracedb}'.")
-            service_url = f"https://{gracedb}.ligo.org/api/"
+        groups = {"gracedb", "gracedb-test", "gracedb-playground"}
+        if group is not None and group not in groups:
+            raise ValueError(f"gracedb must be one of {groups}, not '{group}'.")
+            service_url = f"https://{group}.ligo.org/api/"
             return GraceDb(service_url=service_url, reload_certificate=True)
 
     def _get_data_from_payload(self, data: Dict[str, Any]) -> Dict[str, Any]:
@@ -86,7 +99,6 @@ class PAstroAlertConsumer(IGWNAlertConsumer):
         if payload is None:
             logger.debug(f"[{self.id}] Alert received from {topic} without a payload.")
             return
-
         elif not isinstance(payload, dict):
             try:
                 payload = json.loads(payload)
@@ -102,11 +114,13 @@ class PAstroAlertConsumer(IGWNAlertConsumer):
         try:
             event_id = payload["uid"]
         except KeyError as exc:
-            logger.debug(f"No uid found in {topic} payload: {payload}: {exc}.")
+            logger.debug(f"[{self.id}] No uid in {topic} payload: {payload}: {exc}.")
             return
 
         if self.save_payload:
-            self._write_json(payload, self.out_dir / event_id / "payload.json")
+            payload_file = self.out_dir / event_id / "payload.json"
+            self._write_json(payload, payload_file)
+            logger.info(f"[{self.id}] Uploading {gid} payload to {payload_file}.")
 
         # compute p_astro
         data = self._get_data_from_payload(data)
@@ -116,8 +130,9 @@ class PAstroAlertConsumer(IGWNAlertConsumer):
         p_astro_file = event_dir / "spiir.p_astro.json"
         self._write_json(p_astro, p_astro_file)
 
-        if self.gracedb is not None:
+        if self.upload:
+            logger.info(f"[{self.id}] Uploading {gid} p_astro to {self.group}.")
             self.gracedb.writeLog(gid, "source probabilities", filename=p_astro_file)
 
         runtime = time.perf_counter() - runtime
-        logger.debug(f"{event_id} alert processed in {runtime:.4f}s.")
+        logger.debug(f"[{self.id}] {event_id} alert processed in {runtime:.4f}s.")

@@ -27,9 +27,22 @@ class IGWNAlertConsumer:
         self.credentials = credentials or "~/.config/hop/auth.toml"
         self.username = username
 
-        self.client = self.get_client()
+        self.client = self._setup_igwn_alert_client()
 
-    def get_client(self) -> client:
+    def __enter__(self):
+        """Enables use within a with context block."""
+        return self
+
+    def __exit__(self):
+        """Enables use within a with context block."""
+        self.close()
+
+    def close(self):
+        """Closes all client connections."""
+        if self.client is not None:
+            self.client.disconnect()
+
+    def _setup_igwn_alert_client(self) -> client:
         """Instantiate IGWNAlert client connection."""
         # specify default SCiMMA auth.toml credentials path
         auth_fp = Path(credentials).expanduser()
@@ -70,6 +83,6 @@ class IGWNAlertConsumer:
             # Kill the client upon exiting the loop:
             logger.info(f"Disconnecting from: {server}")
             try:
-                alert_client.disconnect()
+                self.close()
             except Exception:
                 logger.info("Disconnected")

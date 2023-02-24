@@ -3,6 +3,7 @@ import logging
 import time
 from pathlib import Path
 
+import click
 from ligo.gracedb.rest import GraceDb
 
 from spiir.logging import setup_logger

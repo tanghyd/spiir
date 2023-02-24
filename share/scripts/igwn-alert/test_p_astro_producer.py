@@ -9,7 +9,7 @@ from ligo.gracedb.rest import GraceDb
 from spiir.logging import setup_logger
 
 
-@click.option("--files", "-f", nargs=-1, type=click.Path())
+@click.argument("files", nargs=-1, type=click.Path())
 @click.option("--pipeline", "-p", type=str, default="spiir")
 @click.option("--group", "-g", type=str, default="Test")
 @click.option("--search", "-s", type=str)

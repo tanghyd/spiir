@@ -10,8 +10,8 @@ from spiir.search.p_astro.models import CompositeModel
 from spiir.cli import click_logger_options
 from spiir.logging import setup_logger
 
-@click.argument("signal-config", type=click.Path(exists=True), help="Path to fgmc.pkl model file.")
-@click.argument("source-config", type=click.Path(exists=True), help="Path to mchirp_area.pkl model file.")
+@click.argument("signal-config", type=click.Path(exists=True))
+@click.argument("source-config", type=click.Path(exists=True))
 @click.option("--out", type=click.Path(file_okay=False))
 @click.option("--topics", "-t", multiple=True)
 @click.option("--group", "-g", type=str, default="gracedb-playground")

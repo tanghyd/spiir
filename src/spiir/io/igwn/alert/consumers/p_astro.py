@@ -29,11 +29,15 @@ class PAstroAlertConsumer(IGWNAlertConsumer):
         save_payload: bool = False,
     ):
         super().__init__(topics, group, server, id, username, credentials)
-        self.model = model  # assumes p-astro model already loaded
+        self.model = model  # assumes p-astro model object already loaded
         self.out_dir = Path(out)  # location to save results from process_alert
-        self.gracedb = self._setup_gracedb_client(group)
+        self.save_payload = save_payload  # whether to save the incoming payload.json
+
+        # setup gracedb client for upload
+        self.gracedb_client = None
         self.upload_gracedb = upload_gracedb
-        self.save_payload = save_payload
+        if self.upload_gracedb:
+            self.gracedb_client = self._setup_gracedb_client(group)
 
     def __enter__(self):
         """Enables use within a with context block."""
@@ -126,12 +130,12 @@ class PAstroAlertConsumer(IGWNAlertConsumer):
         p_astro = self.model.predict(**data)
 
         # create spiir.p_astro.json file and upload to GraceDb
-        p_astro_fp = self.out_dir / event_id / "spiir.p_astro.json"
-        self._write_json(p_astro, p_astro_fp)
+        fp = self.out_dir / event_id / "spiir.p_astro.json"
+        self._write_json(p_astro, fp)
 
         if self.upload_gracedb:
             logger.info(f"[{self.id}] Uploading {event_id} p_astro to {self.group}.")
-            self.gracedb.writeLog(event_id, "source probabilities", filename=p_astro_fp)
+            self.gracedb_client.writeLog(event_id, "source probabilities", filename=fp)
 
         runtime = time.perf_counter() - runtime
         logger.debug(f"[{self.id}] Alert for {event_id} processed in {runtime:.4f}s.")

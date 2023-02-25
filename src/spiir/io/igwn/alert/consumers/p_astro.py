@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 class PAstroAlertConsumer(IGWNAlertConsumer):
     def __init__(
         self,
-        model,
+        model: "CompositeModel",
         out: str = "./out/",
         topics: List[str] = ["test_spiir"],
         group: str = "gracedb-playground",

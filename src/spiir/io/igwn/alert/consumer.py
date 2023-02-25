@@ -28,18 +28,18 @@ class IGWNAlertConsumer:
         self.username = username
         self.client = self._setup_igwn_alert_client(self.username, self.credentials)
 
-    def __enter__(self):
-        """Enables use within a with context block."""
-        return self
+    # def __enter__(self):
+    #     """Enables use within a with context block."""
+    #     return self
 
-    def __exit__(self):
-        """Enables use within a with context block."""
-        self.close()
+    # def __exit__(self):
+    #     """Enables use within a with context block."""
+    #     self.close()
 
-    def close(self):
-        """Closes all client connections."""
-        if self.client is not None:
-            self.client.disconnect()
+    # def close(self):
+    #     """Closes all client connections."""
+    #     if self.client is not None:
+    #         self.client.disconnect()
 
     def _setup_igwn_alert_client(self, username: str, credentials: str) -> client:
         """Instantiate IGWNAlert client connection."""
@@ -69,11 +69,12 @@ class IGWNAlertConsumer:
 
         return client(**kwargs)
 
-    def process_alert(self, topic: Optional[List[str]], payload: Optional[List[str]]):
-        logger.debug(f"[{self.id} {topic}: Received payload: {payload}.")
+    @staticmethod
+    def process_alert(topic: Optional[List[str]], payload: Optional[List[str]]):
+        logger.debug(f"{topic}: Received payload: {payload}.")
         pass
 
-    def run(self, topics: Optional[List[str]] = None):
+    def listen(self, topics: Optional[List[str]] = None):
         topics = topics or self.topics
         logger.debug(f"Listening to topics: {', '.join(topics)}.")
         try:

@@ -34,11 +34,6 @@ class PAstroAlertConsumer(IGWNAlertConsumer):
         self.gracedb = self._setup_gracedb_client(group)
         self.upload = upload
 
-    def __exit__(self):
-        """Close connections associated with Consumer object."""
-        if self.gracedb is not None:
-            self.gracedb.close()
-
     def __enter__(self):
         """Enables use within a with context block."""
         return self

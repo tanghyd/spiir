@@ -25,14 +25,14 @@ class PAstroAlertConsumer(IGWNAlertConsumer):
         id: Optional[str] = None,
         username: Optional[str] = None,
         credentials: Optional[str] = None,
-        upload: bool = False,
+        upload_gracedb: bool = False,
         save_payload: bool = False,
     ):
         super().__init__(topics, group, server, id, username, credentials)
         self.model = model  # assumes p-astro model already loaded
         self.out_dir = Path(out)  # location to save results from process_alert
         self.gracedb = self._setup_gracedb_client(group)
-        self.upload = upload
+        self.upload_gracedb = upload_gracedb
         self.save_payload = save_payload
 
     def __enter__(self):
@@ -129,7 +129,7 @@ class PAstroAlertConsumer(IGWNAlertConsumer):
         p_astro_fp = self.out_dir / event_id / "spiir.p_astro.json"
         self._write_json(p_astro, p_astro_fp)
 
-        if self.upload:
+        if self.upload_gracedb:
             logger.info(f"[{self.id}] Uploading {event_id} p_astro to {self.group}.")
             self.gracedb.writeLog(event_id, "source probabilities", filename=p_astro_fp)
 

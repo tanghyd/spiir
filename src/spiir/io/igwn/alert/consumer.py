@@ -28,18 +28,18 @@ class IGWNAlertConsumer:
         self.username = username
         self.client = self._setup_igwn_alert_client(self.username, self.credentials)
 
-    # def __enter__(self):
-    #     """Enables use within a with context block."""
-    #     return self
+    def __enter__(self):
+        """Enables use within a with context block."""
+        return self
 
-    # def __exit__(self):
-    #     """Enables use within a with context block."""
-    #     self.close()
+    def __exit__(self, *args, **kwargs):
+        """Enables use within a with context block."""
+        self.close()
 
-    # def close(self):
-    #     """Closes all client connections."""
-    #     if self.client is not None:
-    #         self.client.disconnect()
+    def close(self):
+        """Closes all client connections."""
+        if self.client is not None:
+            self.client.disconnect()
 
     def _setup_igwn_alert_client(self, username: str, credentials: str) -> client:
         """Instantiate IGWNAlert client connection."""
@@ -57,33 +57,41 @@ class IGWNAlertConsumer:
 
             # handle ambiguous/duplicate usernames
             if len(auth) > 1:
-                raise RuntimeError(f"Ambiguous credentials for {username} in {auth_fp}")
+                msg = f"[{self.id}] Ambiguous credentials for {username} in {auth_fp}"
+                raise RuntimeError(msg)
             elif len(auth) == 0:
-                raise RuntimeError(f"No credentials found for {username} in {auth_fp}")
+                msg = f"[{self.id}] No credentials found for {username} in {auth_fp}"
+                raise RuntimeError(msg)
             else:
-                logger.debug(f"Loading {username} credentials from {auth_fp}")
+                logger.debug(
+                    f"[{self.id}] Loading {username} credentials from {auth_fp}"
+                )
                 kwargs["username"] = auth[0]["username"]
                 kwargs["password"] = auth[0]["password"]
         else:
-            logger.debug(f"Loading default credentials from {auth_fp}")
+            logger.debug(f"[{self.id}] Loading default credentials from {auth_fp}")
 
         return client(**kwargs)
 
-    @staticmethod
-    def process_alert(topic: Optional[List[str]], payload: Optional[List[str]]):
-        logger.debug(f"{topic}: Received payload: {payload}.")
-        pass
+    def process_alert(
+        self,
+        topic: Optional[List[str]] = None,
+        payload: Optional[Dict[str, Any]] = None,
+    ):
+        if payload is None:
+            return
+        logger.debug(f"[{self.id}] Received payload from {topic}.")
 
-    def listen(self, topics: Optional[List[str]] = None):
+    def subscribe(self, topics: Optional[List[str]] = None):
         topics = topics or self.topics
-        logger.debug(f"Listening to topics: {', '.join(topics)}.")
+        logger.debug(f"[{self.id}] Listening to topics: {', '.join(topics)}.")
         try:
             self.client.listen(self.process_alert, topics)
 
         except (KeyboardInterrupt, SystemExit):
             # Kill the client upon exiting the loop:
-            logger.info(f"Disconnecting from: {server}")
+            logger.info(f"[{self.id}] Disconnecting from: {server}")
             try:
                 self.close()
             except Exception:
-                logger.info("Disconnected")
+                logger.info(f"[{self.id}] Disconnected")

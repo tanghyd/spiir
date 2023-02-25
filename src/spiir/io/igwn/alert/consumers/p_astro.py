@@ -33,12 +33,13 @@ class PAstroAlertConsumer(IGWNAlertConsumer):
         self.out_dir = Path(out)  # location to save results from process_alert
         self.gracedb = self._setup_gracedb_client(group)
         self.upload = upload
+        self.save_payload = save_payload
 
     def __enter__(self):
         """Enables use within a with context block."""
         return self
 
-    def __exit__(self):
+    def __exit__(self, *args, **kwargs):
         """Enables use within a with context block."""
         self.close()
 
@@ -48,8 +49,7 @@ class PAstroAlertConsumer(IGWNAlertConsumer):
             self.gracedb.close()
         super().close()
 
-    @staticmethod
-    def _write_json(data: Dict[str, Any], path: Path):
+    def _write_json(self, data: Dict[str, Any], path: Path):
         """Write dictionary data to a JSON file."""
         path.parent.mkdir(exist_ok=True, parents=True)
         with path.open(mode="w") as f:
@@ -63,7 +63,7 @@ class PAstroAlertConsumer(IGWNAlertConsumer):
             service_url = f"https://{group}.ligo.org/api/"
             return GraceDb(service_url=service_url, reload_certificate=True)
 
-    def _get_data_from_payload(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    def _get_data_from_payload(self, payload: Dict[str, Any]) -> Dict[str, Any]:
         """Retrieve data for p_astro model from the IGWNAlert payload."""
         try:
             data = payload["data"]["extra_attributes"]
@@ -105,29 +105,33 @@ class PAstroAlertConsumer(IGWNAlertConsumer):
         if payload.get("alert_type", None) != "new":
             return
 
-        # get GraceDb id in database
+        # get GraceDb id in database to label payload and p_astro files
         try:
             event_id = payload["uid"]
         except KeyError as exc:
             logger.debug(f"[{self.id}] No uid in {topic} payload: {payload}: {exc}.")
             return
 
+        # retrieve data from payload
         if self.save_payload:
-            payload_file = self.out_dir / event_id / "payload.json"
-            self._write_json(payload, payload_file)
-            logger.info(f"[{self.id}] Uploading {gid} payload to {payload_file}.")
+            payload_fp = self.out_dir / event_id / "payload.json"
+            self._write_json(payload, payload_fp)
+            logger.info(f"[{self.id}] Uploading {event_id} payload file: {payload_fp}.")
+
+        data = self._get_data_from_payload(payload)
+        if data is None:
+            return
 
         # compute p_astro
-        data = self._get_data_from_payload(data)
         p_astro = self.model.predict(**data)
 
         # create spiir.p_astro.json file and upload to GraceDb
-        p_astro_file = event_dir / "spiir.p_astro.json"
-        self._write_json(p_astro, p_astro_file)
+        p_astro_fp = self.out_dir / event_id / "spiir.p_astro.json"
+        self._write_json(p_astro, p_astro_fp)
 
         if self.upload:
-            logger.info(f"[{self.id}] Uploading {gid} p_astro to {self.group}.")
-            self.gracedb.writeLog(gid, "source probabilities", filename=p_astro_file)
+            logger.info(f"[{self.id}] Uploading {event_id} p_astro to {self.group}.")
+            self.gracedb.writeLog(event_id, "source probabilities", filename=p_astro_fp)
 
         runtime = time.perf_counter() - runtime
-        logger.debug(f"[{self.id}] {event_id} alert processed in {runtime:.4f}s.")
+        logger.debug(f"[{self.id}] Alert for {event_id} processed in {runtime:.4f}s.")

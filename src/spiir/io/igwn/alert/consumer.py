@@ -13,88 +13,85 @@ logger = logging.getLogger(__name__)
 class IGWNAlertConsumer:
     def __init__(
         self,
+        topics: List[str] = ["test_spiir"],
+        group: str = "gracedb-playground",
+        server: str = "kafka://kafka.scima.org/",
         id: Optional[str] = None,
-        service_url: str = f"https://gracedb-playground.ligo.org/api/",
-        out_dir: str = "out/results",
+        username: Optional[str] = None,
+        credentials: Optional[str] = None,
     ):
-        self.id = id or type(self).__name__  # replace with process/node id?
-        self.gracedb = None
-        self.service_url: Optional[str] = None
-        if service_url is not None:
-            self._setup_client(service_url)
+        self.id = id or type(self).__name__
+        self.topics = topics
+        self.group = group
+        self.server = server
+        self.credentials = credentials or "~/.config/hop/auth.toml"
+        self.username = username
+        self.client = self._setup_igwn_alert_client(self.username, self.credentials)
 
-        self.out_dir = Path(out_dir)
-        self.out_dir.mkdir(exist_ok=True, parents=True)
+    def __enter__(self):
+        """Enables use within a with context block."""
+        return self
 
-    def _setup_client(self, service_url: str):
-        if self.gracedb is not None:
-            self.gracedb.close()
-        try:
-            self.gracedb = GraceDb(service_url=service_url, reload_certificate=True)
-            self.service_url = service_url
-            logger.info(f"{self.id} initialised connection to {self.service_url}")
-        except Exception as e:
-            logger.warning(e)
+    def __exit__(self, *args, **kwargs):
+        """Enables use within a with context block."""
+        self.close()
+
+    def close(self):
+        """Closes all client connections."""
+        if self.client is not None:
+            self.client.disconnect()
+
+    def _setup_igwn_alert_client(self, username: str, credentials: str) -> client:
+        """Instantiate IGWNAlert client connection."""
+        # specify default SCiMMA auth.toml credentials path
+        auth_fp = Path(credentials).expanduser()
+        assert Path(auth_fp).is_file(), f"{auth_fp} is not a file."
+
+        # prepare igwn alert client
+        kwargs = {"server": self.server, "group": self.group, "authfile": str(auth_fp)}
+
+        # load SCIMMA hop auth credentials from auth.toml file
+        if username is not None:
+            auth_data = toml.load(auth_fp)
+            auth = [data for data in auth_data["auth"] if data["username"] == username]
+
+            # handle ambiguous/duplicate usernames
+            if len(auth) > 1:
+                msg = f"[{self.id}] Ambiguous credentials for {username} in {auth_fp}"
+                raise RuntimeError(msg)
+            elif len(auth) == 0:
+                msg = f"[{self.id}] No credentials found for {username} in {auth_fp}"
+                raise RuntimeError(msg)
+            else:
+                logger.debug(
+                    f"[{self.id}] Loading {username} credentials from {auth_fp}"
+                )
+                kwargs["username"] = auth[0]["username"]
+                kwargs["password"] = auth[0]["password"]
+        else:
+            logger.debug(f"[{self.id}] Loading default credentials from {auth_fp}")
+
+        return client(**kwargs)
 
     def process_alert(
         self,
         topic: Optional[List[str]] = None,
         payload: Optional[Dict[str, Any]] = None,
     ):
-        logger.debug(f"{self.id} doing nothing with payload from {topic}: {payload}.")
-        pass
+        if payload is None:
+            return
+        logger.debug(f"[{self.id}] Received payload from {topic}.")
 
-
-# TODO: Add docstring(s)
-# TODO: Incorporate as method on IGWNAlertConsumer class
-def run_igwn_alert_consumer(
-    consumer: IGWNAlertConsumer,
-    server: str = "kafka://kafka.scima.org/",
-    group: str = "gracedb-playground",
-    topics: List[str] = ["test_spiir"],
-    username: Optional[str] = None,
-    credentials: Optional[str] = None,
-):
-    # specify default auth.toml credentials path
-    credentials = credentials or "~/.config/hop/auth.toml"
-    auth_fp = Path(credentials).expanduser()
-    assert Path(auth_fp).is_file(), f"{auth_fp} does not exist"
-
-    # prepare igwn alert client
-    client_args = {"server": server, "group": group, "authfile": str(auth_fp)}
-
-    if username is not None:
-        # load SCIMMA hop auth credentials from auth.toml file
-        auth_data = toml.load(auth_fp)
-        auth = [data for data in auth_data["auth"] if data["username"] == username]
-
-        # handle ambiguous/duplicate usernames
-        if len(auth) > 1:
-            raise RuntimeError(f"Ambiguous credentials for {username} in {auth_fp}")
-        elif len(auth) == 0:
-            raise RuntimeError(f"No credentials found for {username} in {auth_fp}")
-        else:
-            logger.debug(f"Loading {username} credentials from {auth_fp}")
-            client_args["username"] = auth[0]["username"]
-            client_args["password"] = auth[0]["password"]
-    else:
-        logger.debug(f"Loading default credentials from {auth_fp}")
-
-    # Initialize the client sesion
-    logger.debug(
-        " ".join([f"{k}: {v}" for k, v in client_args.items() if k != "password"]) + "."
-    )
-
-    alert_client = client(**client_args)
-
-    try:
-        logger.debug(f"Listening to topics: {', '.join(topics)}.")
-        alert_client.listen(consumer.process_alert, topics)
-
-    except (KeyboardInterrupt, SystemExit):
-        # Kill the client upon exiting the loop:
-        logger.info(f"Disconnecting from: {server}")
+    def subscribe(self, topics: Optional[List[str]] = None):
+        topics = topics or self.topics
+        logger.debug(f"[{self.id}] Listening to topics: {', '.join(topics)}.")
         try:
-            alert_client.disconnect()
-        except Exception:
-            logger.info("Disconnected")
+            self.client.listen(self.process_alert, topics)
+
+        except (KeyboardInterrupt, SystemExit):
+            # Kill the client upon exiting the loop:
+            logger.info(f"[{self.id}] Disconnecting from: {server}")
+            try:
+                self.close()
+            except Exception:
+                logger.info(f"[{self.id}] Disconnected")

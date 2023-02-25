@@ -31,9 +31,9 @@ def main(
     logger = setup_logger(Path(__file__).stem, log_level, log_file)
 
     if wait < 0:
-        raise ValueError("wait arg must be greater than or equal to 0.")
+        raise ValueError("wait must be a float greater than or equal to 0.")
 
-    with GraceDb(service_url=service_url, reload_certificate=True) as client:
+    with GraceDb(service_url=service_url) as client:
 
         if search is not None:
             assert search in client.searches
@@ -41,7 +41,7 @@ def main(
         for fp in files:
             if Path(fp).is_file():
                 try:
-                    response = client.create_event(group, pipeline, fp, search=search)
+                    response = client.create_event(group, pipeline,  fp, search=search)
                     logger.debug(f"Sent {fp} with response {response.status_code}")
                 except Exception as exc:
                     try:

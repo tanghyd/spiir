@@ -96,7 +96,7 @@ def main(
     topics: List[str] = ["test_spiir"],
     group: str = "gracedb-playground",
     server: str = "kafka://kafka.scimma.org/",
-    username: Optional[str] = 'daniel.tang-aef798b8',
+    username: Optional[str] = None,
     credentials: Optional[str] = None,
     log_level: int = logging.WARNING,
     log_file: Optional[Union[str, Path]] = None,

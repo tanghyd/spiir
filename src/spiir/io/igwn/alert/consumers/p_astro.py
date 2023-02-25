@@ -1,3 +1,5 @@
+"""Module for the IGWNAlert Consumer that predicts p_astro and uploads to GraceDb."""
+
 import json
 import logging
 import time
@@ -9,89 +11,131 @@ from ..consumer import IGWNAlertConsumer
 if TYPE_CHECKING:
     from ....search.p_astro.models import CompositeModel
 
-
 logger = logging.getLogger(__name__)
 
 
-class PAstroCompositeModelConsumer(IGWNAlertConsumer):
+class PAstroAlertConsumer(IGWNAlertConsumer):
     def __init__(
         self,
         model: "CompositeModel",
+        out: str = "./out/",
+        topics: List[str] = ["test_spiir"],
+        group: str = "gracedb-playground",
+        server: str = "kafka://kafka.scima.org/",
         id: Optional[str] = None,
-        service_url: str = f"https://gracedb-playground.ligo.org/api/",
-        out_dir: str = "p_astro/results",
+        username: Optional[str] = None,
+        credentials: Optional[str] = None,
+        upload_gracedb: bool = False,
+        save_payload: bool = False,
     ):
-        id = id or type(self).__name__
-        super().__init__(id, service_url, out_dir)
-        self.model = model  # assumes the model is already initialised
+        super().__init__(topics, group, server, id, username, credentials)
+        self.model = model  # assumes p-astro model object already loaded
+        self.out_dir = Path(out)  # location to save results from process_alert
+        self.save_payload = save_payload  # whether to save the incoming payload.json
 
-    def save_json(self, data: Dict[str, Any], file_path: Path, indent: int = 4):
-        with Path(file_path).open(mode="w") as f:
-            f.write(json.dumps(data, indent=indent))
+        # setup gracedb client for upload
+        self.gracedb_client = None
+        self.upload_gracedb = upload_gracedb
+        if self.upload_gracedb:
+            self.gracedb_client = self._setup_gracedb_client(group)
+
+    def __enter__(self):
+        """Enables use within a with context block."""
+        return self
+
+    def __exit__(self, *args, **kwargs):
+        """Enables use within a with context block."""
+        self.close()
+
+    def close(self):
+        """Closes all client connections."""
+        if self.gracedb is not None:
+            self.gracedb.close()
+        super().close()
+
+    def _write_json(self, data: Dict[str, Any], path: Path):
+        """Write dictionary data to a JSON file."""
+        path.parent.mkdir(exist_ok=True, parents=True)
+        with path.open(mode="w") as f:
+            f.write(json.dumps(data, indent=4))
+
+    def _setup_gracedb_client(self, group: Optional[str] = None):
+        """Instantiate connection to GraceDb via GraceDb client."""
+        groups = {"gracedb", "gracedb-test", "gracedb-playground"}
+        if group is not None and group not in groups:
+            raise ValueError(f"gracedb must be one of {groups}, not '{group}'.")
+            service_url = f"https://{group}.ligo.org/api/"
+            return GraceDb(service_url=service_url, reload_certificate=True)
+
+    def _get_data_from_payload(self, payload: Dict[str, Any]) -> Dict[str, Any]:
+        """Retrieve data for p_astro model from the IGWNAlert payload."""
+        try:
+            data = payload["data"]["extra_attributes"]
+        except Exception as exc:
+            logger.debug(f"[{self.id}] No valid data retrieved from payload: {exc}.")
+            return
+
+        far = data["CoincInspiral"]["combined_far"]
+        if far <= 0.0:
+            logger.debug(f"[{self.id}] FAR is equal to 0. - skipping")
+            return
+
+        snr = data["CoincInspiral"]["snr"]
+        mchirp = data["CoincInspiral"]["mchirp"]
+        eff_dist = min(sngl["eff_distance"] for sngl in data["SingleInspiral"])
+
+        return {"far": far, "snr": snr, "mchirp": mchirp, "eff_dist": eff_dist}
 
     def process_alert(
         self,
         topic: Optional[List[str]] = None,
         payload: Optional[Dict[str, Any]] = None,
     ):
-        # to do: check optional input parameters in igwn_alert repo
-        if payload is not None:
-            duration = time.perf_counter()
-            if not isinstance(payload, dict):
-                try:
-                    payload = json.loads(payload)
-                except Exception as exc:
-                    logger.warning(f"Error parsing {topic} payload {payload}: {exc}.")
-                    return
+        """Process IGWN Alerts by retrieving coinc.xml files and computing p_astro."""
+        runtime = time.perf_counter()
 
-            if payload.get("alert_type", None) != "new":
-                return
-
+        # parse payload input from topic
+        if payload is None:
+            logger.debug(f"[{self.id}] Alert received from {topic} without a payload.")
+            return
+        elif not isinstance(payload, dict):
             try:
-                gid = payload["uid"]
-            except KeyError as exc:
-                logger.debug(f"No uid found in {topic} payload: {payload}: {exc}.")
-                return
-
-            event_dir = self.out_dir / gid
-            event_dir.mkdir(exist_ok=True, parents=True)
-            self.save_json(payload, event_dir / "payload.json")
-
-            # retrieve p_astro model input data from igwn alert payload
-            try:
-                data = payload["data"]["extra_attributes"]
+                payload = json.loads(payload)
             except Exception as exc:
-                logger.debug(f"No valid data retrieved from {gid}: {exc}.")
+                logger.debug(f"[{self.id}] Error loading {topic} JSON payload: {exc}.")
                 return
 
-            far = data["CoincInspiral"]["combined_far"]
-            if far <= 0.0:
-                logger.debug(f"{gid} FAR is equal to 0. - skipping")
-                return
+        # only get the first alert for a given event - initial coinc.xml upload
+        if payload.get("alert_type", None) != "new":
+            return
 
-            snr = data["CoincInspiral"]["snr"]
-            mchirp = data["CoincInspiral"]["mchirp"]
-            eff_dist = min(sngl["eff_distance"] for sngl in data["SingleInspiral"])
+        # get GraceDb id in database to label payload and p_astro files
+        try:
+            event_id = payload["uid"]
+        except KeyError as exc:
+            logger.debug(f"[{self.id}] No uid in {topic} payload: {payload}: {exc}.")
+            return
 
-            # run p_astro model prediction
-            runtime = time.perf_counter()
-            p_astro = self.model.predict(far, snr, mchirp, eff_dist)
-            runtime = time.perf_counter() - runtime
-            logger.debug(f"{gid} p_astro predicted in {runtime:.4f}s.")
+        # retrieve data from payload
+        if self.save_payload:
+            payload_fp = self.out_dir / event_id / "payload.json"
+            self._write_json(payload, payload_fp)
+            logger.info(f"[{self.id}] Uploading {event_id} payload file: {payload_fp}.")
 
-            # create p_astro.json file and upload to GraceDb
-            runtime = time.perf_counter()
-            event_file = event_dir / "p_astro.json"
-            self.save_json(p_astro, event_file)
-            if self.gracedb is not None:
-                self.gracedb.writeLog(gid, "source probabilities", filename=event_file)
-            runtime = time.perf_counter() - runtime
-            logger.debug(f"{gid} p_astro.json uploaded to GraceDB in {runtime:.4f}s.")
+        data = self._get_data_from_payload(payload)
+        if data is None:
+            return
 
-            duration = time.perf_counter() - duration
-            logger.debug(f"{gid} total processing time was {duration:.4f}s.")
-        else:
-            logger.warning(f"Alert received but payload = None; topic = {topic}")
+        # compute p_astro
+        p_astro = self.model.predict(**data)
 
-    def __exit__(self):
-        self.gracedb.close()
+        # create spiir.p_astro.json file and upload to GraceDb
+        fp = self.out_dir / event_id / "spiir.p_astro.json"
+        self._write_json(p_astro, fp)
+
+        if self.upload_gracedb:
+            logger.info(f"[{self.id}] Uploading {event_id} p_astro to {self.group}.")
+            self.gracedb_client.writeLog(event_id, "source probabilities", filename=fp)
+
+        runtime = time.perf_counter() - runtime
+        logger.debug(f"[{self.id}] Alert for {event_id} processed in {runtime:.4f}s.")

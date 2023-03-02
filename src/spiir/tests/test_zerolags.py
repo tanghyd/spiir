@@ -1,14 +1,14 @@
-
 import functools
 import logging
 import time
-from pathlib import Path
 from os import PathLike
-from typing import Optional, Union, Callable, Dict, List, Set
+from pathlib import Path
+from typing import Callable, Dict, List, Optional, Set, Union
 
 import click
 import numpy as np
 import pandas as pd
+
 from ..io.ligolw import load_table_from_xmls
 
 logger = logging.getLogger(Path(__file__).stem)
@@ -67,7 +67,7 @@ def configure_logger(
 
     return logger
 
- 
+
 def load_table(p: Union[str, Path], table: str, glob: str = "*") -> pd.DataFrame:
     logger.info(f"Reading {table} table data from {p}...")
     path = Path(p)

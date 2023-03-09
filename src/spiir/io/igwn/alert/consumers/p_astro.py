@@ -6,6 +6,8 @@ import time
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
+from ligo.gracedb.rest import GraceDb
+
 from ..consumer import IGWNAlertConsumer
 
 if TYPE_CHECKING:
@@ -31,9 +33,10 @@ class PAstroAlertConsumer(IGWNAlertConsumer):
         super().__init__(topics, group, server, id, username, credentials)
         self.model = model  # assumes p-astro model already loaded
         self.out_dir = Path(out)  # location to save results from process_alert
-        self.gracedb = self._setup_gracedb_client(group)
-        self.upload_gracedb = upload_gracedb
         self.save_payload = save_payload
+
+        self.upload_gracedb = upload_gracedb
+        self.gracedb = self._setup_gracedb_client(group) if upload_gracedb else None
 
     def __enter__(self):
         """Enables use within a with context block."""
@@ -60,8 +63,8 @@ class PAstroAlertConsumer(IGWNAlertConsumer):
         groups = {"gracedb", "gracedb-test", "gracedb-playground"}
         if group is not None and group not in groups:
             raise ValueError(f"gracedb must be one of {groups}, not '{group}'.")
-            service_url = f"https://{group}.ligo.org/api/"
-            return GraceDb(service_url=service_url, reload_certificate=True)
+        service_url = f"https://{group}.ligo.org/api/"
+        return GraceDb(service_url=service_url, reload_certificate=True)
 
     def _get_data_from_payload(self, payload: Dict[str, Any]) -> Dict[str, Any]:
         """Retrieve data for p_astro model from the IGWNAlert payload."""
@@ -116,7 +119,7 @@ class PAstroAlertConsumer(IGWNAlertConsumer):
         if self.save_payload:
             payload_fp = self.out_dir / event_id / "payload.json"
             self._write_json(payload, payload_fp)
-            logger.info(f"[{self.id}] Uploading {event_id} payload file: {payload_fp}.")
+            logger.info(f"[{self.id}] Saving {event_id} payload file to: {payload_fp}.")
 
         data = self._get_data_from_payload(payload)
         if data is None:

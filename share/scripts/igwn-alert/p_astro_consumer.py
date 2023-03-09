@@ -30,6 +30,12 @@ def parse_cli_arguments() -> argparse.Namespace:
         help="Output directory for input payload and output p_astro.",
     )
     parser.add_argument(
+        "--upload-gracedb",
+        action="store_true",
+        default=False,
+        help="Whether to upload the p_astro.json output to GraceDb",
+    )
+    parser.add_argument(
         "-s",
         "--server",
         type=str,
@@ -93,6 +99,7 @@ def main(
     signal_config: str,
     source_config: str,
     out: str = "./results/",
+    upload_gracedb: bool = False,
     topics: List[str] = ["test_spiir"],
     group: str = "gracedb-playground",
     server: str = "kafka://kafka.scimma.org/",
@@ -114,7 +121,7 @@ def main(
         server=server,
         username=username,
         credentials=credentials,
-        upload_gracedb=False,
+        upload_gracedb=upload_gracedb,
         save_payload=True,
     ) as consumer:
         consumer.subscribe()

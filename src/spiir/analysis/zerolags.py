@@ -45,8 +45,8 @@ def match_coincident_injections(
     chunk_size: Optional[int] = None,
     verbose: bool = False,
     tie_break: Optional[str] = None,
-    zerolag_end_times: tuple[str, str] = ("end_time_sngl_H1", "end_time_ns_sngl_H1"),
-    injection_end_times: tuple[str, str] = ("h_end_time", "h_end_time_ns"),
+    zerolag_end_times: Tuple[str, str] = ("end_time_sngl_H1", "end_time_ns_sngl_H1"),
+    injection_end_times: Tuple[str, str] = ("h_end_time", "h_end_time_ns"),
 ) -> pd.DataFrame:
     """Matches zerolags found by the pipeline that are coincident with an injection set.
 

@@ -5,7 +5,6 @@ from typing import Any, Dict, List, Optional
 
 import toml
 from igwn_alert import client
-from ligo.gracedb.rest import GraceDb
 
 logger = logging.getLogger(__name__)
 
@@ -90,7 +89,7 @@ class IGWNAlertConsumer:
 
         except (KeyboardInterrupt, SystemExit):
             # Kill the client upon exiting the loop:
-            logger.info(f"[{self.id}] Disconnecting from: {server}")
+            logger.info(f"[{self.id}] Disconnecting from: {self.server}")
             try:
                 self.close()
             except Exception:

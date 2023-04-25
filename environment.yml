@@ -8,11 +8,11 @@ dependencies:
   - setuptools
 
   # format and lint
+  - pre-commit
   - black
   - black[jupyter]
   - mdformat
-  - isort
-  - flake8
+  - ruff
 
   # utilities
   - click
@@ -46,5 +46,4 @@ dependencies:
   - bilby
 
   - pip:
-    - pre-commit  # NOTE: had some conda-forge issues here - likely solveable
     - -r docs/requirements.txt  # documentation

@@ -148,7 +148,9 @@ class ChirpMassAreaModel:
         assert self.m0 is not None, "coefficient 'm0' is not initialised"
 
         # determine chirp mass bounds in detector frame - mc_det = (1+z)*mc
-        get_redshifted_mchirp = lambda m: (m / (2**0.2)) * (1 + z)
+        def get_redshifted_mchirp(m):
+            return m / 2**0.2 * (1 + z)
+
         mchirp_min, mchirp_max = (get_redshifted_mchirp(m) for m in self.mass_bounds)
 
         # determine astrophysical source class probabilities given estimated parameters

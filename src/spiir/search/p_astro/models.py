@@ -76,7 +76,9 @@ class TwoComponentModel:
             The maximum between the observed SNR value and the SNR threshold.
         """
 
-        parse_ifos = lambda key: key if isinstance(key, str) else ",".join(key)
+        def parse_ifos(key):
+            return key if isinstance(key, str) else ",".join(key)
+
         if isinstance(snr, Iterable):
             far_threshold = [self.thresholds[parse_ifos(key)]["far"] for key in ifos]
             snr_threshold = [self.thresholds[parse_ifos(key)]["snr"] for key in ifos]

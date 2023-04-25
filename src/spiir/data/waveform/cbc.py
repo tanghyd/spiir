@@ -148,7 +148,7 @@ def simulate_time_domain_inspiral(
 def convert_inference_to_simulation_spins(theta_jn, theta_1, theta_2, a_1, a_2):
     raise NotImplementedError
     # See bilby: https://github.com/lscsoft/bilby/blob/master/bilby/gw/conversion.py#L53
-    # if (a_1 == 0.0 or theta_1 in [0, np.pi]) and (a_2 == 0.0 or theta_2 in [0, np.pi]):
+    # if (a_1 == 0. or theta_1 in [0, np.pi]) and (a_2 == 0. or theta_2 in [0, np.pi]):
     #     spin_1x, spin_1y, spin_1z = 0.0, 0.0, float(a_1 * np.cos(theta_1))
     #     spin_2x, spin_2y, spin_2z = 0.0, 0.0, float(a_2 * np.cos(theta_2))
     #     iota = theta_jn

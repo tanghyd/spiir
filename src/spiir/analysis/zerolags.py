@@ -4,18 +4,11 @@ Note that all functions in this module are under development and are subject to 
 """
 
 import logging
-from os import PathLike
-from typing import Any, Dict, Optional, Sequence, Tuple, Union
+from typing import Dict, Optional, Tuple
 
-import astropy
-import astropy_healpix as ah
-import ligo.skymap.io
-import ligo.skymap.plot
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from astropy.coordinates import SkyCoord
-from ligo.skymap.postprocess import find_greedy_credible_levels
 from matplotlib.figure import Figure
 from scipy.stats import halfnorm, poisson
 from tqdm import tqdm
@@ -136,7 +129,7 @@ def match_coincident_injections(
     # handle tie_break column specifications
     if tie_break is not None:
         if not isinstance(tie_break, str):
-            raise TypeError(f"tie_break must be a str.")
+            raise TypeError("tie_break must be a str.")
         required_zerolag_cols += [tie_break]
 
     for col in required_zerolag_cols:
@@ -152,7 +145,7 @@ def match_coincident_injections(
     found = []
     with tqdm(
         total=len(zerolags),
-        desc=f"Matching zerolags against injection set",
+        desc="Matching zerolags against injection set",
         disable=not verbose,
     ) as progress_bar:
         for chunk in chunk_iterable(range(len(zerolags)), size=chunk_size):
@@ -215,7 +208,6 @@ def plot_zerolag_background(
     figsize: Tuple[float, float] = (12, 8),
 ):
     # TODO: revise and document required input data format(s)
-    col: str = ("cmbchisq",)
 
     # this function produces two comparison plots across two runs
     # i.e. a inj and noninj run for two different runs, comparing cohsnr/cmbchisq

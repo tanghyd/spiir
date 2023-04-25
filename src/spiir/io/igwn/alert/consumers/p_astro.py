@@ -135,6 +135,7 @@ class PAstroAlertConsumer(IGWNAlertConsumer):
         if self.upload_gracedb:
             logger.info(f"[{self.id}] Uploading {event_id} p_astro to {self.group}.")
             self.gracedb.writeLog(event_id, "source probabilities", filename=p_astro_fp)
+            self.gracedb.writeLabel(event_id, "PASTRO_READY")
 
         runtime = time.perf_counter() - runtime
         logger.debug(f"[{self.id}] Alert for {event_id} processed in {runtime:.4f}s.")
